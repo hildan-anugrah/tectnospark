@@ -67,33 +67,33 @@ window.I18N_EN_DATA = {
     "col1": {
       "step": "01 • Supplier (Upstream)",
       "title": "Garment & Shoe Factories",
-      "p1": "• Produces uniform and footwear packages based on aggregate purchase orders (PO).",
-      "p2": "• Enforces strict 5-segment SKU coding standards per category and size.",
-      "p3": "• Cargo Point: Inbound container shipments delivered to campus warehouse (Inbound Logistics).",
+      "p1": "Produces uniform and footwear packages based on aggregate purchase orders (PO).",
+      "p2": "Enforces strict 5-segment SKU coding standards per category and size.",
+      "p3": "<strong>Cargo Point:</strong> Inbound container shipments delivered to campus warehouse (Inbound Logistics).",
       "flow": "Flow: Aggregate PO ➔ Inbound Freight"
     },
     "col2": {
       "step": "02 • Warehouse (Inbound)",
       "title": "Campus Logistics Warehouse",
-      "p1": "• Physical cargo receiving (StockReceive) and quality control (QC).",
-      "p2": "• Strict FIFO (First-In, First-Out) batch recording and landed unit cost assignment.",
-      "p3": "• Cargo Point: Outbound transfer of oldest batches to distribution booths.",
+      "p1": "Physical cargo receiving (StockReceive) and quality control (QC).",
+      "p2": "Strict FIFO (First-In, First-Out) batch recording and landed unit cost assignment.",
+      "p3": "<strong>Cargo Point:</strong> Outbound transfer of oldest batches to distribution booths.",
       "flow": "Flow: Inbound ➔ POS Distribution Booths"
     },
     "col3": {
       "step": "03 • Verifiers & Booths",
       "title": "Finance & On-Site Booth Staff",
-      "p1": "• Finance: Authorizes student tuition payment status (Eligibility verification).",
-      "p2": "• Booth Staff: Serves physical garment distribution at campus pickup booths.",
-      "p3": "• Critical Point: QR Code identity scanning and size fitting validation.",
+      "p1": "<strong>Finance:</strong> Authorizes student tuition payment status (Eligibility verification).",
+      "p2": "<strong>Booth Staff:</strong> Serves physical garment distribution at campus pickup booths.",
+      "p3": "<strong>Critical Point:</strong> QR Code identity scanning and size fitting validation.",
       "flow": "Flow: Paid Status ➔ Physical Handover"
     },
     "col4": {
       "step": "04 • Consumer (Downstream)",
       "title": "Freshman Students (Customers)",
-      "p1": "• End consumers with official package entitlements per study program.",
-      "p2": "• Submits body size profiles via student portal and receives assigned schedule tickets.",
-      "p3": "• Info Point: Presents high-resolution QR Code ticket (student ID) at pickup booth.",
+      "p1": "End consumers with official package entitlements per study program.",
+      "p2": "Submits body size profiles via student portal and receives assigned schedule tickets.",
+      "p3": "<strong>Info Point:</strong> Presents high-resolution QR Code ticket (student ID) at pickup booth.",
       "flow": "Flow: Size Profile ➔ Tailored Uniform Package"
     }
   },
@@ -132,29 +132,29 @@ window.I18N_EN_DATA = {
     "card1": {
       "flow": "Flow 01 • Student ➔ University",
       "title": "Requirement: Size Profiles & Schedules",
-      "p1": "• Source & Target: Students submit data to campus; receive schedule via email.",
-      "p2": "• Problem: Disconnected Google Forms without standardized SKU validation, resulting in duplicate entries and manual staff consolidation delays of 2–3 weeks.",
+      "p1": "<strong>Source & Target:</strong> Students submit data to campus; receive schedule via email.",
+      "p2": "<strong>Pain Point:</strong> Disconnected Google Forms without standardized SKU validation, resulting in duplicate entries and manual staff consolidation delays of 2–3 weeks.",
       "status": "Status: Delayed Information & Unstandardized Format"
     },
     "card2": {
       "flow": "Flow 02 • Finance ➔ Day-Of Distribution",
       "title": "Requirement: Tuition Paid Status (Eligibility)",
-      "p1": "• Source & Target: Finance exports paid clearance status to booth staff.",
-      "p2": "• Problem: Static local Excel exports. Day-of bank clearing updates fail to reach booth stations in real time, causing paid students to be wrongly turned away.",
+      "p1": "<strong>Source & Target:</strong> Finance exports paid clearance status to booth staff.",
+      "p2": "<strong>Pain Point:</strong> Static local Excel exports. Day-of bank clearing updates fail to reach booth stations in real time, causing paid students to be wrongly turned away.",
       "status": "Status: Severed Communication (Local Data Silos)"
     },
     "card3": {
       "flow": "Flow 03 • Booth Desk ➔ Warehouse",
       "title": "Requirement: Package Entitlement & Stock Ledger",
-      "p1": "• Source & Target: Booth staff verifies entitlements and logs item release.",
-      "p2": "• Problem: Physical logbooks tallying handovers. Warehouse stock balances were only reconciled at night, leaving large gaps for shrinkage and stock discrepancies.",
+      "p1": "<strong>Source & Target:</strong> Booth staff verifies entitlements and logs item release.",
+      "p2": "<strong>Pain Point:</strong> Physical logbooks tallying handovers. Warehouse stock balances were only reconciled at night, leaving large gaps for shrinkage and stock discrepancies.",
       "status": "Status: Lagging Records (Paper-Based Handover)"
     },
     "card4": {
       "flow": "Flow 04 • Procurement ➔ Factory",
       "title": "Requirement: Aggregate Purchase Orders (PO)",
-      "p1": "• Source & Target: Procurement dispatches garment production quantities to vendor.",
-      "p2": "• Problem: Purchase orders drafted from crude estimates rather than validated student anthropometric demand, triggering multi-month return-exchange lead times.",
+      "p1": "<strong>Source & Target:</strong> Procurement dispatches garment production quantities to vendor.",
+      "p2": "<strong>Pain Point:</strong> Purchase orders drafted from crude estimates rather than validated student anthropometric demand, triggering multi-month return-exchange lead times.",
       "status": "Status: Blind Ordering (Lack of Real Demand Signal)"
     }
   },
@@ -171,28 +171,28 @@ window.I18N_EN_DATA = {
       "system": "ERP Master & Entitlement Engine",
       "tech": "Database MySQL InnoDB",
       "func": "Governs student master data, 4-segment base SKU hierarchy, bulk excel imports via background jobs, and automated academic entitlement matrix per program.",
-      "benefit": "100% immune to spreadsheet crashes; full ACID transaction integrity with a unified single source of truth."
+      "benefit": "<strong>100% Crash-Free:</strong> Full ACID transaction integrity with unified single source of truth."
     },
     "row2": {
       "problem": "Dead-Stock & Delayed Schedule Broadcasts",
       "system": "SCM Demand Planning Portal",
       "tech": "Size Event & Announcement Hub",
       "func": "Opens pre-enrollment self-service size selection windows (SizeChangeEvent), program-filtered slot broadcasts, and automated Demand vs. Shortage calculus for procurement tenders.",
-      "benefit": "Zero Dead-Stock: Factory purchase orders match 100% of verified student physical measurements."
+      "benefit": "<strong>Zero Dead-Stock:</strong> Factory purchase orders match 100% of verified student physical measurements."
     },
     "row3": {
       "problem": "Queue Congestion & Double-Claim Risk",
       "system": "POS QR Verification Engine",
       "tech": "BaconQrCode & HTML5 Scanner",
       "func": "Issues tamper-proof Level-H QR code passes and executes 6-tier atomic validation on scanner read (Payment, Time Slot, Program, Gender, Entitlement Balance, Rack Stock).",
-      "benefit": "Service time slashed to under 30 seconds per student with zero duplicate claim vulnerability."
+      "benefit": "<strong>Service Time < 30s:</strong> Instant validation with zero duplicate claim vulnerability."
     },
     "row4": {
       "problem": "Warehouse Shrinkage & Opaque COGS Valuation",
       "system": "WMS & FIFO Costing Engine",
       "tech": "StockBatch & Movement Ledger",
       "func": "Tracks oldest vendor intake batches (FIFO), ledger-backed stock deductions, physical Stock Opname variance audits, and real-time gross margin profit analytics.",
-      "benefit": "Real-time FIFO inventory valuation, transparent audit trails, and elimination of physical discrepancies."
+      "benefit": "<strong>Real-Time FIFO Valuation:</strong> Transparent audit trails and elimination of physical discrepancies."
     }
   },
   "slide7": {
@@ -274,7 +274,7 @@ window.I18N_EN_DATA = {
     },
     "m2": {
       "badge": "VALUE 02 • INVENTORY ACCURACY",
-      "value": "Zero",
+      "value": "0",
       "title": "Dead-Stock Accumulation",
       "p1": "• Pre-enrollment size profiling prior to supplier manufacturing tenders.",
       "p2": "• Automated Demand vs. Shortage calculations align factory orders 100% with real student body sizes.",
