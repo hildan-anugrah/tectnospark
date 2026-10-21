@@ -51,12 +51,22 @@
     return '';
   }
 
+  function getShape(pptx, name) {
+    if (pptx && pptx.shapes) {
+      if (name === 'rect' && pptx.shapes.RECTANGLE) return pptx.shapes.RECTANGLE;
+      if (name === 'roundRect' && pptx.shapes.ROUNDED_RECTANGLE) return pptx.shapes.ROUNDED_RECTANGLE;
+      if (name === 'ellipse' && (pptx.shapes.OVAL || pptx.shapes.ELLIPSE)) return pptx.shapes.OVAL || pptx.shapes.ELLIPSE;
+      if (name === 'line' && pptx.shapes.LINE) return pptx.shapes.LINE;
+    }
+    return name;
+  }
+
   // Neo-Brutalist Slide Header
   function applyHeader(slide, pptx, categoryTag, mainTitle, subtitle, rightBadgeText) {
     slide.background = { fill: C_WHITE };
 
     // Left vertical accent bar with Neo shadow
-    slide.addShape(pptx.ShapeType.rect, {
+    slide.addShape(getShape(pptx, 'rect'), {
       x: 0.8 + SHADOW_OFFSET_SM,
       y: 0.42 + SHADOW_OFFSET_SM,
       w: 0.08,
@@ -64,7 +74,7 @@
       fill: { color: C_DARK },
       line: { color: C_DARK }
     });
-    slide.addShape(pptx.ShapeType.rect, {
+    slide.addShape(getShape(pptx, 'rect'), {
       x: 0.8,
       y: 0.42,
       w: 0.08,
@@ -119,7 +129,7 @@
       const bY = 0.58;
 
       // Badge shadow
-      slide.addShape(pptx.ShapeType.roundRect, {
+      slide.addShape(getShape(pptx, 'roundRect'), {
         x: bX + SHADOW_OFFSET_SM,
         y: bY + SHADOW_OFFSET_SM,
         w: bW,
@@ -129,7 +139,7 @@
         rectRadius: 0.08
       });
       // Badge body
-      slide.addShape(pptx.ShapeType.roundRect, {
+      slide.addShape(getShape(pptx, 'roundRect'), {
         x: bX,
         y: bY,
         w: bW,
@@ -154,7 +164,7 @@
     }
 
     // Neo-Brutalist 2pt bottom divider line
-    slide.addShape(pptx.ShapeType.rect, {
+    slide.addShape(getShape(pptx, 'rect'), {
       x: 0.8,
       y: 1.36,
       w: 11.733,
@@ -167,7 +177,7 @@
   // Neo-Brutalist Card with solid offset shadow & bold 2pt border
   function addNeoCard(slide, pptx, x, y, w, h, badge, title, bullets, footerText, isHighlight) {
     // 1. Neo-Brutalist hard shadow backing shape
-    slide.addShape(pptx.ShapeType.roundRect, {
+    slide.addShape(getShape(pptx, 'roundRect'), {
       x: x + SHADOW_OFFSET,
       y: y + SHADOW_OFFSET,
       w: w,
@@ -178,7 +188,7 @@
     });
 
     // 2. Main card body with bold 2pt dark border
-    slide.addShape(pptx.ShapeType.roundRect, {
+    slide.addShape(getShape(pptx, 'roundRect'), {
       x: x,
       y: y,
       w: w,
@@ -229,7 +239,7 @@
     // 4. Card Bottom Footer Banner (if provided)
     if (footerText) {
       const footerY = y + h - 0.52;
-      slide.addShape(pptx.ShapeType.rect, {
+      slide.addShape(getShape(pptx, 'rect'), {
         x: x + 0.2,
         y: footerY,
         w: w - 0.4,
@@ -302,7 +312,7 @@
       }
 
       // 2pt Neo-Brutalist Header Divider
-      s1.addShape(pptx.ShapeType.rect, {
+      s1.addShape(getShape(pptx, 'rect'), {
         x: 0.8,
         y: 0.88,
         w: 11.733,
@@ -382,7 +392,7 @@
         const y = rowY[m.row];
 
         // 1. Neo-Brutalism card shadow
-        s2.addShape(pptx.ShapeType.roundRect, {
+        s2.addShape(getShape(pptx, 'roundRect'), {
           x: x + SHADOW_OFFSET,
           y: y + SHADOW_OFFSET,
           w: cardW,
@@ -393,7 +403,7 @@
         });
 
         // 2. Card body with 2pt border
-        s2.addShape(pptx.ShapeType.roundRect, {
+        s2.addShape(getShape(pptx, 'roundRect'), {
           x: x,
           y: y,
           w: cardW,
@@ -408,7 +418,7 @@
         const picX = x + (cardW - picSize) / 2;
         const picY = y + 0.15;
 
-        s2.addShape(pptx.ShapeType.oval, {
+        s2.addShape(getShape(pptx, 'ellipse'), {
           x: picX + SHADOW_OFFSET_SM,
           y: picY + SHADOW_OFFSET_SM,
           w: picSize,
@@ -424,11 +434,11 @@
             y: picY,
             w: picSize,
             h: picSize,
-            round: true
+            rounding: true
           });
         }
 
-        s2.addShape(pptx.ShapeType.oval, {
+        s2.addShape(getShape(pptx, 'ellipse'), {
           x: picX,
           y: picY,
           w: picSize,
@@ -443,7 +453,7 @@
         const pillX = x + (cardW - pillW) / 2;
         const pillY = y + 1.28;
 
-        s2.addShape(pptx.ShapeType.roundRect, {
+        s2.addShape(getShape(pptx, 'roundRect'), {
           x: pillX + SHADOW_OFFSET_SM,
           y: pillY + SHADOW_OFFSET_SM,
           w: pillW,
@@ -453,7 +463,7 @@
           rectRadius: 0.15
         });
 
-        s2.addShape(pptx.ShapeType.roundRect, {
+        s2.addShape(getShape(pptx, 'roundRect'), {
           x: pillX,
           y: pillY,
           w: pillW,
@@ -606,7 +616,7 @@
       ];
 
       // Table Neo shadow backing
-      s4.addShape(pptx.ShapeType.roundRect, {
+      s4.addShape(getShape(pptx, 'roundRect'), {
         x: 0.8 + SHADOW_OFFSET,
         y: 1.55 + SHADOW_OFFSET,
         w: 11.733,
@@ -738,7 +748,7 @@
       ];
 
       // Table Neo shadow backing
-      s6.addShape(pptx.ShapeType.roundRect, {
+      s6.addShape(getShape(pptx, 'roundRect'), {
         x: 0.8 + SHADOW_OFFSET,
         y: 1.55 + SHADOW_OFFSET,
         w: 11.733,
@@ -878,7 +888,7 @@
 
       function addMetricCard(x, y, w, h, badge, metricVal, title, bullets, footerText, isHighlight) {
         // Neo shadow backing
-        s9.addShape(pptx.ShapeType.roundRect, {
+        s9.addShape(getShape(pptx, 'roundRect'), {
           x: x + SHADOW_OFFSET,
           y: y + SHADOW_OFFSET,
           w: w,
@@ -889,7 +899,7 @@
         });
 
         // Main card body with 2pt border
-        s9.addShape(pptx.ShapeType.roundRect, {
+        s9.addShape(getShape(pptx, 'roundRect'), {
           x: x,
           y: y,
           w: w,
@@ -901,7 +911,7 @@
 
         // Badge pill
         const bW = w - 0.44;
-        s9.addShape(pptx.ShapeType.roundRect, {
+        s9.addShape(getShape(pptx, 'roundRect'), {
           x: x + 0.22,
           y: y + 0.18,
           w: bW,
@@ -955,7 +965,7 @@
         });
 
         // Divider
-        s9.addShape(pptx.ShapeType.rect, {
+        s9.addShape(getShape(pptx, 'rect'), {
           x: x + 0.3,
           y: y + 1.76,
           w: w - 0.6,
@@ -984,7 +994,7 @@
 
         // Footer Banner
         const footerY = y + h - 0.52;
-        s9.addShape(pptx.ShapeType.rect, {
+        s9.addShape(getShape(pptx, 'rect'), {
           x: x + 0.2,
           y: footerY,
           w: w - 0.4,
