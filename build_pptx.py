@@ -152,8 +152,23 @@ def set_notes(slide, notes):
 # ==========================================
 s1 = prs.slides.add_slide(prs.slide_layouts[6])
 
-# Top Header Bar
-top_box = s1.shapes.add_textbox(Inches(0.8), Inches(0.4), Inches(11.733), Inches(0.45))
+# Top Header Bar (Horizon Logo + Text)
+if os.path.exists("assets/logo.webp"):
+    try:
+        from PIL import Image
+        import io
+        im_horizon = Image.open("assets/logo.webp")
+        stream_horizon = io.BytesIO()
+        im_horizon.save(stream_horizon, format="PNG")
+        stream_horizon.seek(0)
+        s1.shapes.add_picture(stream_horizon, Inches(0.8), Inches(0.36), width=Inches(0.42), height=Inches(0.42))
+        top_box_left = Inches(1.32)
+    except Exception:
+        top_box_left = Inches(0.8)
+else:
+    top_box_left = Inches(0.8)
+
+top_box = s1.shapes.add_textbox(top_box_left, Inches(0.44), Inches(7.5), Inches(0.35))
 tf_top = top_box.text_frame
 tf_top.word_wrap = True
 tf_top.margin_left = tf_top.margin_right = tf_top.margin_top = tf_top.margin_bottom = 0
@@ -166,12 +181,10 @@ r_top1.font.size = Pt(9.5)
 r_top1.font.bold = True
 r_top1.font.color.rgb = RGBColor(100, 116, 139)
 
-r_top2 = p_top.add_run()
-r_top2.text = "                                                                                   TECHNOSPARK 2026 PITCH DECK"
-r_top2.font.name = FONT_BODY
-r_top2.font.size = Pt(9.5)
-r_top2.font.bold = True
-r_top2.font.color.rgb = C_RED
+# Header Logo (Technospark)
+logo_path = "assets/technospark-logo.png" if os.path.exists("assets/technospark-logo.png") else "assets/team/image2.png"
+if os.path.exists(logo_path):
+    s1.shapes.add_picture(logo_path, Inches(10.65), Inches(0.24), width=Inches(1.88))
 
 # Header Divider Line
 line = s1.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(0.88), Inches(11.733), Inches(0.02))
@@ -217,30 +230,24 @@ p_desc.font.size = Pt(12)
 p_desc.font.color.rgb = RGBColor(75, 85, 99)
 p_desc.line_spacing = 1.25
 
-# 3 Bento Cards
-add_card(s1, 0.8, 3.85, 3.75, 2.95, "Objek & Komoditas", "Pengadaan Perlengkapan Kampus", [
-    "Pengadaan dan pembagian tahunan: Jas Almamater, Kemeja Putih, Celana/Rok, Sepatu Lab & Dinas, serta Medical Kit.",
-    "Penyaluran langsung ke ribuan mahasiswa baru tanpa perantara ritel komersial."
+# 2 Bento Cards
+add_card(s1, 0.8, 3.85, 5.75, 2.95, "Objek & Komoditas Logistik", "Pengadaan Perlengkapan Kampus", [
+    "Pengadaan dan penyaluran tahunan ribuan paket perlengkapan mahasiswa baru: Jas Almamater, Kemeja Putih, Celana/Rok Bahan, Sepatu Lab & Dinas, serta Medical Kit.",
+    "Penyaluran langsung secara terpusat tanpa perantara ritel komersial (Direct Campus SCM)."
 ], "Model: Closed-Loop Campus SCM")
 
-add_card(s1, 4.78, 3.85, 3.75, 2.95, "Tantangan Utama", "Hambatan Spreadsheet & Posko", [
-    "Spreadsheet Excel 4.5 MB crash saat ribuan maba mendaftar serentak.",
-    "Antrean fisik posko 15–20 menit/orang akibat verifikasi berkas manual.",
-    "Tebakan order pabrik memicu penumpukan dead-stock ukuran ekstrem."
-], "Dampak: Modal Mengendap", is_highlight=True)
-
-add_card(s1, 8.76, 3.85, 3.75, 2.95, "Nirwana Team", "Tim Pengembang Sistem", [
-    "Fhazar Raffiful Aqyla (Project Manager)",
-    "Ferry Noer Hendriawan (Frontend) • Hildan (Backend)",
-    "Fadel Rahmadhan (QA) • Daffa (UI/UX) • Acep (Analyst)"
-], "Horizon University")
+add_card(s1, 6.78, 3.85, 5.75, 2.95, "Tantangan Operasional Utama", "Hambatan Spreadsheet & Posko", [
+    "Spreadsheet Excel Induk 4.5 MB rawan crash dan lag saat ribuan mahasiswa mendaftar serentak.",
+    "Waktu antrean posko fisik lambat (15–20 menit per mahasiswa) akibat verifikasi berkas manual.",
+    "Tebakan rasio order pengadaan pabrik memicu dead-stock ekstrem dan modal kampus mengendap."
+], "Dampak: Modal Mengendap & Risiko Klaim Ganda", is_highlight=True)
 
 set_notes(s1, """NASKAH BACA PRESENTER SLIDE 1 (Target: 01:10 Menit):
-"Selamat pagi/siang Yang Terhormat Bapak/Ibu Dosen Penguji dan Dewan Juri Technospark. Kami dari Tim Nirwana, yang beranggotakan Fhazar, Ferry, Hildan, Fadel, Daffa, dan Acep. Hari ini kami mempresentasikan analisis dan solusi sistem informasi rantai pasok terpadu bertajuk: HorizonU Uniform, dengan engine sistem bernama UniStock.
+"Selamat pagi/siang Yang Terhormat Bapak/Ibu Dosen Penguji dan Dewan Juri Technospark. Kami dari Tim Nirwana, yang beranggotakan Fhazar, Ferry, Hildan, Fadel, Daffa, dan Acep. Hari ini kami mempresentasikan analisis dan solusi sistem informasi rantai pasok terpadu bertajuk: HorizonU Uniform.
 
 Studi kasus kami berfokus pada Departemen Keuangan Universitas Horizon Indonesia, yang bertanggung jawab atas pengadaan dan distribusi ribuan paket seragam kuliah, jas almamater, sepatu laboratorium, hingga perlengkapan medis mahasiswa baru setiap tahunnya.
 
-Sebelum UniStock dibangun, pengelolaan dilakukan manual memakai spreadsheet Excel induk sebesar 4.5 Megabytes dengan belasan lembar kerja yang sering sekali mengalami lag dan crash. Di lapangan terjadi antrean panjang hingga 20 menit per mahasiswa, ketidakcocokan ukuran pakaian yang memicu penumpukan dead-stock, serta kerentanan klaim ganda. Mari kita lihat bagaimana rantai pasok ini bekerja." """)
+Sebelum HorizonU Uniform dibangun, pengelolaan dilakukan manual memakai spreadsheet Excel induk sebesar 4.5 Megabytes dengan belasan lembar kerja yang sering sekali mengalami lag dan crash. Di lapangan terjadi antrean panjang hingga 20 menit per mahasiswa, ketidakcocokan ukuran pakaian yang memicu penumpukan dead-stock, serta kerentanan klaim ganda. Mari kita lihat bagaimana rantai pasok ini bekerja." """)
 
 # ==========================================
 # SLIDE 2: OUR TEAM (NIRWANA DEVELOPMENT TEAM)
@@ -248,7 +255,7 @@ Sebelum UniStock dibangun, pengelolaan dilakukan manual memakai spreadsheet Exce
 s2 = prs.slides.add_slide(prs.slide_layouts[6])
 apply_header(s2, "Profil Tim Pengembang",
              "Our Team • Nirwana Development Team",
-             "Kolaborasi lintas disiplin dalam perancangan arsitektur, rekayasa kode, dan tata kelola platform UniStock")
+             "Kolaborasi lintas disiplin dalam perancangan arsitektur, rekayasa kode, dan tata kelola platform HorizonU Uniform")
 
 team_members = [
     {
@@ -340,8 +347,8 @@ for m in team_members:
     p_n.font.color.rgb = C_WHITE
     p_n.alignment = PP_ALIGN.CENTER
 
-    # Role & Subtext
-    text_box = s2.shapes.add_textbox(Inches(x + 0.1), Inches(y + 1.63), Inches(card_w - 0.2), Inches(0.75))
+    # Role Only (Clean)
+    text_box = s2.shapes.add_textbox(Inches(x + 0.1), Inches(y + 1.68), Inches(card_w - 0.2), Inches(0.45))
     tf_t = text_box.text_frame
     tf_t.word_wrap = True
     tf_t.margin_left = tf_t.margin_right = tf_t.margin_top = tf_t.margin_bottom = 0
@@ -349,21 +356,13 @@ for m in team_members:
     p_r = tf_t.paragraphs[0]
     p_r.text = m["role"]
     p_r.font.name = FONT_TITLE
-    p_r.font.size = Pt(10)
+    p_r.font.size = Pt(11)
     p_r.font.bold = True
     p_r.font.color.rgb = C_RED if m["is_pm"] else C_TEXT_DARK
     p_r.alignment = PP_ALIGN.CENTER
-    p_r.space_after = Pt(2)
-
-    p_d = tf_t.add_paragraph()
-    p_d.text = m["desc"]
-    p_d.font.name = FONT_BODY
-    p_d.font.size = Pt(8.5)
-    p_d.font.color.rgb = RGBColor(100, 116, 139)
-    p_d.alignment = PP_ALIGN.CENTER
 
 set_notes(s2, """NASKAH BACA PRESENTER SLIDE 2 (Target: 00:45 Menit):
-"Pada Slide 2, izinkan kami memperkenalkan 6 anggota Tim Nirwana yang memiliki spesialisasi peran masing-masing dalam membangun UniStock:
+"Pada Slide 2, izinkan kami memperkenalkan 6 anggota Tim Nirwana yang memiliki spesialisasi peran masing-masing dalam membangun HorizonU Uniform:
 
 1. Fhazar Raffiful Aqyla sebagai Project Manager, memimpin perumusan roadmap produk dan keselarasan strategi rantai pasok.
 2. Ferry Noer Hendriawan sebagai Frontend Developer, merancang tampilan antarmuka interaktif dan modul scanner posko.
@@ -522,7 +521,7 @@ Kesimpulannya, terjadi silo data dan keterlambatan informasi akut yang melumpuhk
 # ==========================================
 s6 = prs.slides.add_slide(prs.slide_layouts[6])
 apply_header(s6, "Rekomendasi Sistem Terpadu",
-             "Pemilihan Arsitektur Sistem Informasi (UniStock Engine)",
+             "Pemilihan Arsitektur Sistem Informasi (HorizonU Uniform Engine)",
              "Integrasi empat pilar sistem: ERP, SCM, POS, dan WMS dalam satu platform web modern")
 
 t_s6 = s6.shapes.add_table(5, 4, Inches(0.8), Inches(1.55), Inches(11.733), Inches(5.25)).table
@@ -575,7 +574,7 @@ for r_i, (m, sys, fn, ben) in enumerate(rows_s6):
         if c_i == 0: p.font.bold = True
 
 set_notes(s6, """NASKAH BACA PRESENTER SLIDE 6 (Target: 01:30 Menit):
-"Untuk mengatasi persoalan tersebut, pada Slide 6 kami merekomendasikan empat subsistem terpadu di dalam arsitektur HorizonU Uniform (UniStock):
+"Untuk mengatasi persoalan tersebut, pada Slide 6 kami merekomendasikan empat subsistem terpadu di dalam arsitektur HorizonU Uniform:
 
 1. ERP Master & Entitlement Engine: Berfungsi menggantikan Excel dengan basis data relasional MySQL InnoDB terstruktur, mengelola kuota hak per program studi, dan mengunci integritas transaksi. Manfaatnya: 100% bebas kendala Excel rusak.
 
@@ -697,5 +696,5 @@ Statement akhir kami: Sistem Informasi bukan sekadar alat pencatat administrasi,
 
 Sekian presentasi dari Tim Nirwana. Kami siap menerima pertanyaan dari Dewan Juri. Terima kasih." """)
 
-prs.save("HorizonU_Uniform_UniStock_SCM_Presentasi_Technospark.pptx")
+prs.save("HorizonU_Uniform_SCM_Presentasi_Technospark.pptx")
 print("Clean executive 9-slide PPTX successfully created!")

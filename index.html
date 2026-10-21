@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HorizonU Uniform (UniStock SCM) — Presentasi Technospark</title>
+<title>HorizonU Uniform — Presentasi Technospark</title>
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <!-- Font Awesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- i18next Internationalization Framework -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/23.11.5/i18next.min.js"></script>
+<script src="assets/locales/id.js"></script>
 <!-- Tailwind CSS via CDN -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -60,7 +63,19 @@
   .slide-panel.active {
     display: flex;
   }
-  #presentation-viewport:fullscreen,
+
+  /* Fullscreen Viewport: Seamless edge-to-edge white presentation canvas */
+  #presentation-viewport:fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
   #presentation-viewport:-webkit-full-screen {
     width: 100vw !important;
     height: 100vh !important;
@@ -69,43 +84,54 @@
     align-items: center !important;
     justify-content: center !important;
     overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
-  #presentation-viewport:fullscreen #slide-stage,
+  #presentation-viewport.is-fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Fullscreen Slide Stage: Eliminate outer frame, border, rounded corners, and drop shadows completely */
+  #presentation-viewport:fullscreen #slide-stage {
+    border: none !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
   #presentation-viewport:-webkit-full-screen #slide-stage {
     border: none !important;
-    border-radius: 0 !important;
+    border-radius: 0px !important;
     box-shadow: none !important;
+    outline: none !important;
   }
-  .fullscreen-bar {
-    display: none;
+  #slide-stage.is-fullscreen {
+    border: none !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    outline: none !important;
   }
-  #presentation-viewport:fullscreen .fullscreen-bar,
-  #presentation-viewport:-webkit-full-screen .fullscreen-bar {
-    display: flex;
+
+  /* Browser Native Fullscreen Backdrop override to seamless white */
+  ::backdrop {
+    background-color: #ffffff !important;
+  }
+  ::-webkit-backdrop {
+    background-color: #ffffff !important;
   }
 </style>
 </head>
 <body class="bg-[#F3F4F6] text-slate-900 font-sans h-screen w-screen overflow-hidden flex flex-col select-none">
 
-  <!-- TOP MINIMAL NEO-NAVBAR -->
-  <header class="h-14 bg-white border-b-2 border-slate-900 px-8 flex items-center justify-between shrink-0 z-20">
-    <div class="flex items-center gap-3">
-      <div class="bg-horizon-700 text-white text-[11px] font-extrabold tracking-wider px-3 py-1 rounded border-2 border-slate-900 shadow-neo-sm uppercase">
-        TECHNOSPARK 2026
-      </div>
-      <span class="text-sm text-slate-800 font-bold">
-        <span class="text-horizon-700">HorizonU Uniform</span> / UniStock SCM Engine
-      </span>
-    </div>
-    <div class="flex items-center gap-4 text-xs text-slate-700 font-semibold">
-      <span><kbd class="bg-white border-2 border-slate-900 text-slate-900 font-mono px-2 py-0.5 rounded text-[11px] font-bold shadow-neo-sm">Space</kbd> / <kbd class="bg-white border-2 border-slate-900 text-slate-900 font-mono px-2 py-0.5 rounded text-[11px] font-bold shadow-neo-sm">→</kbd> Ganti Slide</span>
-      <span><kbd class="bg-white border-2 border-slate-900 text-slate-900 font-mono px-2 py-0.5 rounded text-[11px] font-bold shadow-neo-sm">T</kbd> Naskah Presenter</span>
-      <span><kbd class="bg-white border-2 border-slate-900 text-slate-900 font-mono px-2 py-0.5 rounded text-[11px] font-bold shadow-neo-sm">F</kbd> Fullscreen</span>
-    </div>
-  </header>
-
   <!-- MAIN SLIDE CANVAS -->
-  <main class="flex-1 flex items-center justify-center p-4 overflow-hidden relative">
+  <main class="flex-1 flex items-center justify-center p-3 md:p-4 overflow-hidden relative">
     <div id="presentation-viewport" class="w-full h-full flex items-center justify-center overflow-hidden relative">
       <div id="slide-stage" class="w-[1440px] h-[810px] shrink-0 bg-white rounded-2xl border-2 border-slate-900 shadow-neo-lg flex flex-col justify-between p-8 relative overflow-hidden">
 
@@ -114,57 +140,49 @@
       <!-- ========================================== -->
       <section class="slide-panel active" id="slide-1">
         <!-- Hero Header -->
-        <div class="flex items-center justify-between border-b-2 border-slate-900 pb-4">
-          <span class="text-xs font-extrabold text-slate-700 uppercase tracking-widest font-mono">Departemen Keuangan • Universitas Horizon Indonesia</span>
-          <span class="text-xs font-extrabold text-horizon-700 font-mono uppercase tracking-wider">Technospark 2026 Pitch Deck</span>
+        <div class="flex items-center justify-between border-b-2 border-slate-900 pb-3">
+          <div class="flex items-center gap-2.5">
+            <img src="assets/logo.webp" alt="Horizon University" class="h-8 w-8 object-contain">
+            <span data-i18n="slide1.headerDept" class="text-xs font-extrabold text-slate-700 uppercase tracking-widest font-mono">Departemen Keuangan • Universitas Horizon Indonesia</span>
+          </div>
+          <img src="assets/technospark-logo.png" alt="Technospark" class="h-11 md:h-12 object-contain drop-shadow-sm">
         </div>
 
         <!-- Big Landing Page Title Banner -->
         <div class="my-auto py-2">
           <div class="max-w-4xl">
-            <span class="text-horizon-700 font-extrabold text-sm uppercase tracking-wider block mb-1">
+            <span data-i18n="slide1.eyebrow" class="text-horizon-700 font-extrabold text-sm uppercase tracking-wider block mb-1">
               Solusi Rantai Pasok Logistik Kampus Terintegrasi
             </span>
             <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none mb-3">
               HORIZONU <span class="text-horizon-700 underline decoration-4 underline-offset-4">UNIFORM</span>
             </h1>
-            <p class="text-sm md:text-base text-slate-600 font-medium leading-relaxed max-w-3xl">
+            <p data-i18n="slide1.desc" class="text-sm md:text-base text-slate-600 font-medium leading-relaxed max-w-3xl">
               Transformasi digital operasional seragam mahasiswa: Menghubungkan Hulu (Vendor Pabrik), Gudang Kampus, dan Bagian Keuangan hingga Hilir (Mahasiswa) berbasis data presisi dan aturan inventaris FIFO.
             </p>
           </div>
 
           <!-- Hero Bento Grid (Neo-Brutalism Style) -->
-          <div class="grid grid-cols-3 gap-5 mt-6">
+          <div class="grid grid-cols-2 gap-6 mt-6">
             <!-- Box 1: Kasus & Objek -->
             <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-5 shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
-              <div class="w-8 h-8 rounded-lg bg-horizon-700 text-white border-2 border-slate-900 flex items-center justify-center font-bold text-sm mb-3 shadow-neo-sm">
+              <div class="w-9 h-9 rounded-lg bg-horizon-700 text-white border-2 border-slate-900 flex items-center justify-center font-bold text-sm mb-3 shadow-neo-sm">
                 <i class="fa-solid fa-school"></i>
               </div>
-              <h3 class="text-base font-extrabold text-slate-900 mb-1">Objek & Komoditas</h3>
-              <p class="text-xs text-slate-600 leading-relaxed">
-                Pengadaan dan pembagian tahunan: <strong>Jas Almamater, Kemeja Putih, Celana/Rok, Sepatu Dinas & Lab</strong>, serta <strong>Medical Kit</strong> tanpa perantara ritel.
+              <h3 data-i18n="slide1.box1.title" class="text-base font-extrabold text-slate-900 mb-1.5">Objek & Komoditas Logistik</h3>
+              <p data-i18n-html="slide1.box1.desc" class="text-xs text-slate-600 leading-relaxed">
+                Pengadaan dan penyaluran tahunan ribuan paket perlengkapan mahasiswa baru: <strong>Jas Almamater, Kemeja Putih, Celana/Rok Bahan, Sepatu Dinas & Lab</strong>, serta <strong>Medical Kit</strong> tanpa perantara ritel komersial.
               </p>
             </div>
 
             <!-- Box 2: Akar Masalah -->
             <div class="bg-red-50 border-2 border-slate-900 rounded-xl p-5 shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
-              <div class="w-8 h-8 rounded-lg bg-red-600 text-white border-2 border-slate-900 flex items-center justify-center font-bold text-sm mb-3 shadow-neo-sm">
+              <div class="w-9 h-9 rounded-lg bg-red-600 text-white border-2 border-slate-900 flex items-center justify-center font-bold text-sm mb-3 shadow-neo-sm">
                 <i class="fa-solid fa-triangle-exclamation"></i>
               </div>
-              <h3 class="text-base font-extrabold text-slate-900 mb-1">Tantangan Utama</h3>
-              <p class="text-xs text-slate-700 leading-relaxed">
-                <strong>Spreadsheet 4.5 MB crash</strong> saat ribuan maba mendaftar, antrean fisik posko <strong>15–20 menit/orang</strong>, dan tebakan order memicu penumpukan <strong>dead-stock</strong>.
-              </p>
-            </div>
-
-            <!-- Box 3: Tim Pengembang -->
-            <div class="bg-neo-blue border-2 border-slate-900 rounded-xl p-5 shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
-              <div class="w-8 h-8 rounded-lg bg-sky-600 text-white border-2 border-slate-900 flex items-center justify-center font-bold text-sm mb-3 shadow-neo-sm">
-                <i class="fa-solid fa-users"></i>
-              </div>
-              <h3 class="text-base font-extrabold text-slate-900 mb-1">Nirwana Team</h3>
-              <p class="text-xs text-slate-700 leading-tight">
-                <strong>Fhazar</strong> (PM) • <strong>Ferry</strong> (Frontend) • <strong>Hildan</strong> (Backend) • <strong>Fadel</strong> (QA) • <strong>Daffa</strong> (UI/UX) • <strong>Acep</strong> (Analyst)
+              <h3 data-i18n="slide1.box2.title" class="text-base font-extrabold text-slate-900 mb-1.5">Tantangan Operasional Utama</h3>
+              <p data-i18n-html="slide1.box2.desc" class="text-xs text-slate-700 leading-relaxed">
+                <strong>Spreadsheet Excel 4.5 MB rawan crash</strong> saat ribuan mahasiswa mendaftar serentak, waktu antrean posko fisik <strong>15–20 menit per mahasiswa</strong>, dan tebakan rasio order ke pabrik memicu <strong>dead-stock</strong> modal mengendap.
               </p>
             </div>
           </div>
@@ -179,90 +197,84 @@
           <div class="flex items-start gap-3">
             <div class="w-2.5 h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
             <div>
-              <span class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Profil Tim Pengembang</span>
-              <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Our Team • Nirwana Development Team</h2>
-              <p class="text-xs text-slate-600 font-medium mt-0.5">Kolaborasi lintas disiplin dalam perancangan arsitektur, rekayasa kode, dan tata kelola platform UniStock</p>
+              <span data-i18n="slide2.badge" class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Profil Tim Pengembang</span>
+              <h2 data-i18n="slide2.title" class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Our Team • Nirwana Development Team</h2>
+              <p data-i18n="slide2.subtitle" class="text-xs text-slate-600 font-medium mt-0.5">Kolaborasi lintas disiplin dalam perancangan arsitektur, rekayasa kode, dan tata kelola platform HorizonU Uniform</p>
             </div>
           </div>
           <div class="flex items-center gap-2">
             <span class="bg-amber-100 border-2 border-slate-900 text-slate-900 text-xs font-extrabold px-3 py-1 rounded-md shadow-neo-sm font-mono">
-              6 Core Engineers
+              <span data-i18n="slide2.badgeCount">6 Core Engineers</span>
             </span>
           </div>
         </div>
 
         <!-- 2 Rows x 3 Cols Grid of Team Members -->
-        <div class="grid grid-cols-3 gap-5 my-auto">
+        <div class="grid grid-cols-3 gap-6 my-auto">
           <!-- Member 1: Ferry -->
-          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
-            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-2.5">
+          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-5 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-3">
               <img src="assets/team/ferry.jpg" alt="Ferry Noer Hendriawan" class="w-full h-full object-cover">
             </div>
-            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1 uppercase tracking-wider">
+            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3.5 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1.5 uppercase tracking-wider">
               Ferry Noer Hendriawan
             </span>
-            <span class="text-xs font-extrabold text-slate-900 mb-0.5">Frontend Developer</span>
-            <span class="text-[11px] text-slate-600 font-medium">Blade + Tailwind • Responsive UI • Posko Scanner Client</span>
+            <span class="text-xs font-extrabold text-slate-800" data-i18n="slide2.members.ferry.role">Frontend Developer</span>
           </div>
 
           <!-- Member 2: Fhazar (PM) -->
-          <div class="bg-red-50 border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
-            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-2.5 ring-2 ring-horizon-700">
+          <div class="bg-red-50 border-2 border-slate-900 rounded-xl p-5 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-3 ring-2 ring-horizon-700">
               <img src="assets/team/fhazar.jpg" alt="Fhazar Raffiful Aqyla" class="w-full h-full object-cover">
             </div>
-            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3.5 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1 uppercase tracking-wider">
+            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3.5 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1.5 uppercase tracking-wider">
               Fhazar Raffiful Aqyla
             </span>
-            <span class="text-xs font-extrabold text-horizon-700 mb-0.5">Project Manager</span>
-            <span class="text-[11px] text-slate-700 font-medium">Scrum Master • Product Roadmap • SCM Strategic Alignment</span>
+            <span class="text-xs font-extrabold text-horizon-700" data-i18n="slide2.members.fhazar.role">Project Manager</span>
           </div>
 
           <!-- Member 3: Hildan -->
-          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
-            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-2.5">
+          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-5 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-3">
               <img src="assets/team/hildan.png" alt="Hildan Anugrah Tamadi Putra" class="w-full h-full object-cover">
             </div>
-            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1 uppercase tracking-wider">
+            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3.5 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1.5 uppercase tracking-wider">
               Hildan Anugrah Tamadi Putra
             </span>
-            <span class="text-xs font-extrabold text-slate-900 mb-0.5">Backend Developer</span>
-            <span class="text-[11px] text-slate-600 font-medium">Laravel 12 Engine • FIFO Valuation • Pessimistic Lock</span>
+            <span class="text-xs font-extrabold text-slate-800" data-i18n="slide2.members.hildan.role">Backend Developer</span>
           </div>
 
           <!-- Member 4: Fadel -->
-          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
-            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-2.5">
+          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-5 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-3">
               <img src="assets/team/fadel.png" alt="Fadel Rahmadhan" class="w-full h-full object-cover">
             </div>
-            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1 uppercase tracking-wider">
+            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3.5 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1.5 uppercase tracking-wider">
               Fadel Rahmadhan
             </span>
-            <span class="text-xs font-extrabold text-slate-900 mb-0.5">Quality Assurance</span>
-            <span class="text-[11px] text-slate-600 font-medium">Blackbox Testing • Stress Concurrency • Double-Claim Shield</span>
+            <span class="text-xs font-extrabold text-slate-800" data-i18n="slide2.members.fadel.role">Quality Assurance</span>
           </div>
 
           <!-- Member 5: Daffa -->
-          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
-            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-2.5">
+          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-5 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-3">
               <img src="assets/team/daffa.jpg" alt="Daffa Nazriel Zaidan" class="w-full h-full object-cover">
             </div>
-            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1 uppercase tracking-wider">
+            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3.5 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1.5 uppercase tracking-wider">
               Daffa Nazriel Zaidan
             </span>
-            <span class="text-xs font-extrabold text-slate-900 mb-0.5">UI/UX Designer</span>
-            <span class="text-[11px] text-slate-600 font-medium">Neo-Brutalist Design System • Student Journey • Usability Testing</span>
+            <span class="text-xs font-extrabold text-slate-800" data-i18n="slide2.members.daffa.role">UI/UX Designer</span>
           </div>
 
           <!-- Member 6: Acep -->
-          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
-            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-2.5">
+          <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-5 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all">
+            <div class="w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-3">
               <img src="assets/team/acep.png" alt="Acep Ugan Saputra" class="w-full h-full object-cover">
             </div>
-            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1 uppercase tracking-wider">
+            <span class="bg-horizon-700 text-white border-2 border-slate-900 px-3.5 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1.5 uppercase tracking-wider">
               Acep Ugan Saputra
             </span>
-            <span class="text-xs font-extrabold text-slate-900 mb-0.5">System Analyst</span>
-            <span class="text-[11px] text-slate-600 font-medium">Business Process BPMN • Relational Database • SCM Audit Trail</span>
+            <span class="text-xs font-extrabold text-slate-800" data-i18n="slide2.members.acep.role">System Analyst</span>
           </div>
         </div>
       </section>
@@ -274,70 +286,70 @@
         <div class="border-b-2 border-slate-900 pb-3 mb-5 flex items-start gap-3">
           <div class="w-2.5 h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
           <div>
-            <span class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Struktur Rantai Pasok</span>
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Pemetaan Stakeholder & Aliran Fisik Barang</h2>
-            <p class="text-xs text-slate-600 font-medium mt-0.5">Aliran terpadu dari pabrik vendor hingga serah terima mahasiswa dengan prinsip "Data Mengunci Fisik"</p>
+            <span data-i18n="slide3.badge" class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Struktur Rantai Pasok</span>
+            <h2 data-i18n="slide3.title" class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Pemetaan Stakeholder & Aliran Fisik Barang</h2>
+            <p data-i18n="slide3.subtitle" class="text-xs text-slate-600 font-medium mt-0.5">Aliran terpadu dari pabrik vendor hingga serah terima mahasiswa dengan prinsip "Data Mengunci Fisik"</p>
           </div>
         </div>
 
         <div class="grid grid-cols-4 gap-4 my-auto">
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">01 • Supplier (Hulu)</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2">Pabrik Garmen & Sepatu</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide3.col1.step">01 • Supplier (Hulu)</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2" data-i18n="slide3.col1.title">Pabrik Garmen & Sepatu</h3>
               <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
-                <li>• Memproduksi paket seragam dan sepatu sesuai pesanan pengadaan kampus (PO).</li>
-                <li>• Menerapkan standarisasi kode varian SKU per kategori dan ukuran.</li>
-                <li>• <strong>Titik Barang:</strong> Pengiriman kardus stok ke gudang kampus (Inbound Logistics).</li>
+                <li data-i18n="slide3.col1.p1">• Memproduksi paket seragam dan sepatu sesuai pesanan pengadaan kampus (PO).</li>
+                <li data-i18n="slide3.col1.p2">• Menerapkan standarisasi kode varian SKU per kategori dan ukuran.</li>
+                <li data-i18n-html="slide3.col1.p3">• <strong>Titik Barang:</strong> Pengiriman kardus stok ke gudang kampus (Inbound Logistics).</li>
               </ul>
             </div>
             <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700">
-              Aliran: PO Agregat ➔ Fisik Masuk
+              <span data-i18n="slide3.col1.flow">Aliran: PO Agregat ➔ Fisik Masuk</span>
             </div>
           </div>
 
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">02 • Gudang (Inbound)</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2">Gudang Logistik Kampus</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide3.col2.step">02 • Gudang (Inbound)</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2" data-i18n="slide3.col2.title">Gudang Logistik Kampus</h3>
               <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
-                <li>• Penerimaan fisik barang (StockReceive) dan pemeriksaan mutu (QC).</li>
-                <li>• Pencatatan batch urutan FIFO (First-In, First-Out) dan nilai HPP unit.</li>
-                <li>• <strong>Titik Barang:</strong> Transfer stok batch tertua menuju posko distribusi loket.</li>
+                <li data-i18n="slide3.col2.p1">• Penerimaan fisik barang (StockReceive) dan pemeriksaan mutu (QC).</li>
+                <li data-i18n="slide3.col2.p2">• Pencatatan batch urutan FIFO (First-In, First-Out) dan nilai HPP unit.</li>
+                <li data-i18n-html="slide3.col2.p3">• <strong>Titik Barang:</strong> Transfer stok batch tertua menuju posko distribusi loket.</li>
               </ul>
             </div>
             <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700">
-              Aliran: Inbound ➔ POS Loket
+              <span data-i18n="slide3.col2.flow">Aliran: Inbound ➔ POS Loket</span>
             </div>
           </div>
 
           <div class="bg-red-50 border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">03 • Verifikator & Loket</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2">Staf Keuangan & Posko</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide3.col3.step">03 • Verifikator & Loket</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2" data-i18n="slide3.col3.title">Staf Keuangan & Posko</h3>
               <ul class="text-xs text-slate-700 space-y-2 leading-relaxed">
-                <li>• <strong>Keuangan:</strong> Otorisasi status pelunasan biaya kuliah mahasiswa (Eligibility).</li>
-                <li>• <strong>Staf Posko:</strong> Melayani meja pembagian fisik seragam di posko kampus.</li>
-                <li>• <strong>Titik Kritis:</strong> Validasi identitas QR Code dan pencocokan ukuran saat fitting.</li>
+                <li data-i18n-html="slide3.col3.p1">• <strong>Keuangan:</strong> Otorisasi status pelunasan biaya kuliah mahasiswa (Eligibility).</li>
+                <li data-i18n-html="slide3.col3.p2">• <strong>Staf Posko:</strong> Melayani meja pembagian fisik seragam di posko kampus.</li>
+                <li data-i18n-html="slide3.col3.p3">• <strong>Titik Kritis:</strong> Validasi identitas QR Code dan pencocokan ukuran saat fitting.</li>
               </ul>
             </div>
             <div class="mt-3 pt-2 border-t border-red-300 text-[11px] font-bold text-horizon-700">
-              Aliran: Data Lunas ➔ Serah Fisik
+              <span data-i18n="slide3.col3.flow">Aliran: Data Lunas ➔ Serah Fisik</span>
             </div>
           </div>
 
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">04 • Konsumen (Hilir)</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2">Mahasiswa (Customer)</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide3.col4.step">04 • Konsumen (Hilir)</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2" data-i18n="slide3.col4.title">Mahasiswa (Customer)</h3>
               <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
-                <li>• Konsumen akhir yang memiliki hak jatah barang (Entitlement) sesuai prodi.</li>
-                <li>• Mengisi profil ukuran mandiri di web dan menerima tiket jadwal pembagian.</li>
-                <li>• <strong>Titik Info:</strong> Menunjukkan tiket QR Code beresolusi tinggi (NIM murni) di loket.</li>
+                <li data-i18n="slide3.col4.p1">• Konsumen akhir yang memiliki hak jatah barang (Entitlement) sesuai prodi.</li>
+                <li data-i18n="slide3.col4.p2">• Mengisi profil ukuran mandiri di web dan menerima tiket jadwal pembagian.</li>
+                <li data-i18n-html="slide3.col4.p3">• <strong>Titik Info:</strong> Menunjukkan tiket QR Code beresolusi tinggi (NIM murni) di loket.</li>
               </ul>
             </div>
             <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700">
-              Aliran: Profil ➔ Seragam Pas
+              <span data-i18n="slide3.col4.flow">Aliran: Profil ➔ Seragam Pas</span>
             </div>
           </div>
         </div>
@@ -350,9 +362,9 @@
         <div class="border-b-2 border-slate-900 pb-3 mb-4 flex items-start gap-3">
           <div class="w-2.5 h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
           <div>
-            <span class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Analisis Masalah Sistem Lama</span>
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Evaluasi Kendala Operasional & Dampak Sistemik</h2>
-            <p class="text-xs text-slate-600 font-medium mt-0.5">Analisis akar masalah pengelolaan manual terhadap pembengkakan biaya, waktu kerja, dan penurunan mutu layanan</p>
+            <span data-i18n="slide4.badge" class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Analisis Masalah Sistem Lama</span>
+            <h2 data-i18n="slide4.title" class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Evaluasi Kendala Operasional & Dampak Sistemik</h2>
+            <p data-i18n="slide4.subtitle" class="text-xs text-slate-600 font-medium mt-0.5">Analisis akar masalah pengelolaan manual terhadap pembengkakan biaya, waktu kerja, dan penurunan mutu layanan</p>
           </div>
         </div>
 
@@ -360,31 +372,31 @@
           <table class="w-full text-left text-xs">
             <thead class="bg-horizon-700 text-white font-extrabold border-b-2 border-slate-900 text-[11.5px]">
               <tr>
-                <th class="py-3 px-4 w-1/4">Masalah Utama (Gejala Lapangan)</th>
-                <th class="py-3 px-4 w-[38%] border-l-2 border-slate-900">Akar Penyebab Masalah (Root Cause)</th>
-                <th class="py-3 px-4 w-[37%] border-l-2 border-slate-900">Dampak terhadap Biaya, Waktu, Stok & Layanan</th>
+                <th data-i18n="slide4.thProblem" class="py-3 px-4 w-1/4">Masalah Utama (Gejala Lapangan)</th>
+                <th data-i18n="slide4.thCause" class="py-3 px-4 w-[38%] border-l-2 border-slate-900">Akar Penyebab Masalah (Root Cause)</th>
+                <th data-i18n="slide4.thImpact" class="py-3 px-4 w-[37%] border-l-2 border-slate-900">Dampak terhadap Biaya, Waktu, Stok & Layanan</th>
               </tr>
             </thead>
             <tbody class="divide-y-2 divide-slate-900 leading-relaxed text-slate-800">
               <tr class="hover:bg-slate-50">
-                <td class="py-2.5 px-4 font-extrabold text-horizon-700">1. Ketidakcocokan Ukuran & Penumpukan Dead-Stock</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900">Pemesanan pengadaan ke vendor pabrik hanya menggunakan tebakan rasio historis. Tidak ada sistem survey profil ukuran mandiri sebelum tender dibuka.</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Dampak Stok & Biaya:</strong> Ukuran favorit (M/L) habis pada hari pertama pembagian, ukuran ekstrem (XS, 3XL) menumpuk bertahun-tahun. Modal kampus mengendap menjadi dead-stock.</td>
+                <td data-i18n="slide4.row1.problem" class="py-2.5 px-4 font-extrabold text-horizon-700">1. Ketidakcocokan Ukuran & Penumpukan Dead-Stock</td>
+                <td data-i18n="slide4.row1.cause" class="py-2.5 px-4 border-l-2 border-slate-900">Pemesanan pengadaan ke vendor pabrik hanya menggunakan tebakan rasio historis. Tidak ada sistem survey profil ukuran mandiri sebelum tender dibuka.</td>
+                <td data-i18n-html="slide4.row1.impact" class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Dampak Stok & Biaya:</strong> Ukuran favorit (M/L) habis pada hari pertama pembagian, ukuran ekstrem (XS, 3XL) menumpuk bertahun-tahun. Modal kampus mengendap menjadi dead-stock.</td>
               </tr>
               <tr class="bg-red-50/60 hover:bg-red-50">
-                <td class="py-2.5 px-4 font-extrabold text-horizon-700">2. File Excel Sering Crash & Pengumuman Lambat</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900">Departemen Keuangan memakai satu file spreadsheet raksasa (~4.5 MB, 19 sheet) untuk ribuan data mahasiswa. Pengiriman jadwal disebarkan manual via surel.</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Dampak Waktu & Layanan:</strong> Aplikasi sering not responding atau data korup. Rekapitulasi memakan waktu berminggu-minggu dan info jadwal terlambat diterima mahasiswa.</td>
+                <td data-i18n="slide4.row2.problem" class="py-2.5 px-4 font-extrabold text-horizon-700">2. File Excel Sering Crash & Pengumuman Lambat</td>
+                <td data-i18n="slide4.row2.cause" class="py-2.5 px-4 border-l-2 border-slate-900">Departemen Keuangan memakai satu file spreadsheet raksasa (~4.5 MB, 19 sheet) untuk ribuan data mahasiswa. Pengiriman jadwal disebarkan manual via surel.</td>
+                <td data-i18n-html="slide4.row2.impact" class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Dampak Waktu & Layanan:</strong> Aplikasi sering not responding atau data korup. Rekapitulasi memakan waktu berminggu-minggu dan info jadwal terlambat diterima mahasiswa.</td>
               </tr>
               <tr class="hover:bg-slate-50">
-                <td class="py-2.5 px-4 font-extrabold text-horizon-700">3. Bottleneck Loket Posko & Risiko Double-Claim</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900">Pengecekan lunas, pencocokan hak prodi, dan paraf bukti serah terima dilakukan manual dengan mencentang map formulir kertas fisik.</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Dampak Waktu & Akurasi:</strong> Waktu pelayanan lambat (15–20 menit per orang), antrean ratusan meter, serta rawan klaim ganda (double-claim) di loket atau hari berbeda.</td>
+                <td data-i18n="slide4.row3.problem" class="py-2.5 px-4 font-extrabold text-horizon-700">3. Bottleneck Loket Posko & Risiko Double-Claim</td>
+                <td data-i18n="slide4.row3.cause" class="py-2.5 px-4 border-l-2 border-slate-900">Pengecekan lunas, pencocokan hak prodi, dan paraf bukti serah terima dilakukan manual dengan mencentang map formulir kertas fisik.</td>
+                <td data-i18n-html="slide4.row3.impact" class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Dampak Waktu & Akurasi:</strong> Waktu pelayanan lambat (15–20 menit per orang), antrean ratusan meter, serta rawan klaim ganda (double-claim) di loket atau hari berbeda.</td>
               </tr>
               <tr class="bg-red-50/60 hover:bg-red-50">
-                <td class="py-2.5 px-4 font-extrabold text-horizon-700">4. Susut Stok Liar & Valuasi HPP Buram</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900">Penerimaan seragam dari vendor dengan harga berbeda tidak dicatat per batch FIFO dan tanpa kartu mutasi stok otomatis yang terikat ke transaksi loket.</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Dampak Biaya & Akuntansi:</strong> Selisih barang susut (shrinkage) tidak terlacak penanggungjawabnya. Valuasi HPP dan analisis Gross Profit Margin (GPM) terdistorsi.</td>
+                <td data-i18n="slide4.row4.problem" class="py-2.5 px-4 font-extrabold text-horizon-700">4. Susut Stok Liar & Valuasi HPP Buram</td>
+                <td data-i18n="slide4.row4.cause" class="py-2.5 px-4 border-l-2 border-slate-900">Penerimaan seragam dari vendor dengan harga berbeda tidak dicatat per batch FIFO dan tanpa kartu mutasi stok otomatis yang terikat ke transaksi loket.</td>
+                <td data-i18n-html="slide4.row4.impact" class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Dampak Biaya & Akuntansi:</strong> Selisih barang susut (shrinkage) tidak terlacak penanggungjawabnya. Valuasi HPP dan analisis Gross Profit Margin (GPM) terdistorsi.</td>
               </tr>
             </tbody>
           </table>
@@ -398,59 +410,59 @@
         <div class="border-b-2 border-slate-900 pb-3 mb-4 flex items-start gap-3">
           <div class="w-2.5 h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
           <div>
-            <span class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Analisis Aliran Informasi</span>
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Titik Kemacetan & Isolasi Data (As-Is State)</h2>
-            <p class="text-xs text-slate-600 font-medium mt-0.5">Hambatan komunikasi antarbagian yang memicu keterlambatan, inkonsistensi data, dan pembatalan layanan</p>
+            <span data-i18n="slide5.badge" class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Analisis Aliran Informasi</span>
+            <h2 data-i18n="slide5.title" class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Titik Kemacetan & Isolasi Data (As-Is State)</h2>
+            <p data-i18n="slide5.subtitle" class="text-xs text-slate-600 font-medium mt-0.5">Hambatan komunikasi antarbagian yang memicu keterlambatan, inkonsistensi data, dan pembatalan layanan</p>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4 my-auto">
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2 py-0.5 rounded uppercase">Aliran 01 • Mahasiswa ➔ Kampus</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-1.5">Kebutuhan: Profil Ukuran & Jadwal</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide5.card1.flow">Aliran 01 • Mahasiswa ➔ Kampus</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-1.5" data-i18n="slide5.card1.title">Kebutuhan: Profil Ukuran & Jadwal</h3>
               <ul class="text-xs text-slate-600 space-y-1.5 leading-relaxed">
-                <li>• <strong>Asal & Tujuan:</strong> Mahasiswa mengisi formulir ke kampus dan menerima jadwal pembagian via email.</li>
-                <li>• <strong>Titik Masalah:</strong> Google Form terpisah tanpa validasi SKU baku, memicu pengisian ganda dan rekapitulasi data staf terlambat berminggu-minggu.</li>
+                <li data-i18n-html="slide5.card1.p1">• <strong>Asal & Tujuan:</strong> Mahasiswa mengisi formulir ke kampus dan menerima jadwal pembagian via email.</li>
+                <li data-i18n-html="slide5.card1.p2">• <strong>Titik Masalah:</strong> Google Form terpisah tanpa validasi SKU baku, memicu pengisian ganda dan rekapitulasi data staf terlambat berminggu-minggu.</li>
               </ul>
             </div>
-            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700">Kondisi: Informasi Terlambat & Format Liar</div>
+            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700"><span data-i18n="slide5.card1.status">Kondisi: Informasi Terlambat & Format Liar</span></div>
           </div>
 
           <div class="bg-red-50 border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2 py-0.5 rounded uppercase">Aliran 02 • Keuangan ➔ Posko Hari-H</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-1.5">Kebutuhan: Status Lunas (Eligibility)</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide5.card2.flow">Aliran 02 • Keuangan ➔ Posko Hari-H</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-1.5" data-i18n="slide5.card2.title">Kebutuhan: Status Lunas (Eligibility)</h3>
               <ul class="text-xs text-slate-700 space-y-1.5 leading-relaxed">
-                <li>• <strong>Asal & Tujuan:</strong> Staf Keuangan mengekspor data pelunasan ke staf meja posko pembagian seragam.</li>
-                <li>• <strong>Titik Masalah:</strong> Data terisolasi di file Excel lokal staf. Saat ada pelunasan baru di bank pada hari-H, staf posko tidak terupdate sehingga maba tertolak.</li>
+                <li data-i18n-html="slide5.card2.p1">• <strong>Asal & Tujuan:</strong> Staf Keuangan mengekspor data pelunasan ke staf meja posko pembagian seragam.</li>
+                <li data-i18n-html="slide5.card2.p2">• <strong>Titik Masalah:</strong> Data terisolasi di file Excel lokal staf. Saat ada pelunasan baru di bank pada hari-H, staf posko tidak terupdate sehingga maba tertolak.</li>
               </ul>
             </div>
-            <div class="mt-3 pt-2 border-t border-red-300 text-[11px] font-bold text-horizon-700">Kondisi: Informasi Terputus (Silo Data Lokal)</div>
+            <div class="mt-3 pt-2 border-t border-red-300 text-[11px] font-bold text-horizon-700"><span data-i18n="slide5.card2.status">Kondisi: Informasi Terputus (Silo Data Lokal)</span></div>
           </div>
 
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2 py-0.5 rounded uppercase">Aliran 03 • Meja Posko ➔ Gudang</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-1.5">Kebutuhan: Kuota Hak & Kartu Mutasi</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide5.card3.flow">Aliran 03 • Meja Posko ➔ Gudang</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-1.5" data-i18n="slide5.card3.title">Kebutuhan: Kuota Hak & Kartu Mutasi</h3>
               <ul class="text-xs text-slate-600 space-y-1.5 leading-relaxed">
-                <li>• <strong>Asal & Tujuan:</strong> Staf posko memverifikasi paket hak prodi dan mencatat mutasi seragam yang keluar.</li>
-                <li>• <strong>Titik Masalah:</strong> Penyerahan seragam dicatat di lembaran kertas. Pengurangan saldo stok gudang baru direkap malam hari, memicu risiko susut stok.</li>
+                <li data-i18n-html="slide5.card3.p1">• <strong>Asal & Tujuan:</strong> Staf posko memverifikasi paket hak prodi dan mencatat mutasi seragam yang keluar.</li>
+                <li data-i18n-html="slide5.card3.p2">• <strong>Titik Masalah:</strong> Penyerahan seragam dicatat di lembaran kertas. Pengurangan saldo stok gudang baru direkap malam hari, memicu risiko susut stok.</li>
               </ul>
             </div>
-            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700">Kondisi: Informasi Terlambat (Paper-Based Tracking)</div>
+            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700"><span data-i18n="slide5.card3.status">Kondisi: Informasi Terlambat (Paper-Based Tracking)</span></div>
           </div>
 
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2 py-0.5 rounded uppercase">Aliran 04 • Pengadaan ➔ Pabrik</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-1.5">Kebutuhan: Purchase Order Agregat</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide5.card4.flow">Aliran 04 • Pengadaan ➔ Pabrik</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-1.5" data-i18n="slide5.card4.title">Kebutuhan: Purchase Order Agregat</h3>
               <ul class="text-xs text-slate-600 space-y-1.5 leading-relaxed">
-                <li>• <strong>Asal & Tujuan:</strong> Pengadaan kampus mengirim rincian jumlah potong seragam dan sepatu ke pabrik.</li>
-                <li>• <strong>Titik Masalah:</strong> Purchase Order ke pabrik hanya estimasi kasar tanpa dasar profil data riil maba, memicu lead-time penukaran barang berbulan-bulan.</li>
+                <li data-i18n-html="slide5.card4.p1">• <strong>Asal & Tujuan:</strong> Pengadaan kampus mengirim rincian jumlah potong seragam dan sepatu ke pabrik.</li>
+                <li data-i18n-html="slide5.card4.p2">• <strong>Titik Masalah:</strong> Purchase Order ke pabrik hanya estimasi kasar tanpa dasar profil data riil maba, memicu lead-time penukaran barang berbulan-bulan.</li>
               </ul>
             </div>
-            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700">Kondisi: Informasi Tidak Akurat (Blind Ordering)</div>
+            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700"><span data-i18n="slide5.card4.status">Kondisi: Informasi Tidak Akurat (Blind Ordering)</span></div>
           </div>
         </div>
       </section>
@@ -462,9 +474,9 @@
         <div class="border-b-2 border-slate-900 pb-3 mb-4 flex items-start gap-3">
           <div class="w-2.5 h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
           <div>
-            <span class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Rekomendasi Sistem Terpadu</span>
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Pemilihan Arsitektur Sistem Informasi (UniStock Engine)</h2>
-            <p class="text-xs text-slate-600 font-medium mt-0.5">Integrasi empat pilar sistem: ERP, SCM, POS, dan WMS dalam satu platform web modern</p>
+            <span data-i18n="slide6.badge" class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Rekomendasi Sistem Terpadu</span>
+            <h2 data-i18n="slide6.title" class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Pemilihan Arsitektur Sistem Informasi (HorizonU Uniform Engine)</h2>
+            <p data-i18n="slide6.subtitle" class="text-xs text-slate-600 font-medium mt-0.5">Integrasi empat pilar sistem: ERP, SCM, POS, dan WMS dalam satu platform web modern</p>
           </div>
         </div>
 
@@ -472,36 +484,36 @@
           <table class="w-full text-left text-xs">
             <thead class="bg-horizon-700 text-white font-extrabold border-b-2 border-slate-900 text-[11.5px]">
               <tr>
-                <th class="py-3 px-4 w-[22%]">Masalah yang Diselesaikan</th>
-                <th class="py-3 px-4 w-[26%] border-l-2 border-slate-900">Sistem & Modul Terpilih</th>
-                <th class="py-3 px-4 w-[34%] border-l-2 border-slate-900">Fungsi Sistem dalam Kasus</th>
-                <th class="py-3 px-4 w-[18%] border-l-2 border-slate-900">Manfaat Terukur</th>
+                <th data-i18n="slide6.thProblem" class="py-3 px-4 w-[22%]">Masalah yang Diselesaikan</th>
+                <th data-i18n="slide6.thSystem" class="py-3 px-4 w-[26%] border-l-2 border-slate-900">Sistem & Modul Terpilih</th>
+                <th data-i18n="slide6.thFunc" class="py-3 px-4 w-[34%] border-l-2 border-slate-900">Fungsi Sistem dalam Kasus</th>
+                <th data-i18n="slide6.thBenefit" class="py-3 px-4 w-[18%] border-l-2 border-slate-900">Manfaat Terukur</th>
               </tr>
             </thead>
             <tbody class="divide-y-2 divide-slate-900 leading-relaxed text-slate-800">
               <tr class="hover:bg-slate-50">
-                <td class="py-2.5 px-4 font-extrabold text-horizon-700">Excel Crash & Data Mahasiswa Terpecah</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>ERP Master & Entitlement Engine</strong><br><span class="text-[11px] text-slate-500 font-mono">MySQL InnoDB Relational</span></td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900">Mengelola master data mahasiswa, struktur base code 4-segmen, impor massal via Maatwebsite, serta matriks kuota hak (Entitlement) otomatis per jenjang dan prodi.</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>100% Bebas Crash Excel</strong>, data terisolasi ACID, single source of truth.</td>
+                <td data-i18n="slide6.row1.problem" class="py-2.5 px-4 font-extrabold text-horizon-700">Excel Crash & Data Mahasiswa Terpecah</td>
+                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong data-i18n="slide6.row1.system">ERP Master & Entitlement Engine</strong><br><span data-i18n="slide6.row1.tech" class="text-[11px] text-slate-500 font-mono">MySQL InnoDB Relational</span></td>
+                <td data-i18n="slide6.row1.func" class="py-2.5 px-4 border-l-2 border-slate-900">Mengelola master data mahasiswa, struktur base code 4-segmen, impor massal via Maatwebsite, serta matriks kuota hak (Entitlement) otomatis per jenjang dan prodi.</td>
+                <td data-i18n-html="slide6.row1.benefit" class="py-2.5 px-4 border-l-2 border-slate-900"><strong>100% Bebas Crash Excel</strong>, data terisolasi ACID, single source of truth.</td>
               </tr>
               <tr class="bg-red-50/60 hover:bg-red-50">
-                <td class="py-2.5 px-4 font-extrabold text-horizon-700">Dead-Stock & Pengumuman Jadwal Lambat</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>SCM Demand Planning Portal</strong><br><span class="text-[11px] text-slate-500 font-mono">Size Event & Schedule Hub</span></td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900">Membuka event input profil ukuran mandiri mahasiswa (SizeChangeEvent), siaran jadwal terfilter per prodi, serta kalkulasi otomatis Demand vs Shortage untuk tender vendor.</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Zero Dead-Stock</strong>, pengadaan pabrik presisi 100% sesuai ukuran riil.</td>
+                <td data-i18n="slide6.row2.problem" class="py-2.5 px-4 font-extrabold text-horizon-700">Dead-Stock & Pengumuman Jadwal Lambat</td>
+                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong data-i18n="slide6.row2.system">SCM Demand Planning Portal</strong><br><span data-i18n="slide6.row2.tech" class="text-[11px] text-slate-500 font-mono">Size Event & Schedule Hub</span></td>
+                <td data-i18n="slide6.row2.func" class="py-2.5 px-4 border-l-2 border-slate-900">Membuka event input profil ukuran mandiri mahasiswa (SizeChangeEvent), siaran jadwal terfilter per prodi, serta kalkulasi otomatis Demand vs Shortage untuk tender vendor.</td>
+                <td data-i18n-html="slide6.row2.benefit" class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Zero Dead-Stock</strong>, pengadaan pabrik presisi 100% sesuai ukuran riil.</td>
               </tr>
               <tr class="hover:bg-slate-50">
-                <td class="py-2.5 px-4 font-extrabold text-horizon-700">Bottleneck Antrean & Risiko Double-Claim</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>POS QR Verification Engine</strong><br><span class="text-[11px] text-slate-500 font-mono">BaconQrCode & HTML5 Scanner</span></td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900">Penerbitan QR Code NIM beresolusi tinggi (Level H) dan eksekusi 6-Lapis Validasi Atomik via kamera webcam loket (Lunas, Sesi, Prodi, Gender, Sisa Hak, Stok Rak).</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Waktu layan &lt; 30 detik/mhs</strong>, nol risiko penyerahan ganda.</td>
+                <td data-i18n="slide6.row3.problem" class="py-2.5 px-4 font-extrabold text-horizon-700">Bottleneck Antrean & Risiko Double-Claim</td>
+                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong data-i18n="slide6.row3.system">POS QR Verification Engine</strong><br><span data-i18n="slide6.row3.tech" class="text-[11px] text-slate-500 font-mono">BaconQrCode & HTML5 Scanner</span></td>
+                <td data-i18n="slide6.row3.func" class="py-2.5 px-4 border-l-2 border-slate-900">Penerbitan QR Code NIM beresolusi tinggi (Level H) dan eksekusi 6-Lapis Validasi Atomik via kamera webcam loket (Lunas, Sesi, Prodi, Gender, Sisa Hak, Stok Rak).</td>
+                <td data-i18n-html="slide6.row3.benefit" class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Waktu layan &lt; 30 detik/mhs</strong>, nol risiko penyerahan ganda.</td>
               </tr>
               <tr class="bg-red-50/60 hover:bg-red-50">
-                <td class="py-2.5 px-4 font-extrabold text-horizon-700">Susut Stok Gudang & Valuasi HPP Buram</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>WMS & FIFO Costing Engine</strong><br><span class="text-[11px] text-slate-500 font-mono">StockBatch & Movement Ledger</span></td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900">Melacak batch penerimaan vendor tertua (FIFO), pemotongan stok berkartu audit, rekonsiliasi Stock Opname fisik via variance kalkulator, serta analitik margin laba kotor.</td>
-                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Valuasi HPP FIFO real-time</strong>, audit transparan, cegah selisih fisik.</td>
+                <td data-i18n="slide6.row4.problem" class="py-2.5 px-4 font-extrabold text-horizon-700">Susut Stok Gudang & Valuasi HPP Buram</td>
+                <td class="py-2.5 px-4 border-l-2 border-slate-900"><strong data-i18n="slide6.row4.system">WMS & FIFO Costing Engine</strong><br><span data-i18n="slide6.row4.tech" class="text-[11px] text-slate-500 font-mono">StockBatch & Movement Ledger</span></td>
+                <td data-i18n="slide6.row4.func" class="py-2.5 px-4 border-l-2 border-slate-900">Melacak batch penerimaan vendor tertua (FIFO), pemotongan stok berkartu audit, rekonsiliasi Stock Opname fisik via variance kalkulator, serta analitik margin laba kotor.</td>
+                <td data-i18n-html="slide6.row4.benefit" class="py-2.5 px-4 border-l-2 border-slate-900"><strong>Valuasi HPP FIFO real-time</strong>, audit transparan, cegah selisih fisik.</td>
               </tr>
             </tbody>
           </table>
@@ -515,63 +527,63 @@
         <div class="border-b-2 border-slate-900 pb-3 mb-4 flex items-start gap-3">
           <div class="w-2.5 h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
           <div>
-            <span class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Desain Arsitektur Solusi</span>
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Aliran 4-Fase Closed-Loop Supply Chain Engine</h2>
-            <p class="text-xs text-slate-600 font-medium mt-0.5">Konektivitas sistem end-to-end, pemrosesan transaksi atomik, dan closed-loop data feedback</p>
+            <span data-i18n="slide7.badge" class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Desain Arsitektur Solusi</span>
+            <h2 data-i18n="slide7.title" class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Aliran 4-Fase Closed-Loop Supply Chain Engine</h2>
+            <p data-i18n="slide7.subtitle" class="text-xs text-slate-600 font-medium mt-0.5">Konektivitas sistem end-to-end, pemrosesan transaksi atomik, dan closed-loop data feedback</p>
           </div>
         </div>
 
         <div class="grid grid-cols-4 gap-4 my-auto">
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Fase 1 • Hulu (Inbound)</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2">Inbound & Batch FIFO</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide7.phase1.step">Fase 1 • Hulu (Inbound)</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2" data-i18n="slide7.phase1.title">Inbound & Batch FIFO</h3>
               <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
-                <li>• Pencatatan barang dari vendor garmen pada modul StockReceive.</li>
-                <li>• Sistem menerbitkan ID batch terurut (FIFO Queue Sequence).</li>
-                <li>• Pencatatan otomatis jurnal mutasi masuk (StockMovement IN) dan penetapan unit HPP batch.</li>
+                <li data-i18n="slide7.phase1.p1">• Pencatatan barang dari vendor garmen pada modul StockReceive.</li>
+                <li data-i18n="slide7.phase1.p2">• Sistem menerbitkan ID batch terurut (FIFO Queue Sequence).</li>
+                <li data-i18n="slide7.phase1.p3">• Pencatatan otomatis jurnal mutasi masuk (StockMovement IN) dan penetapan unit HPP batch.</li>
               </ul>
             </div>
-            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700">Output: Batch FIFO Terdaftar</div>
+            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700"><span data-i18n="slide7.phase1.output">Output: Batch FIFO Terdaftar</span></div>
           </div>
 
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Fase 2 • Demand (Planning)</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2">Eligibility & Profiling</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide7.phase2.step">Fase 2 • Demand (Planning)</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2" data-i18n="slide7.phase2.title">Eligibility & Profiling</h3>
               <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
-                <li>• Keuangan mengaktifkan data mahasiswa lunas di EligibilityRecord.</li>
-                <li>• Mahasiswa input profil ukuran badan mandiri di event portal.</li>
-                <li>• Sistem menghitung Demand vs Shortage untuk acuan belanja pengadaan vendor.</li>
+                <li data-i18n="slide7.phase2.p1">• Keuangan mengaktifkan data mahasiswa lunas di EligibilityRecord.</li>
+                <li data-i18n="slide7.phase2.p2">• Mahasiswa input profil ukuran badan mandiri di event portal.</li>
+                <li data-i18n="slide7.phase2.p3">• Sistem menghitung Demand vs Shortage untuk acuan belanja pengadaan vendor.</li>
               </ul>
             </div>
-            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700">Output: QR Code & Jadwal Aktif</div>
+            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700"><span data-i18n="slide7.phase2.output">Output: QR Code & Jadwal Aktif</span></div>
           </div>
 
           <div class="bg-red-50 border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Fase 3 • Hilir (Outbound)</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2">POS QR & 6-Lapis Validasi</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide7.phase3.step">Fase 3 • Hilir (Outbound)</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2" data-i18n="slide7.phase3.title">POS QR & 6-Lapis Validasi</h3>
               <ul class="text-xs text-slate-700 space-y-2 leading-relaxed">
-                <li>• Staf memindai QR NIM mahasiswa di loket posko kampus.</li>
-                <li>• Eksekusi 6-Lapis Validasi Atomik via pessimistic lock (lockForUpdate).</li>
-                <li>• Pemotongan batch tertua otomatis (deductStockFifo) dan cetak tiket serah terima fisik.</li>
+                <li data-i18n="slide7.phase3.p1">• Staf memindai QR NIM mahasiswa di loket posko kampus.</li>
+                <li data-i18n="slide7.phase3.p2">• Eksekusi 6-Lapis Validasi Atomik via pessimistic lock (lockForUpdate).</li>
+                <li data-i18n="slide7.phase3.p3">• Pemotongan batch tertua otomatis (deductStockFifo) dan cetak tiket serah terima fisik.</li>
               </ul>
             </div>
-            <div class="mt-3 pt-2 border-t border-red-300 text-[11px] font-bold text-horizon-700">Output: Seragam Diterima Pas</div>
+            <div class="mt-3 pt-2 border-t border-red-300 text-[11px] font-bold text-horizon-700"><span data-i18n="slide7.phase3.output">Output: Seragam Diterima Pas</span></div>
           </div>
 
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-4 shadow-neo flex flex-col justify-between">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase">Fase 4 • Kontrol (Audit)</span>
-              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2">Opname & Closed-Loop</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10px] font-black px-2 py-0.5 rounded uppercase" data-i18n="slide7.phase4.step">Fase 4 • Kontrol (Audit)</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-2 mb-2" data-i18n="slide7.phase4.title">Opname & Closed-Loop</h3>
               <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
-                <li>• Stock Opname fisik berkala menghitung selisih variance otomatis.</li>
-                <li>• Penerbitan jurnal penyesuaian susut/surplus stok gudang.</li>
-                <li>• Generate analitik Gross Profit Margin (GPM) dan laporan sisa stok untuk pimpinan.</li>
+                <li data-i18n="slide7.phase4.p1">• Stock Opname fisik berkala menghitung selisih variance otomatis.</li>
+                <li data-i18n="slide7.phase4.p2">• Penerbitan jurnal penyesuaian susut/surplus stok gudang.</li>
+                <li data-i18n="slide7.phase4.p3">• Generate analitik Gross Profit Margin (GPM) dan laporan sisa stok untuk pimpinan.</li>
               </ul>
             </div>
-            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700">Output: Feedback Siklus Baru</div>
+            <div class="mt-3 pt-2 border-t border-slate-300 text-[11px] font-bold text-horizon-700"><span data-i18n="slide7.phase4.output">Output: Feedback Siklus Baru</span></div>
           </div>
         </div>
       </section>
@@ -583,9 +595,9 @@
         <div class="border-b-2 border-slate-900 pb-3 mb-4 flex items-start gap-3">
           <div class="w-2.5 h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
           <div>
-            <span class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Rencana Penerapan & Mitigasi</span>
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Prioritas Implementasi & Manajemen Risiko Lapangan</h2>
-            <p class="text-xs text-slate-600 font-medium mt-0.5">Tahapan kesiapan operasional serta prosedur kontingensi darurat saat hari-H distribusi</p>
+            <span data-i18n="slide8.badge" class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Rencana Penerapan & Mitigasi</span>
+            <h2 data-i18n="slide8.title" class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Prioritas Implementasi & Manajemen Risiko Lapangan</h2>
+            <p data-i18n="slide8.subtitle" class="text-xs text-slate-600 font-medium mt-0.5">Tahapan kesiapan operasional serta prosedur kontingensi darurat saat hari-H distribusi</p>
           </div>
         </div>
 
@@ -593,34 +605,34 @@
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-5 shadow-neo flex flex-col justify-between">
             <div>
               <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2.5 py-0.5 rounded uppercase flex items-center gap-1.5 w-fit mb-3">
-                <i class="fa-solid fa-list-check"></i> 3 Prioritas Implementasi
+                <i class="fa-solid fa-list-check"></i> <span data-i18n="slide8.priorities.badge">3 Prioritas Implementasi</span>
               </span>
-              <h3 class="text-base font-extrabold text-slate-900 mb-3">Tahapan Kesiapan Sistem</h3>
+              <h3 class="text-base font-extrabold text-slate-900 mb-3" data-i18n="slide8.priorities.title">Tahapan Kesiapan Sistem</h3>
               <ul class="text-xs text-slate-700 space-y-3 leading-relaxed">
-                <li>• <strong>Prioritas 1 (Master Data):</strong> Pembersihan data lama, pembuatan skema SKU 5-segmen, impor data mahasiswa, dan konfigurasi hak seragam prodi.</li>
-                <li>• <strong>Prioritas 2 (Integrasi Portal):</strong> Integrasi status lunas Keuangan (Eligibility), pembukaan jendela waktu pengisian profil ukuran maba, dan rilis jadwal.</li>
-                <li>• <strong>Prioritas 3 (Kesiapan SDM):</strong> Pelatihan teknis staf posko memakai scanner webcam, prosedur fitting ukuran, dan drill skenario darurat.</li>
+                <li data-i18n-html="slide8.priorities.p1">• <strong>Prioritas 1 (Master Data):</strong> Pembersihan data lama, pembuatan skema SKU 5-segmen, impor data mahasiswa, dan konfigurasi hak seragam prodi.</li>
+                <li data-i18n-html="slide8.priorities.p2">• <strong>Prioritas 2 (Integrasi Portal):</strong> Integrasi status lunas Keuangan (Eligibility), pembukaan jendela waktu pengisian profil ukuran maba, dan rilis jadwal.</li>
+                <li data-i18n-html="slide8.priorities.p3">• <strong>Prioritas 3 (Kesiapan SDM):</strong> Pelatihan teknis staf posko memakai scanner webcam, prosedur fitting ukuran, dan drill skenario darurat.</li>
               </ul>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-300 text-xs font-bold text-horizon-700">Roadmap: 6 Minggu Implementasi Penuh</div>
+            <div class="mt-4 pt-3 border-t border-slate-300 text-xs font-bold text-horizon-700"><span data-i18n="slide8.priorities.roadmap">Roadmap: 6 Minggu Implementasi Penuh</span></div>
           </div>
 
           <div class="bg-red-50 border-2 border-slate-900 rounded-xl p-5 shadow-neo flex flex-col justify-between">
             <div>
               <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2.5 py-0.5 rounded uppercase flex items-center gap-1.5 w-fit mb-3">
-                <i class="fa-solid fa-shield-virus"></i> 3 Risiko Lapangan & Cara Mitigasi
+                <i class="fa-solid fa-shield-virus"></i> <span data-i18n="slide8.risks.badge">3 Risiko Lapangan & Cara Mitigasi</span>
               </span>
-              <h3 class="text-base font-extrabold text-slate-900 mb-3">SOP Kontingensi Hari-H Posko</h3>
+              <h3 class="text-base font-extrabold text-slate-900 mb-3" data-i18n="slide8.risks.title">SOP Kontingensi Hari-H Posko</h3>
               <ul class="text-xs text-slate-700 space-y-3 leading-relaxed">
-                <li>• <strong>RISIKO 1: Baterai HP Mahasiswa Mati / QR Rusak</strong><br>
-                <span class="text-slate-600"><em>Mitigasi UniStock:</em> Bilah scanner staf posko dilengkapi fitur Fallback Search manual via NIM atau Nama yang langsung memanggil profil hak seketika.</span></li>
-                <li>• <strong>RISIKO 2: Ukuran Rak Habis / Fitting Beda</strong><br>
-                <span class="text-slate-600"><em>Mitigasi UniStock:</em> Fitur Partial Pickup memungkinkan staf menyerahkan barang yang tersedia (sisa hak tidak hangus) dan mencatat tukar ukuran di <code>student_size_histories</code>.</span></li>
-                <li>• <strong>RISIKO 3: Jaringan Internet Kampus Lambat / Dobel Klik</strong><br>
-                <span class="text-slate-600"><em>Mitigasi UniStock:</em> Transaksi dilindungi Pessimistic Row Locking (<code>lockForUpdate</code>) dan proteksi idempotensi, menjamin nol pemotongan stok ganda.</span></li>
+                <li>• <strong data-i18n="slide8.risks.r1Title">RISIKO 1: Baterai HP Mahasiswa Mati / QR Rusak</strong><br>
+                <span data-i18n-html="slide8.risks.r1Mitigation" class="text-slate-600"><em>Mitigasi HorizonU Uniform:</em> Bilah scanner staf posko dilengkapi fitur Fallback Search manual via NIM atau Nama yang langsung memanggil profil hak seketika.</span></li>
+                <li>• <strong data-i18n="slide8.risks.r2Title">RISIKO 2: Ukuran Rak Habis / Fitting Beda</strong><br>
+                <span data-i18n-html="slide8.risks.r2Mitigation" class="text-slate-600"><em>Mitigasi HorizonU Uniform:</em> Fitur Partial Pickup memungkinkan staf menyerahkan barang yang tersedia (sisa hak tidak hangus) dan mencatat tukar ukuran di <code>student_size_histories</code>.</span></li>
+                <li>• <strong data-i18n="slide8.risks.r3Title">RISIKO 3: Jaringan Internet Kampus Lambat / Dobel Klik</strong><br>
+                <span data-i18n-html="slide8.risks.r3Mitigation" class="text-slate-600"><em>Mitigasi HorizonU Uniform:</em> Transaksi dilindungi Pessimistic Row Locking (<code>lockForUpdate</code>) dan proteksi idempotensi, menjamin nol pemotongan stok ganda.</span></li>
               </ul>
             </div>
-            <div class="mt-4 pt-3 border-t border-red-300 text-xs font-bold text-horizon-700">Toleransi Kesalahan: Resiliensi Operasional Tinggi</div>
+            <div class="mt-4 pt-3 border-t border-red-300 text-xs font-bold text-horizon-700"><span data-i18n="slide8.risks.tolerance">Toleransi Kesalahan: Resiliensi Operasional Tinggi</span></div>
           </div>
         </div>
       </section>
@@ -632,53 +644,53 @@
         <div class="border-b-2 border-slate-900 pb-3 mb-4 flex items-start gap-3">
           <div class="w-2.5 h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
           <div>
-            <span class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Kesimpulan & Hasil Terukur</span>
-            <h2 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Dampak Strategis & Manfaat Nyata Implementasi</h2>
-            <p class="text-xs text-slate-600 font-medium mt-0.5">Transformasi operasional Departemen Keuangan Universitas Horizon Indonesia pasca-digitalisasi</p>
+            <span data-i18n="slide9.badge" class="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">Kesimpulan & Hasil Terukur</span>
+            <h2 data-i18n="slide9.title" class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Dampak Strategis & Manfaat Nyata Implementasi</h2>
+            <p data-i18n="slide9.subtitle" class="text-xs text-slate-600 font-medium mt-0.5">Transformasi operasional Departemen Keuangan Universitas Horizon Indonesia pasca-digitalisasi</p>
           </div>
         </div>
 
         <div class="grid grid-cols-3 gap-5 my-auto">
           <div class="bg-red-50 border-2 border-slate-900 rounded-xl p-6 shadow-neo flex flex-col justify-between text-center">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2.5 py-0.5 rounded uppercase">MANFAAT 01 • EFISIENSI WAKTU</span>
-              <div class="text-5xl font-black text-horizon-700 my-2 tracking-tight">&lt; 30s</div>
-              <h3 class="text-sm font-extrabold text-slate-900 mb-2">Waktu Layan per Mahasiswa</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2.5 py-0.5 rounded uppercase" data-i18n="slide9.m1.badge">MANFAAT 01 • EFISIENSI WAKTU</span>
+              <div class="text-5xl font-black text-horizon-700 my-2 tracking-tight" data-i18n="slide9.m1.value">&lt; 30s</div>
+              <h3 class="text-sm font-extrabold text-slate-900 mb-2" data-i18n="slide9.m1.title">Waktu Layan per Mahasiswa</h3>
               <ul class="text-xs text-slate-600 text-left space-y-1.5 leading-relaxed">
-                <li>• Memangkas waktu layanan loket dari 15–20 menit menjadi di bawah 30 detik.</li>
-                <li>• Pemindaian QR Code instan berbasis NIM dan validasi 6-lapis otomatis.</li>
-                <li>• Mengeliminasi antrean panjang berdesakan di posko kampus.</li>
+                <li data-i18n="slide9.m1.p1">• Memangkas waktu layanan loket dari 15–20 menit menjadi di bawah 30 detik.</li>
+                <li data-i18n="slide9.m1.p2">• Pemindaian QR Code instan berbasis NIM dan validasi 6-lapis otomatis.</li>
+                <li data-i18n="slide9.m1.p3">• Mengeliminasi antrean panjang berdesakan di posko kampus.</li>
               </ul>
             </div>
-            <div class="mt-4 pt-3 border-t border-red-300 text-xs font-bold text-horizon-700">Dampak: Pelayanan Mahasiswa Cepat & Nyaman</div>
+            <div class="mt-4 pt-3 border-t border-red-300 text-xs font-bold text-horizon-700"><span data-i18n="slide9.m1.impact">Dampak: Pelayanan Mahasiswa Cepat & Nyaman</span></div>
           </div>
 
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-6 shadow-neo flex flex-col justify-between text-center">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2.5 py-0.5 rounded uppercase">MANFAAT 02 • AKURASI INVENTARIS</span>
-              <div class="text-5xl font-black text-slate-900 my-2 tracking-tight">0</div>
-              <h3 class="text-sm font-extrabold text-slate-900 mb-2">Dead-Stock Seragam & Sepatu</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2.5 py-0.5 rounded uppercase" data-i18n="slide9.m2.badge">MANFAAT 02 • AKURASI INVENTARIS</span>
+              <div class="text-5xl font-black text-slate-900 my-2 tracking-tight" data-i18n="slide9.m2.value">0</div>
+              <h3 class="text-sm font-extrabold text-slate-900 mb-2" data-i18n="slide9.m2.title">Dead-Stock Seragam & Sepatu</h3>
               <ul class="text-xs text-slate-600 text-left space-y-1.5 leading-relaxed">
-                <li>• Profiling ukuran mandiri maba sebelum tender vendor garmen dibuka.</li>
-                <li>• Kalkulasi Demand vs Shortage otomatis memastikan pesanan selaras 100%.</li>
-                <li>• Tidak ada lagi seragam ukuran ekstrem yang mengendap bertahun-tahun.</li>
+                <li data-i18n="slide9.m2.p1">• Profiling ukuran mandiri maba sebelum tender vendor garmen dibuka.</li>
+                <li data-i18n="slide9.m2.p2">• Kalkulasi Demand vs Shortage otomatis memastikan pesanan selaras 100%.</li>
+                <li data-i18n="slide9.m2.p3">• Tidak ada lagi seragam ukuran ekstrem yang mengendap bertahun-tahun.</li>
               </ul>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-300 text-xs font-bold text-slate-800">Dampak: Optimalisasi Modal Kerja Kampus</div>
+            <div class="mt-4 pt-3 border-t border-slate-300 text-xs font-bold text-slate-800"><span data-i18n="slide9.m2.impact">Dampak: Optimalisasi Modal Kerja Kampus</span></div>
           </div>
 
           <div class="bg-neo-bg border-2 border-slate-900 rounded-xl p-6 shadow-neo flex flex-col justify-between text-center">
             <div>
-              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2.5 py-0.5 rounded uppercase">MANFAAT 03 • AKUNTABILITAS BIAYA</span>
-              <div class="text-5xl font-black text-slate-900 my-2 tracking-tight">100%</div>
-              <h3 class="text-sm font-extrabold text-slate-900 mb-2">Valuasi FIFO Real-Time</h3>
+              <span class="bg-white border border-slate-900 text-horizon-700 text-[10.5px] font-black px-2.5 py-0.5 rounded uppercase" data-i18n="slide9.m3.badge">MANFAAT 03 • AKUNTABILITAS BIAYA</span>
+              <div class="text-5xl font-black text-slate-900 my-2 tracking-tight" data-i18n="slide9.m3.value">100%</div>
+              <h3 class="text-sm font-extrabold text-slate-900 mb-2" data-i18n="slide9.m3.title">Valuasi FIFO Real-Time</h3>
               <ul class="text-xs text-slate-600 text-left space-y-1.5 leading-relaxed">
-                <li>• Mengeliminasi ketergantungan pada spreadsheet Excel yang rawan rusak.</li>
-                <li>• Pergerakan stok dicatat otomatis ke kartu mutasi berurutan batch FIFO.</li>
-                <li>• Laporan Harga Pokok Penjualan (HPP) dan Gross Profit Margin (GPM) transparan.</li>
+                <li data-i18n="slide9.m3.p1">• Mengeliminasi ketergantungan pada spreadsheet Excel yang rawan rusak.</li>
+                <li data-i18n="slide9.m3.p2">• Pergerakan stok dicatat otomatis ke kartu mutasi berurutan batch FIFO.</li>
+                <li data-i18n="slide9.m3.p3">• Laporan Harga Pokok Penjualan (HPP) dan Gross Profit Margin (GPM) transparan.</li>
               </ul>
             </div>
-            <div class="mt-4 pt-3 border-t border-slate-300 text-xs font-bold text-slate-800">Dampak: Audit Trail Keuangan Bebas Selisih</div>
+            <div class="mt-4 pt-3 border-t border-slate-300 text-xs font-bold text-slate-800"><span data-i18n="slide9.m3.impact">Dampak: Audit Trail Keuangan Bebas Selisih</span></div>
           </div>
         </div>
       </section>
@@ -688,11 +700,11 @@
         <div class="bg-slate-800 px-8 py-2.5 border-b border-slate-700 flex items-center justify-between">
           <div class="flex items-center gap-2 text-xs font-bold text-red-300 uppercase tracking-wider">
             <i class="fa-solid fa-microphone-lines"></i>
-            <span>Naskah Baca Presenter (Teleprompter Mode) — Baca Langsung di Sini</span>
+            <span data-i18n="common.prompterHeader">Naskah Baca Presenter (Teleprompter Mode) — Baca Langsung di Sini</span>
           </div>
           <div class="flex items-center gap-4 text-xs text-slate-300">
             <span id="prompter-slide-badge" class="font-mono font-bold text-white">Slide 1 / 9</span>
-            <span>Target Durasi: <strong id="prompter-time-badge" class="text-amber-400 font-mono font-bold">01:10 Menit</strong></span>
+            <span><span data-i18n="common.targetDurationLabel">Target Durasi:</span> <strong id="prompter-time-badge" class="text-amber-400 font-mono font-bold">01:10 Menit</strong></span>
             <button onclick="togglePrompter()" class="text-slate-400 hover:text-white text-base">
               <i class="fa-solid fa-xmark"></i>
             </button>
@@ -703,33 +715,20 @@
         </div>
       </div>
 
-      <!-- FULLSCREEN FLOATING CONTROLLER (AUTO-SHOWS ONLY IN FULLSCREEN MODE) -->
-      <div class="fullscreen-bar absolute bottom-6 right-8 bg-white/95 backdrop-blur border-2 border-slate-900 rounded-xl p-2 shadow-neo-lg z-40 items-center gap-2">
-        <button onclick="prevSlide()" class="hover:bg-slate-100 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-black border-2 border-slate-900 shadow-neo-sm transition" title="Slide Sebelumnya (←)">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <span id="fullscreen-slide-counter" class="font-mono text-xs font-black text-horizon-700 px-3 py-1 bg-red-50 border-2 border-slate-900 rounded-md shadow-neo-sm">Slide 1 / 9</span>
-        <button onclick="nextSlide()" class="hover:bg-slate-100 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-black border-2 border-slate-900 shadow-neo-sm transition" title="Slide Selanjutnya (→ / Space)">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
-        <div class="w-[1px] h-5 bg-slate-300 mx-1"></div>
-        <button onclick="togglePrompter()" class="bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-slate-900 shadow-neo-sm transition flex items-center gap-1.5" title="Buka Naskah Bacaan (T)">
-          <i class="fa-solid fa-microphone"></i> Naskah (T)
-        </button>
-        <button onclick="toggleFullscreen()" class="bg-red-50 hover:bg-red-100 text-horizon-700 px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-slate-900 shadow-neo-sm transition flex items-center gap-1.5" title="Keluar Fullscreen (Esc)">
-          <i class="fa-solid fa-compress"></i> Keluar (Esc)
-        </button>
       </div>
+      <!-- END SLIDE STAGE -->
 
     </div>
-  </div>
   </main>
 
   <!-- BOTTOM NEO-DOCK TOOLBAR -->
-  <footer class="h-14 bg-white border-t-2 border-slate-900 px-8 flex items-center justify-between shrink-0 z-20">
-    <div class="flex items-center gap-4 text-xs text-slate-700">
-      <span><strong class="text-slate-900">UniStock SCM</strong> • Departemen Keuangan Horizon University</span>
-      <div class="bg-amber-100 border-2 border-slate-900 px-3 py-0.5 rounded-md font-mono text-xs font-bold text-slate-900 shadow-neo-sm flex items-center gap-2">
+  <footer class="h-14 bg-white border-t-2 border-slate-900 px-6 flex items-center justify-between shrink-0 z-20">
+    <div class="flex items-center gap-3 text-xs text-slate-700">
+      <span class="bg-horizon-700 text-white text-[10px] font-extrabold tracking-wider px-2.5 py-1 rounded border-2 border-slate-900 shadow-neo-sm uppercase">
+        <span data-i18n="common.technosparkBadge">Technospark 2026</span>
+      </span>
+      <span class="hidden sm:inline"><strong data-i18n="common.appTitle" class="text-slate-900">HorizonU Uniform</strong> • <span data-i18n="common.appSubtitle">Departemen Keuangan Horizon University</span></span>
+      <div class="bg-amber-100 border-2 border-slate-900 px-2.5 py-0.5 rounded-md font-mono text-xs font-bold text-slate-900 shadow-neo-sm flex items-center gap-2">
         <i class="fa-regular fa-clock text-horizon-700"></i>
         <span id="timer-text">00:00</span>
         <button onclick="toggleTimer()" class="text-slate-700 hover:text-slate-900 font-bold" title="Play/Pause">
@@ -742,21 +741,21 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <button class="bg-white hover:bg-slate-50 border-2 border-slate-900 text-slate-900 px-3.5 py-1 rounded-lg text-xs font-extrabold flex items-center gap-1.5 shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition" onclick="prevSlide()">
-        <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+      <button class="bg-white hover:bg-slate-50 border-2 border-slate-900 text-slate-900 px-3 py-1 rounded-lg text-xs font-extrabold flex items-center gap-1.5 shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition" onclick="prevSlide()" title="Sebelumnya (← / PageUp)">
+        <i class="fa-solid fa-arrow-left"></i> <span class="hidden sm:inline" data-i18n="common.prev">Sebelumnya</span>
       </button>
       <div class="font-mono text-xs font-black text-horizon-700 px-3 py-1 bg-red-50 border-2 border-slate-900 rounded-md shadow-neo-sm min-w-[85px] text-center" id="slide-counter">Slide 1 / 9</div>
-      <button class="bg-white hover:bg-slate-50 border-2 border-slate-900 text-slate-900 px-3.5 py-1 rounded-lg text-xs font-extrabold flex items-center gap-1.5 shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition" onclick="nextSlide()">
-        Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+      <button class="bg-white hover:bg-slate-50 border-2 border-slate-900 text-slate-900 px-3 py-1 rounded-lg text-xs font-extrabold flex items-center gap-1.5 shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 transition" onclick="nextSlide()" title="Selanjutnya (→ / Space / PageDown)">
+        <span class="hidden sm:inline" data-i18n="common.next">Selanjutnya</span> <i class="fa-solid fa-arrow-right"></i>
       </button>
     </div>
 
     <div class="flex items-center gap-2">
-      <button class="bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 border-2 border-slate-900 shadow-neo-sm transition" onclick="togglePrompter()">
-        <i class="fa-solid fa-microphone"></i> Naskah Bacaan (T)
+      <button class="bg-slate-900 hover:bg-slate-800 text-white px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 border-2 border-slate-900 shadow-neo-sm transition" onclick="togglePrompter()" title="Naskah Bacaan (T)">
+        <i class="fa-solid fa-microphone"></i> <span class="hidden sm:inline" data-i18n="common.prompter">Naskah (T)</span>
       </button>
-      <a href="HorizonU_Uniform_UniStock_SCM_Presentasi_Technospark.pptx" download class="bg-horizon-700 hover:bg-horizon-800 text-white px-4 py-1 rounded-lg text-xs font-black flex items-center gap-1.5 border-2 border-slate-900 shadow-neo-sm transition">
-        <i class="fa-solid fa-download"></i> Unduh File PPTX
+      <a href="HorizonU_Uniform_SCM_Presentasi_Technospark.pptx" download class="bg-horizon-700 hover:bg-horizon-800 text-white px-3.5 py-1 rounded-lg text-xs font-black flex items-center gap-1.5 border-2 border-slate-900 shadow-neo-sm transition" title="Unduh File Presentasi PPTX">
+        <i class="fa-solid fa-download"></i> <span class="hidden sm:inline" data-i18n="common.downloadPptx">Unduh PPTX</span>
       </a>
       <button id="fs-toggle-btn" class="bg-white hover:bg-slate-50 border-2 border-slate-900 text-slate-900 p-1 px-2.5 rounded-lg text-xs font-bold shadow-neo-sm transition" onclick="toggleFullscreen()" title="Fullscreen (F)">
         <i class="fa-solid fa-expand"></i>
@@ -765,176 +764,37 @@
   </footer>
 
   <script>
-    const SPEAKER_SCRIPTS = [
-      {
-        slide: 1,
-        targetTime: "01:10 Menit",
-        script: `
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">PEMBUKAAN</span>
-            "Selamat pagi/siang Yang Terhormat Bapak/Ibu Dosen Penguji dan Dewan Juri Technospark. Kami dari <strong>Tim Nirwana</strong>, yang beranggotakan Fhazar, Ferry, Hildan, Fadel, Daffa, dan Acep. Hari ini kami mempresentasikan analisis dan solusi sistem informasi rantai pasok terpadu bertajuk: <strong>HorizonU Uniform</strong>, dengan engine sistem bernama <strong>UniStock</strong>."
-          </p>
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">LATAR BELAKANG</span>
-            "Studi kasus kami berfokus pada <strong>Departemen Keuangan Universitas Horizon Indonesia</strong>, yang bertanggung jawab atas pengadaan dan distribusi ribuan paket seragam kuliah, jas almamater, sepatu laboratorium, hingga perlengkapan medis mahasiswa baru setiap tahunnya."
-          </p>
-          <p>
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">MASALAH UTAMA</span>
-            "Sebelum UniStock dibangun, pengelolaan dilakukan manual memakai spreadsheet Excel induk sebesar 4.5 Megabytes dengan belasan lembar kerja yang sering sekali mengalami <em>lag</em> dan <em>crash</em>. Di lapangan terjadi antrean panjang hingga 20 menit per mahasiswa, ketidakcocokan ukuran pakaian yang memicu penumpukan <em>dead-stock</em>, serta kerentanan klaim ganda. Mari kita lihat komposisi tim pengembang kami."
-          </p>
-        `
-      },
-      {
-        slide: 2,
-        targetTime: "00:45 Menit",
-        script: `
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">PROFIL TIM</span>
-            "Pada Slide 2, izinkan kami memperkenalkan 6 anggota <strong>Tim Nirwana</strong> yang memiliki spesialisasi peran masing-masing dalam membangun UniStock:"
-          </p>
-          <p class="mb-3">
-            "1. <strong>Fhazar Raffiful Aqyla</strong> sebagai <em>Project Manager</em>, memimpin perumusan roadmap produk dan keselarasan strategi rantai pasok.<br>
-            2. <strong>Ferry Noer Hendriawan</strong> sebagai <em>Frontend Developer</em>, merancang tampilan antarmuka interaktif dan modul scanner posko.<br>
-            3. <strong>Hildan Anugrah Tamadi Putra</strong> sebagai <em>Backend Developer</em>, membangun logic Laravel 12, algoritma FIFO, dan concurrency lock.<br>
-            4. <strong>Fadel Rahmadhan</strong> sebagai <em>Quality Assurance</em>, menguji ketahanan sistem terhadap skenario double-claim dan stress test transaksi.<br>
-            5. <strong>Daffa Nazriel Zaidan</strong> sebagai <em>UI/UX Designer</em>, menyusun prototipe sistem desain Neo-Brutalism yang ergonomis bagi mahasiswa.<br>
-            6. <strong>Acep Ugan Saputra</strong> sebagai <em>System Analyst</em>, merancang pemodelan proses bisnis BPMN dan normalisasi basis data relasional."
-          </p>
-          <p>
-            "Dengan sinergi lintas peran inilah kami mentransformasi sistem rantai pasok seragam kampus secara utuh."
-          </p>
-        `
-      },
-      {
-        slide: 3,
-        targetTime: "01:15 Menit",
-        script: `
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">STRUKTUR SCM</span>
-            "Masuk ke Slide 3 mengenai Struktur Rantai Pasok. Rantai pasok HorizonU Uniform menghubungkan empat entitas stakeholder secara <em>closed-loop</em>:"
-          </p>
-          <p class="mb-3">
-            "Pertama, di sisi <strong>Hulu (Supplier)</strong>, terdapat Pabrik Garmen dan Sepatu yang memproduksi barang sesuai Purchase Order agregat kampus.<br>
-            Kedua, <strong>Gudang Logistik Kampus</strong>, yang bertindak sebagai distributor internal untuk memeriksa fisik, mencatat penerimaan batch, dan memberi nomor urut FIFO.<br>
-            Ketiga, <strong>Departemen Keuangan dan Staf Posko</strong>, yang bertugas memvalidasi status kelayakan pelunasan biaya serta melayani serah terima barang di loket.<br>
-            Dan keempat, di sisi <strong>Hilir (Customer)</strong>, adalah Mahasiswa yang memiliki kuota hak barang sesuai prodinya."
-          </p>
-          <p>
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">PENEKANAN KUNCI</span>
-            "<strong>Prinsip dasar yang kami tanamkan adalah: 'Data Mengunci Fisik'.</strong> Artinya, seragam fisik di meja loket pantang keluar sebelum sistem memindai QR Code mahasiswa dan memastikan hak kuota serta status pembayarannya sah."
-          </p>
-        `
-      },
-      {
-        slide: 4,
-        targetTime: "01:30 Menit",
-        script: `
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">ANALISIS MASALAH</span>
-            "Pada Slide 4, kami membedah empat akar masalah utama melalui tabel hubungan Masalah, Penyebab, dan Dampak sistemik:"
-          </p>
-          <p class="mb-3">
-            "<strong>Masalah Pertama:</strong> Ketidakcocokan ukuran dan penumpukan <em>dead-stock</em>. Penyebabnya adalah pemesanan ke vendor hanya berbasis estimasi historis tanpa survey ukuran mandiri mahasiswa. Dampaknya, ukuran favorit habis seketika, ukuran ekstrem menumpuk bertahun-tahun, dan dana kampus tertahan.<br><br>
-            <strong>Masalah Kedua:</strong> Ketergantungan pada lembar kerja Excel raksasa yang sering <em>crash</em> saat mengolah ribuan data maba, ditambah broadcast jadwal dikirim manual per surel. Dampaknya waktu kerja staf terbuang berminggu-minggu dan informasi jadwal terlambat diterima mahasiswa.<br><br>
-            <strong>Masalah Ketiga:</strong> Kemacetan parah di loket posko karena verifikasi lunas dan pencatatan dilakukan manual di atas kertas. Dampaknya antrean meliuk ratusan meter dengan waktu layan hingga 15-20 menit per orang, serta rawan klaim ganda.<br><br>
-            <strong>Masalah Keempat:</strong> Penyusutan stok tanpa jejak audit karena pencampuran barang antar-pembelian tanpa kaidah FIFO, sehingga nilai HPP dan laba kotor tidak dapat dihitung akurat."
-          </p>
-        `
-      },
-      {
-        slide: 5,
-        targetTime: "01:15 Menit",
-        script: `
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">ALIRAN INFORMASI</span>
-            "Selanjutnya pada Slide 5, kami memetakan Analisis Aliran Informasi pada kondisi As-Is dan titik-titik kemacetannya:"
-          </p>
-          <p class="mb-3">
-            "Pada <strong>Aliran 1</strong> dari Mahasiswa ke Kampus, data ukuran diisi via formulir acak tanpa validasi SKU baku, sehingga rekapitulasi data terlambat dan penuh duplikasi.<br>
-            Pada <strong>Aliran 2</strong> dari Keuangan ke Posko, data pelunasan terisolasi di laptop staf finance. Saat mahasiswa baru saja melunasi di bank pada hari-H, staf posko tidak mengetahuinya karena data belum tersinkronisasi.<br>
-            Pada <strong>Aliran 3</strong> di meja posko, pencatatan serah terima memakai kertas checklist yang baru direkap malam hari, memicu celah barang hilang dan manipulasi.<br>
-            Dan pada <strong>Aliran 4</strong> ke pabrik vendor, order produksi dibuat berdasar tebakan kasar sehingga waktu tunggu revisi ukuran memakan waktu berbulan-bulan."
-          </p>
-          <p>
-            "Kesimpulannya, terjadi <em>silo data</em> dan <em>keterlambatan informasi</em> akut yang melumpuhkan efisiensi."
-          </p>
-        `
-      },
-      {
-        slide: 6,
-        targetTime: "01:30 Menit",
-        script: `
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">REKOMENDASI SISTEM</span>
-            "Untuk mengatasi persoalan tersebut, pada Slide 6 kami merekomendasikan empat subsistem terpadu di dalam arsitektur <strong>HorizonU Uniform (UniStock)</strong>:"
-          </p>
-          <p>
-            "1. <strong>ERP Master & Entitlement Engine:</strong> Berfungsi menggantikan Excel dengan basis data relasional MySQL InnoDB terstruktur, mengelola kuota hak per program studi, dan mengunci integritas transaksi. Manfaatnya: 100% bebas kendala Excel rusak.<br><br>
-            2. <strong>SCM Demand Planning Portal:</strong> Membuka portal mandiri bagi mahasiswa untuk mengisi ukuran baju dan sepatu sebelum produksi, serta menghitung kalkulasi <em>demand vs shortage</em> secara otomatis. Manfaatnya: Zero dead-stock dan pengadaan pabrik tepat sasaran.<br><br>
-            3. <strong>POS QR Verification Engine:</strong> Menghasilkan QR Code instan berbasis NIM dan mengeksekusi 6-Lapis Validasi otomatis melalui kamera webcam posko. Manfaatnya: Memangkas waktu layan menjadi di bawah 30 detik dan nol risiko klaim ganda.<br><br>
-            4. <strong>WMS & FIFO Inventory Costing Engine:</strong> Mengatur pemotongan mutasi dari batch pembelian tertua secara FIFO, rekonsiliasi stock opname fisik, serta perhitungan valuasi HPP dan margin laba secara presisi."
-          </p>
-        `
-      },
-      {
-        slide: 7,
-        targetTime: "01:25 Menit",
-        script: `
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">DESAIN ARSITEKTUR</span>
-            "Pada Slide 7, kami tampilkan Desain Arsitektur Solusi yang bekerja dalam 4 Fase Tertutup (<em>Closed-Loop Engine</em>):"
-          </p>
-          <p class="mb-3">
-            "<strong>Fase 1 (Inbound):</strong> Saat barang dari pabrik tiba, staf gudang mencatatnya pada modul StockReceive, menetapkan batch FIFO, dan mencatat unit HPP pembelian.<br><br>
-            <strong>Fase 2 (Planning):</strong> Departemen Keuangan mengaktifkan status lunas di Eligibility Record, mahasiswa mengisi profil ukuran di portal, dan sistem mengalokasikan paket hak barang.<br><br>
-            <strong>Fase 3 (Outbound):</strong> Di posko hari-H, staf memindai QR Code mahasiswa. Sistem mengeksekusi 6-lapis validasi menggunakan teknik <em>pessimistic locking</em>, memotong stok batch tertua, dan menyerahkan seragam.<br><br>
-            <strong>Fase 4 (Audit & Control):</strong> Stock opname fisik berkala menghitung selisih varians, dan sistem menerbitkan laporan Gross Profit Margin."
-          </p>
-          <p>
-            "Data sisa stok dan tren ukuran dari Fase 4 ini secara otomatis menjadi acuan belanja pengadaan Fase 1 pada semester berikutnya, menutup siklus rantai pasok secara sempurna."
-          </p>
-        `
-      },
-      {
-        slide: 8,
-        targetTime: "01:15 Menit",
-        script: `
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">IMPLEMENTASI & RISIKO</span>
-            "Masuk ke Slide 8 mengenai Prioritas Implementasi dan Mitigasi Risiko Lapangan."
-          </p>
-          <p>
-            "Kami membagi tahapan implementasi menjadi 3 prioritas: Prioritas 1 adalah standarisasi master data dan SKU; Prioritas 2 adalah sinkronisasi status keuangan dan pembukaan portal ukuran; dan Prioritas 3 adalah pelatihan staf loket serta simulasi antrean posko.<br><br>
-            Kami juga telah merancang solusi atas 3 risiko darurat nyata di lapangan:<br>
-            Pertama, jika <strong>baterai HP mahasiswa mati</strong> atau tidak membawa QR, staf posko dapat menggunakan fitur <em>fallback search</em> manual via NIM.<br>
-            Kedua, jika <strong>stok ukuran di rak habis saat fitting</strong>, sistem mendukung fitur <em>Partial Pickup</em> di mana barang yang ada diserahkan tanpa menghanguskan sisa hak mahasiswa.<br>
-            Ketiga, jika <strong>koneksi internet kampus fluktuatif</strong>, database diproteksi oleh <em>pessimistic row locking</em> agar tidak terjadi pengurangan stok ganda."
-          </p>
-        `
-      },
-      {
-        slide: 9,
-        targetTime: "00:55 Menit",
-        script: `
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">KESIMPULAN & PENUTUP</span>
-            "Sebagai penutup pada Slide 9, implementasi HorizonU Uniform menghadirkan 3 manfaat nyata dan terukur:"
-          </p>
-          <p class="mb-3">
-            "1. <strong>Efisiensi Waktu:</strong> Waktu pelayanan posko berhasil dipangkas dari 15–20 menit menjadi <strong>di bawah 30 detik per mahasiswa</strong>.<br>
-            2. <strong>Akurasi Persediaan:</strong> Mewujudkan target <strong>Zero Dead-Stock</strong> karena pengadaan pabrik 100% selaras dengan ukuran tubuh riil mahasiswa.<br>
-            3. <strong>Akuntabilitas Biaya:</strong> Menghilangkan kerentanan crash Excel dengan sistem penilaian inventaris berbasis <strong>FIFO dan analitik Gross Profit Margin real-time</strong>."
-          </p>
-          <p class="mb-3">
-            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">STATEMENT AKHIR</span>
-            "Kesimpulan kami: <em>Sistem Informasi bukan sekadar alat pencatat administrasi, melainkan saraf penggerak utama rantai pasok yang mengunci fisik barang dengan kepatuhan finansial, serta mengubah tebakan manual menjadi keputusan bisnis berakurasi tinggi.</em>"
-          </p>
-          <p>
-            "Sekian presentasi dari Tim Nirwana. Kami siap menerima pertanyaan dari Dewan Juri. Terima kasih."
-          </p>
-        `
+    function applyI18n() {
+      if (!window.i18next || !i18next.isInitialized) return;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = i18next.t(key);
+        if (val && val !== key) el.textContent = val;
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        const val = i18next.t(key);
+        if (val && val !== key) el.innerHTML = val;
+      });
+    }
+
+    function initI18n() {
+      const resourceBundle = window.I18N_ID_DATA || {};
+      if (window.i18next) {
+        i18next.init({
+          lng: 'id',
+          fallbackLng: 'id',
+          resources: {
+            id: {
+              translation: resourceBundle
+            }
+          }
+        }, function(err, t) {
+          applyI18n();
+          updateView();
+        });
       }
-    ];
+    }
 
     let currentSlide = 1;
     const totalSlides = 9;
@@ -951,19 +811,15 @@
       const counter = document.getElementById('slide-counter');
       if (counter) counter.textContent = `Slide ${currentSlide} / ${totalSlides}`;
 
-      const fsCounter = document.getElementById('fullscreen-slide-counter');
-      if (fsCounter) fsCounter.textContent = `Slide ${currentSlide} / ${totalSlides}`;
-
-      const cur = SPEAKER_SCRIPTS.find(s => s.slide === currentSlide);
       const b = document.getElementById('prompter-body');
       const badge = document.getElementById('prompter-slide-badge');
       const time = document.getElementById('prompter-time-badge');
 
-      if (cur && b) {
-        b.innerHTML = cur.script;
+      if (b && window.i18next && i18next.isInitialized) {
+        b.innerHTML = i18next.t(`speakerScripts.slide${currentSlide}.html`);
         b.scrollTop = 0;
         if (badge) badge.textContent = `Slide ${currentSlide} / ${totalSlides}`;
-        if (time) time.textContent = cur.targetTime;
+        if (time) time.textContent = i18next.t(`speakerScripts.slide${currentSlide}.targetTime`);
       }
     }
 
@@ -995,6 +851,12 @@
       } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
         e.preventDefault();
         prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        jumpSlide(1);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        jumpSlide(totalSlides);
       } else if (e.key.toLowerCase() === 't') {
         togglePrompter();
       } else if (e.key.toLowerCase() === 'f') {
@@ -1011,12 +873,51 @@
       }
     }
 
+    function handleFullscreenChange() {
+      const fsBtn = document.getElementById('fs-toggle-btn');
+      const stage = document.getElementById('slide-stage');
+      const vp = document.getElementById('presentation-viewport');
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || (window.innerHeight >= screen.height - 10 && screen.height > 500));
+
+      if (fsBtn) {
+        fsBtn.innerHTML = isFs ? '<i class="fa-solid fa-compress"></i>' : '<i class="fa-solid fa-expand"></i>';
+      }
+
+      if (stage) {
+        if (isFs) {
+          stage.classList.add('is-fullscreen');
+          stage.style.border = 'none';
+          stage.style.borderRadius = '0px';
+          stage.style.boxShadow = 'none';
+          stage.style.outline = 'none';
+        } else {
+          stage.classList.remove('is-fullscreen');
+          stage.style.border = '';
+          stage.style.borderRadius = '';
+          stage.style.boxShadow = '';
+          stage.style.outline = '';
+        }
+      }
+
+      if (vp) {
+        if (isFs) {
+          vp.classList.add('is-fullscreen');
+          vp.style.backgroundColor = '#ffffff';
+        } else {
+          vp.classList.remove('is-fullscreen');
+          vp.style.backgroundColor = '';
+        }
+      }
+    }
+
     function fitSlideStage() {
       const stage = document.getElementById('slide-stage');
       const viewport = document.getElementById('presentation-viewport');
       if (!stage || !viewport) return;
 
-      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || (window.innerHeight >= screen.height - 10 && screen.height > 500));
+      handleFullscreenChange();
+
       const containerW = isFs ? window.innerWidth : viewport.clientWidth;
       const containerH = isFs ? window.innerHeight : viewport.clientHeight;
 
@@ -1063,14 +964,6 @@
       handleFullscreenChange();
     });
 
-    function handleFullscreenChange() {
-      const fsBtn = document.getElementById('fs-toggle-btn');
-      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-      if (fsBtn) {
-        fsBtn.innerHTML = isFs ? '<i class="fa-solid fa-compress"></i>' : '<i class="fa-solid fa-expand"></i>';
-      }
-    }
-
     function toggleTimer() {
       const icon = document.getElementById('timer-icon');
       if (!timerRunning) {
@@ -1109,6 +1002,7 @@
       }
     }
 
+    initI18n();
     updateView();
     fitSlideStage();
     window.addEventListener('load', fitSlideStage);
