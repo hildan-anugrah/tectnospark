@@ -4,1532 +4,978 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HorizonU Uniform (UniStock SCM) — Presentasi Technospark</title>
-<!-- Google Fonts: Inter & Plus Jakarta Sans -->
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <!-- Font Awesome Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<!-- PptxGenJS CDN -->
-<script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
-
+<!-- Tailwind CSS via CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          horizon: {
+            50: '#fdf2f4',
+            100: '#fbe6e9',
+            200: '#f7ced4',
+            600: '#b01022',
+            700: '#980517', // Official Horizon Crimson Red
+            800: '#780412',
+            900: '#52020b',
+          }
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        }
+      }
+    }
+  }
+</script>
 <style>
-  :root {
-    --horizon-red: #980517;
-    --horizon-red-dark: #780412;
-    --horizon-red-light: #FEF2F2;
-    --horizon-red-border: #FCA5A5;
-    
-    --slate-900: #0F172A;
-    --slate-800: #1E293B;
-    --slate-700: #334155;
-    --slate-600: #475569;
-    --slate-400: #94A3B8;
-    --slate-200: #E2E8F0;
-    --slate-100: #F1F5F9;
-    --slate-50:  #F8FAFC;
-    --white:     #FFFFFF;
-
-    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-  }
-
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  body {
-    font-family: var(--font-sans);
-    background-color: var(--slate-100);
-    color: var(--slate-900);
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    user-select: none;
-  }
-
-  /* Top Clean Navbar */
-  .top-navbar {
-    height: 52px;
-    background-color: var(--white);
-    border-bottom: 1px solid var(--slate-200);
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 20;
-  }
-
-  .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .brand-badge {
-    background-color: var(--horizon-red);
-    color: var(--white);
-    font-weight: 800;
-    font-size: 11px;
-    letter-spacing: 0.8px;
-    padding: 4px 10px;
-    border-radius: 4px;
-    text-transform: uppercase;
-  }
-
-  .brand-text {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--slate-700);
-  }
-
-  .brand-text strong {
-    color: var(--horizon-red);
-    font-weight: 800;
-  }
-
-  .nav-shortcuts {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-size: 12px;
-    color: var(--slate-600);
-  }
-
-  .kbd-chip {
-    background-color: var(--slate-100);
-    border: 1px solid var(--slate-200);
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--slate-800);
-  }
-
-  /* Slide Viewport */
-  .stage {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 18px 36px 14px 36px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .slide-container {
-    width: 100%;
-    max-width: 1440px;
-    height: 100%;
-    max-height: 820px;
-    background-color: var(--white);
-    border: 1px solid var(--slate-200);
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 28px 36px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .slide {
+  .slide-panel {
     display: none;
-    width: 100%;
     height: 100%;
     flex-direction: column;
     justify-content: space-between;
   }
-
-  .slide.active {
+  .slide-panel.active {
     display: flex;
-  }
-
-  /* Header Section of Slide */
-  .slide-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    border-bottom: 1.5px solid var(--slate-200);
-    padding-bottom: 14px;
-    margin-bottom: 16px;
-  }
-
-  .header-accent-bar {
-    width: 4px;
-    height: 52px;
-    background-color: var(--horizon-red);
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-
-  .header-content {
-    flex: 1;
-  }
-
-  .slide-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 4px;
-  }
-
-  .meta-tag {
-    font-size: 11px;
-    font-weight: 800;
-    color: var(--horizon-red);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-  }
-
-  .meta-rubric {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--slate-600);
-    background-color: var(--slate-100);
-    border: 1px solid var(--slate-200);
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-
-  .slide-title {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--slate-900);
-    line-height: 1.25;
-    letter-spacing: -0.3px;
-  }
-
-  .slide-desc {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--slate-600);
-    margin-top: 3px;
-    line-height: 1.4;
-  }
-
-  /* Layout Grids */
-  .grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    flex: 1;
-    align-items: stretch;
-  }
-
-  .grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    flex: 1;
-    align-items: stretch;
-  }
-
-  .grid-2x2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 14px;
-    flex: 1;
-    align-items: stretch;
-  }
-
-  .split-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    flex: 1;
-    align-items: stretch;
-  }
-
-  /* Professional Cards */
-  .card {
-    background-color: var(--slate-50);
-    border: 1px solid var(--slate-200);
-    border-radius: 8px;
-    padding: 16px 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.2s ease;
-  }
-
-  .card.card-highlight {
-    background-color: var(--horizon-red-light);
-    border: 1.5px solid var(--horizon-red-border);
-  }
-
-  .card-top-badge {
-    font-size: 10.5px;
-    font-weight: 800;
-    color: var(--horizon-red);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .card-heading {
-    font-size: 15.5px;
-    font-weight: 750;
-    color: var(--slate-900);
-    line-height: 1.35;
-    margin-bottom: 10px;
-  }
-
-  .card-list {
-    list-style: none;
-    font-size: 12.5px;
-    color: var(--slate-700);
-    line-height: 1.55;
-    flex: 1;
-  }
-
-  .card-list li {
-    position: relative;
-    padding-left: 14px;
-    margin-bottom: 7px;
-  }
-
-  .card-list li::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: var(--horizon-red);
-    font-weight: bold;
-    font-size: 14px;
-  }
-
-  .card-list li strong {
-    color: var(--slate-900);
-  }
-
-  .card-footer-pill {
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px dashed var(--slate-200);
-    font-size: 11.5px;
-    font-weight: 700;
-    color: var(--horizon-red);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  /* Clean Corporate Table */
-  .table-wrapper {
-    flex: 1;
-    border: 1px solid var(--slate-200);
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--white);
-  }
-
-  .table-clean {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12.5px;
-    flex: 1;
-  }
-
-  .table-clean th {
-    background-color: var(--horizon-red);
-    color: var(--white);
-    padding: 10px 14px;
-    text-align: left;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 0.3px;
-  }
-
-  .table-clean td {
-    padding: 10px 14px;
-    color: var(--slate-800);
-    line-height: 1.48;
-    border-bottom: 1px solid var(--slate-200);
-    vertical-align: middle;
-  }
-
-  .table-clean tr:nth-child(even) td {
-    background-color: var(--slate-50);
-  }
-
-  .table-clean tr:last-child td {
-    border-bottom: none;
-  }
-
-  .td-bold-red {
-    font-weight: 700;
-    color: var(--horizon-red);
-  }
-
-  /* Bottom Takeaway Box */
-  .takeaway-box {
-    margin-top: 14px;
-    background-color: var(--horizon-red-light);
-    border: 1px solid var(--horizon-red-border);
-    border-left: 5px solid var(--horizon-red);
-    border-radius: 6px;
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 12.5px;
-    color: var(--slate-800);
-    line-height: 1.45;
-  }
-
-  .takeaway-box strong {
-    color: var(--horizon-red);
-    font-weight: 800;
-  }
-
-  /* Metric KPI Number Blocks */
-  .metric-block {
-    text-align: center;
-    padding: 12px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-
-  .metric-num {
-    font-size: 42px;
-    font-weight: 900;
-    color: var(--horizon-red);
-    line-height: 1;
-    margin-bottom: 6px;
-    letter-spacing: -1px;
-  }
-
-  /* Bottom Controls Toolbar */
-  .bottom-dock {
-    height: 58px;
-    background-color: var(--white);
-    border-top: 1px solid var(--slate-200);
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 20;
-  }
-
-  .dock-info {
-    font-size: 12.5px;
-    color: var(--slate-600);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .dock-info strong {
-    color: var(--slate-900);
-  }
-
-  .timer-box {
-    background-color: var(--slate-100);
-    border: 1px solid var(--slate-200);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    font-weight: 700;
-    color: var(--horizon-red);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .timer-icon-btn {
-    background: transparent;
-    border: none;
-    color: var(--slate-600);
-    cursor: pointer;
-    font-size: 12px;
-  }
-
-  .timer-icon-btn:hover {
-    color: var(--slate-900);
-  }
-
-  .dock-nav {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .btn-dock {
-    background-color: var(--white);
-    border: 1px solid var(--slate-200);
-    color: var(--slate-700);
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 12.5px;
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.15s ease;
-  }
-
-  .btn-dock:hover {
-    background-color: var(--slate-50);
-    border-color: var(--slate-400);
-    color: var(--slate-900);
-  }
-
-  .counter-pill {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--horizon-red);
-    padding: 0 8px;
-    min-width: 80px;
-    text-align: center;
-  }
-
-  .btn-prompter {
-    background-color: var(--slate-800);
-    border: 1px solid var(--slate-900);
-    color: var(--white);
-    font-weight: 600;
-  }
-
-  .btn-prompter:hover {
-    background-color: var(--slate-900);
-    color: var(--white);
-  }
-
-  .btn-download-pptx {
-    background-color: var(--horizon-red);
-    border: 1px solid var(--horizon-red-dark);
-    color: var(--white);
-    font-weight: 700;
-  }
-
-  .btn-download-pptx:hover {
-    background-color: var(--horizon-red-dark);
-    color: var(--white);
-  }
-
-  /* Teleprompter Drawer */
-  .teleprompter-drawer {
-    position: fixed;
-    bottom: 58px;
-    left: 0;
-    right: 0;
-    height: 260px;
-    background-color: #0F172A;
-    color: var(--white);
-    border-top: 3px solid var(--horizon-red);
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
-    display: none;
-    flex-direction: column;
-    z-index: 50;
-  }
-
-  .teleprompter-drawer.active {
-    display: flex;
-  }
-
-  .prompter-header {
-    background-color: #1E293B;
-    padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .prompter-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: #FCA5A5;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .prompter-tools {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-size: 12px;
-    color: var(--slate-400);
-  }
-
-  .prompter-tools span strong {
-    color: #FFF;
-  }
-
-  .prompter-body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px 28px;
-    font-size: 15px;
-    line-height: 1.7;
-    color: #F8FAFC;
-  }
-
-  .prompter-badge {
-    display: inline-block;
-    background-color: rgba(152, 5, 23, 0.35);
-    border: 1px solid #FCA5A5;
-    color: #FECDD3;
-    font-size: 10.5px;
-    font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-right: 6px;
-    text-transform: uppercase;
   }
 </style>
 </head>
-<body>
+<body class="bg-slate-100 text-slate-800 font-sans h-screen w-screen overflow-hidden flex flex-col select-none">
 
-<!-- Top Clean Navbar -->
-<header class="top-navbar">
-  <div class="nav-brand">
-    <div class="brand-badge">TECHNOSPARK 2026</div>
-    <div class="brand-text"><strong>HorizonU Uniform</strong> • Closed-Loop SCM Platform</div>
-  </div>
-  <div class="nav-shortcuts">
-    <span><span class="kbd-chip">Space</span> / <span class="kbd-chip">→</span> Ganti Slide</span>
-    <span><span class="kbd-chip">T</span> Naskah Presenter</span>
-    <span><span class="kbd-chip">F</span> Fullscreen</span>
-  </div>
-</header>
-
-<!-- Main Stage -->
-<main class="stage">
-  <div class="slide-container">
-
-    <!-- ========================================== -->
-    <!-- SLIDE 1: CASE INTRODUCTION -->
-    <!-- ========================================== -->
-    <section class="slide active" id="slide-1">
-      <div class="slide-header">
-        <div class="header-accent-bar"></div>
-        <div class="header-content">
-          <div class="slide-meta">
-            <span class="meta-tag">Slide 01 • Case Introduction</span>
-            <span class="meta-rubric">Rubrik: Supply Chain Understanding (15%)</span>
-          </div>
-          <h1 class="slide-title">HORIZONU UNIFORM (UNISTOCK SCM) — TRANSFORMASI LOGISTIK KAMPUS</h1>
-          <p class="slide-desc">Sistem Persediaan & Distribusi Seragam Terpadu Berbasis Closed-Loop SCM pada Departemen Keuangan Universitas Horizon Indonesia</p>
-        </div>
-      </div>
-
-      <div class="grid-3">
-        <!-- Card 1 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge"><i class="fa-solid fa-building-columns"></i> 01 • Profil Kasus & Industri</div>
-            <h3 class="card-heading">Logistik Perlengkapan Kampus</h3>
-            <ul class="card-list">
-              <li><strong>Unit Kasus:</strong> Departemen Keuangan Universitas Horizon Indonesia bertanggung jawab atas pengadaan, akuntansi, dan distribusi perlengkapan mahasiswa baru.</li>
-              <li><strong>Komoditas Produk:</strong> Jas Almamater, Kemeja Putih, Celana/Rok Bahan, Sepatu Lab & Dinas, serta Medical Kit keperawatan/kebidanan.</li>
-              <li><strong>Karakteristik Alur:</strong> Penyerahan langsung dari vendor ke kampus tanpa perantara ritel komersial.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag"><i class="fa-solid fa-arrows-spin"></i> Model: Direct Closed-Loop Campus SCM</div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="card card-highlight">
-          <div>
-            <div class="card-top-badge"><i class="fa-solid fa-triangle-exclamation"></i> 02 • Masalah Utama As-Is</div>
-            <h3 class="card-heading">Kendala Spreadsheet & Loket</h3>
-            <ul class="card-list">
-              <li><strong>Excel Macet & Crash:</strong> File spreadsheet induk (~4.5 MB, 19 sheet) sering lambat atau crash saat data ribuan maba bertambah.</li>
-              <li><strong>Antrean Posko Panjang:</strong> Waktu verifikasi manual mencapai 15–20 menit per mahasiswa, memicu desakan antrean ratusan orang.</li>
-              <li><strong>Dead-Stock & Salah Ukuran:</strong> Pemesanan vendor hanya berdasar tebakan historis; ukuran populer habis, ukuran ekstrem menumpuk.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag"><i class="fa-solid fa-circle-exclamation"></i> Dampak: Modal Mengendap & Risiko Klaim Ganda</div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge"><i class="fa-solid fa-users"></i> 03 • Presenter & Analis</div>
-            <h3 class="card-heading">Tim Pengembang Nirwana</h3>
-            <ul class="card-list" style="line-height: 1.65;">
-              <li><strong>Fhazar Raffiful Aqyla</strong> — Project Manager</li>
-              <li><strong>Ferry Noer Hendriawan</strong> — Frontend Engineer</li>
-              <li><strong>Hildan Anugrah Tamadi Putra</strong> — Backend Engineer</li>
-              <li><strong>Fadel Rahmadhan</strong> — Quality Assurance</li>
-              <li><strong>Daffa Nazriel Zaidan</strong> — UI/UX Designer</li>
-              <li><strong>Acep Ugan Saputra</strong> — System Analyst</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag"><i class="fa-solid fa-globe"></i> Sistem Live: unistok.nirwana.biz.id</div>
-        </div>
-      </div>
-
-      <div class="takeaway-box">
-        <i class="fa-solid fa-bullseye" style="color: var(--horizon-red); font-size: 16px;"></i>
-        <div>
-          <strong>Misi Solusi UniStock:</strong> Menyatukan Hulu (Vendor Pabrik), Gudang Kampus, Bagian Keuangan, hingga Hilir (Mahasiswa) dalam satu arsitektur terintegrasi bertenaga Laravel 12 dan kaidah FIFO.
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- SLIDE 2: SUPPLY CHAIN STRUCTURE -->
-    <!-- ========================================== -->
-    <section class="slide" id="slide-2">
-      <div class="slide-header">
-        <div class="header-accent-bar"></div>
-        <div class="header-content">
-          <div class="slide-meta">
-            <span class="meta-tag">Slide 02 • Supply Chain Structure</span>
-            <span class="meta-rubric">Rubrik: Supply Chain Understanding (15%)</span>
-          </div>
-          <h2 class="slide-title">STRUKTUR RANTAI PASOK: STAKEHOLDER, ALIRAN FISIK & INFORMASI</h2>
-          <p class="slide-desc">Pemetaan peran stakeholder end-to-end dari hulu ke hilir serta titik kritis perpindahan barang dan otorisasi digital.</p>
-        </div>
-      </div>
-
-      <div class="grid-4">
-        <!-- Node 1 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge">01 • Supplier (Hulu)</div>
-            <h3 class="card-heading">Pabrik Garmen & Sepatu</h3>
-            <ul class="card-list">
-              <li>Memproduksi paket seragam dan sepatu sesuai pesanan pengadaan kampus (PO).</li>
-              <li>Menerapkan standarisasi kode varian SKU seragam.</li>
-              <li><strong>Titik Barang:</strong> Pengiriman kardus seragam ke gudang kampus (Inbound Logistics).</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">PO Agregat ➔ Fisik Masuk</div>
-        </div>
-
-        <!-- Node 2 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge">02 • Gudang (Inbound)</div>
-            <h3 class="card-heading">Gudang Logistik Kampus</h3>
-            <ul class="card-list">
-              <li>Penerimaan fisik (StockReceive) dan quality checking kualitas seragam.</li>
-              <li>Pencatatan batch urutan FIFO (First-In, First-Out) dan nilai HPP per unit.</li>
-              <li><strong>Titik Barang:</strong> Transfer stok batch tertua menuju posko distribusi loket.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Inbound ➔ POS Loket</div>
-        </div>
-
-        <!-- Node 3 -->
-        <div class="card card-highlight">
-          <div>
-            <div class="card-top-badge">03 • Verifikator & Posko</div>
-            <h3 class="card-heading">Staf Keuangan & Posko</h3>
-            <ul class="card-list">
-              <li><strong>Keuangan:</strong> Otorisasi status pelunasan biaya kuliah (Eligibility Record).</li>
-              <li><strong>Staf Posko:</strong> Melayani meja pembagian fisik seragam di posko kampus.</li>
-              <li><strong>Titik Kritis:</strong> Validasi QR Code dan pencocokan ukuran saat proses fitting.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Data Lunas ➔ Serah Fisik</div>
-        </div>
-
-        <!-- Node 4 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge">04 • Konsumen (Hilir)</div>
-            <h3 class="card-heading">Mahasiswa (Customer)</h3>
-            <ul class="card-list">
-              <li>Konsumen akhir yang memiliki hak jatah barang (Entitlement) sesuai prodi.</li>
-              <li>Mengisi profil ukuran mandiri di web dan menerima tiket jadwal pembagian.</li>
-              <li><strong>Titik Info:</strong> Menunjukkan QR Code beresolusi tinggi (NIM murni) di meja posko.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Profil ➔ Seragam Pas</div>
-        </div>
-      </div>
-
-      <div class="takeaway-box">
-        <i class="fa-solid fa-shield-halved" style="color: var(--horizon-red); font-size: 16px;"></i>
-        <div>
-          <strong>Prinsip Inti "Data Mengunci Fisik":</strong> Barang fisik di loket gudang pantang diserahkan tanpa otorisasi digital. Pemindaian QR Code mengeksekusi validasi atomik di database: jika belum lunas atau kuota habis, fisik seragam tidak dapat keluar.
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- SLIDE 3: PROBLEM ANALYSIS -->
-    <!-- ========================================== -->
-    <section class="slide" id="slide-3">
-      <div class="slide-header">
-        <div class="header-accent-bar"></div>
-        <div class="header-content">
-          <div class="slide-meta">
-            <span class="meta-tag">Slide 03 • Problem Analysis</span>
-            <span class="meta-rubric">Rubrik: Problem Analysis (20%)</span>
-          </div>
-          <h2 class="slide-title">ANALISIS AKAR MASALAH: MENGAPA SISTEM MANUAL GAGAL?</h2>
-          <p class="slide-desc">Matriks analisis empat masalah utama beserta penyebab sistemik dan dampaknya terhadap biaya, waktu, stok, dan pelayanan.</p>
-        </div>
-      </div>
-
-      <div class="table-wrapper">
-        <table class="table-clean">
-          <thead>
-            <tr>
-              <th style="width: 25%;">Masalah Utama (Gejala Lapangan)</th>
-              <th style="width: 36%;">Akar Penyebab Masalah (Root Cause)</th>
-              <th style="width: 39%;">Dampak terhadap Biaya, Waktu, Stok & Layanan</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="td-bold-red">1. Ketidakcocokan Ukuran & Penumpukan Dead-Stock</td>
-              <td>Pemesanan pengadaan ke vendor pabrik hanya menggunakan tebakan rasio historis. Tidak ada sistem survey profil ukuran mandiri sebelum tender dibuka.</td>
-              <td><strong>Dampak Stok & Biaya:</strong> Ukuran favorit (M/L) habis pada hari pertama pembagian, ukuran ekstrem (XS, 3XL) menumpuk bertahun-tahun. Modal kampus mengendap menjadi dead-stock.</td>
-            </tr>
-            <tr>
-              <td class="td-bold-red">2. File Excel Sering Crash & Pengumuman Lambat</td>
-              <td>Departemen Keuangan memakai satu file spreadsheet raksasa (~4.5 MB, 19 sheet) untuk ribuan data mahasiswa. Pengiriman jadwal disebarkan manual via surel.</td>
-              <td><strong>Dampak Waktu & Layanan:</strong> Aplikasi sering not responding atau data korup. Rekapitulasi memakan waktu berminggu-minggu dan info jadwal terlambat diterima mahasiswa.</td>
-            </tr>
-            <tr>
-              <td class="td-bold-red">3. Bottleneck Loket Posko & Risiko Double-Claim</td>
-              <td>Pengecekan lunas, pencocokan hak prodi, dan paraf bukti serah terima dilakukan manual dengan mencentang map formulir kertas fisik.</td>
-              <td><strong>Dampak Waktu & Akurasi:</strong> Waktu pelayanan lambat (15–20 menit per orang), antrean ratusan meter, serta rawan klaim ganda (double-claim) di loket atau hari berbeda.</td>
-            </tr>
-            <tr>
-              <td class="td-bold-red">4. Susut Stok Liar & Valuasi HPP Buram</td>
-              <td>Penerimaan seragam dari vendor dengan harga berbeda tidak dicatat per batch FIFO dan tanpa kartu mutasi stok otomatis yang terikat ke transaksi loket.</td>
-              <td><strong>Dampak Biaya & Akuntansi:</strong> Selisih barang susut (shrinkage) tidak terlacak penanggungjawabnya. Valuasi HPP dan analisis Gross Profit Margin (GPM) terdistorsi.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="takeaway-box">
-        <i class="fa-solid fa-triangle-exclamation" style="color: var(--horizon-red); font-size: 16px;"></i>
-        <div>
-          <strong>Akar Kegagalan Sistemik:</strong> Ketiadaan Single Source of Truth berbasis database relasional menyebabkan silo data antar-staf, memicu kebocoran persediaan, dan membahayakan akuntabilitas keuangan.
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- SLIDE 4: INFORMATION FLOW ANALYSIS -->
-    <!-- ========================================== -->
-    <section class="slide" id="slide-4">
-      <div class="slide-header">
-        <div class="header-accent-bar"></div>
-        <div class="header-content">
-          <div class="slide-meta">
-            <span class="meta-tag">Slide 04 • Information Flow Analysis</span>
-            <span class="meta-rubric">Rubrik: Information Flow Analysis (15%)</span>
-          </div>
-          <h2 class="slide-title">DIAGRAM ALIRAN INFORMASI & TITIK KEMACETAN (AS-IS STATE)</h2>
-          <p class="slide-desc">Identifikasi kebutuhan informasi stakeholder, asal-tujuan data, serta titik kritis informasi terlambat, tidak akurat, atau terputus.</p>
-        </div>
-      </div>
-
-      <div class="grid-2x2">
-        <!-- Flow 1 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge">Aliran 01 • Mahasiswa ➔ Kampus</div>
-            <h3 class="card-heading">Kebutuhan: Profil Ukuran & Jadwal</h3>
-            <ul class="card-list">
-              <li><strong>Asal & Tujuan:</strong> Mahasiswa mengisi formulir ke kampus dan menerima jadwal pembagian via email.</li>
-              <li><strong>Titik Masalah:</strong> Google Form terpisah tanpa validasi SKU baku, memicu pengisian ganda dan rekapitulasi data staf terlambat berminggu-minggu.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Kondisi: Informasi Terlambat & Format Liar</div>
-        </div>
-
-        <!-- Flow 2 -->
-        <div class="card card-highlight">
-          <div>
-            <div class="card-top-badge">Aliran 02 • Keuangan ➔ Posko Hari-H</div>
-            <h3 class="card-heading">Kebutuhan: Status Lunas (Eligibility)</h3>
-            <ul class="card-list">
-              <li><strong>Asal & Tujuan:</strong> Staf Keuangan mengekspor data pelunasan ke staf meja posko pembagian seragam.</li>
-              <li><strong>Titik Masalah:</strong> Data terisolasi di file Excel lokal staf. Saat ada pelunasan baru di bank pada hari-H, staf posko tidak terupdate sehingga maba tertolak.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Kondisi: Informasi Terputus (Silo Data Lokal)</div>
-        </div>
-
-        <!-- Flow 3 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge">Aliran 03 • Meja Posko ➔ Gudang</div>
-            <h3 class="card-heading">Kebutuhan: Kuota Hak & Kartu Mutasi</h3>
-            <ul class="card-list">
-              <li><strong>Asal & Tujuan:</strong> Staf posko memverifikasi paket hak prodi dan mencatat mutasi seragam yang keluar.</li>
-              <li><strong>Titik Masalah:</strong> Penyerahan seragam dicatat di lembaran kertas. Pengurangan saldo stok gudang baru direkap malam hari, memicu risiko susut stok.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Kondisi: Informasi Terlambat (Paper-Based Tracking)</div>
-        </div>
-
-        <!-- Flow 4 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge">Aliran 04 • Pengadaan ➔ Pabrik</div>
-            <h3 class="card-heading">Kebutuhan: Purchase Order Agregat</h3>
-            <ul class="card-list">
-              <li><strong>Asal & Tujuan:</strong> Pengadaan kampus mengirim rincian jumlah potong seragam dan sepatu ke pabrik.</li>
-              <li><strong>Titik Masalah:</strong> Purchase Order ke pabrik hanya estimasi kasar tanpa dasar profil data riil maba, memicu lead-time penukaran barang berbulan-bulan.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Kondisi: Informasi Tidak Akurat (Blind Ordering)</div>
-        </div>
-      </div>
-
-      <div class="takeaway-box">
-        <i class="fa-solid fa-circle-nodes" style="color: var(--horizon-red); font-size: 16px;"></i>
-        <div>
-          <strong>Diagnosa Kunci:</strong> Terjadi Information Latency dan Data Asymmetry akut yang melumpuhkan koordinasi antar-bagian. Solusi mutlak membutuhkan platform web tunggal terpusat.
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- SLIDE 5: RECOMMENDED INFORMATION SYSTEMS -->
-    <!-- ========================================== -->
-    <section class="slide" id="slide-5">
-      <div class="slide-header">
-        <div class="header-accent-bar"></div>
-        <div class="header-content">
-          <div class="slide-meta">
-            <span class="meta-tag">Slide 05 • Recommended Information Systems</span>
-            <span class="meta-rubric">Rubrik: IS Justification (20%)</span>
-          </div>
-          <h2 class="slide-title">REKOMENDASI SISTEM INFORMASI: EKOSISTEM HORIZONU UNIFORM</h2>
-          <p class="slide-desc">Pemilihan sistem terpadu (ERP, SCM, POS, WMS), justifikasi integrasi, fungsi operasional, dan manfaat nyata terukur.</p>
-        </div>
-      </div>
-
-      <div class="table-wrapper">
-        <table class="table-clean">
-          <thead>
-            <tr>
-              <th style="width: 22%;">Masalah yang Diselesaikan</th>
-              <th style="width: 26%;">Sistem & Modul Terpilih</th>
-              <th style="width: 34%;">Fungsi Sistem dalam Kasus</th>
-              <th style="width: 18%;">Manfaat Terukur</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="td-bold-red">Excel Crash & Data Mahasiswa Terpecah</td>
-              <td><strong>ERP Master & Entitlement Engine</strong><br><small style="color:var(--slate-600);">Database MySQL InnoDB</small></td>
-              <td>Mengelola master data mahasiswa, struktur base code 4-segmen, impor massal via Maatwebsite, serta matriks kuota hak (Entitlement) otomatis per jenjang dan prodi.</td>
-              <td><strong>100% Bebas Crash Excel</strong>, data terisolasi ACID, single source of truth.</td>
-            </tr>
-            <tr>
-              <td class="td-bold-red">Dead-Stock & Pengumuman Jadwal Lambat</td>
-              <td><strong>SCM Demand Planning Portal</strong><br><small style="color:var(--slate-600);">Size Event & Schedule Hub</small></td>
-              <td>Membuka event input profil ukuran mandiri mahasiswa (SizeChangeEvent), siaran jadwal terfilter per prodi, serta kalkulasi otomatis Demand vs Shortage untuk tender vendor.</td>
-              <td><strong>Zero Dead-Stock</strong>, pengadaan pabrik presisi 100% sesuai ukuran riil.</td>
-            </tr>
-            <tr>
-              <td class="td-bold-red">Bottleneck Antrean & Risiko Double-Claim</td>
-              <td><strong>POS QR Verification Engine</strong><br><small style="color:var(--slate-600);">BaconQrCode & HTML5 Scanner</small></td>
-              <td>Penerbitan QR Code NIM beresolusi tinggi (Level H) dan eksekusi 6-Lapis Validasi Atomik via kamera webcam loket (Lunas, Sesi, Prodi, Gender, Sisa Hak, Stok Rak).</td>
-              <td><strong>Waktu layan &lt; 30 detik/mhs</strong>, nol risiko penyerahan ganda.</td>
-            </tr>
-            <tr>
-              <td class="td-bold-red">Susut Stok Gudang & Valuasi HPP Buram</td>
-              <td><strong>WMS & FIFO Costing Engine</strong><br><small style="color:var(--slate-600);">StockBatch & Movement Ledger</small></td>
-              <td>Melacak batch penerimaan vendor tertua (FIFO), pemotongan stok berkartu audit, rekonsiliasi Stock Opname fisik via variance kalkulator, serta analitik margin laba kotor.</td>
-              <td><strong>Valuasi HPP FIFO real-time</strong>, audit transparan, cegah selisih fisik.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="takeaway-box">
-        <i class="fa-solid fa-server" style="color: var(--horizon-red); font-size: 16px;"></i>
-        <div>
-          <strong>Keunggulan Integrasi UniStock:</strong> Menyatukan keandalan ERP, perencanaan SCM, kecepatan POS loket, dan ketatnya WMS dalam satu portal monolitik Laravel 12 modern yang tangguh.
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- SLIDE 6: PROPOSED SOLUTION DESIGN -->
-    <!-- ========================================== -->
-    <section class="slide" id="slide-6">
-      <div class="slide-header">
-        <div class="header-accent-bar"></div>
-        <div class="header-content">
-          <div class="slide-meta">
-            <span class="meta-tag">Slide 06 • Proposed Solution Design</span>
-            <span class="meta-rubric">Rubrik: Proposed Solution (15%)</span>
-          </div>
-          <h2 class="slide-title">DIAGRAM ARSITEKTUR SOLUSI: 4 FASE CLOSED-LOOP SCM ENGINE</h2>
-          <p class="slide-desc">Bagaimana subsistem terhubung erat, aliran data setelah perbaikan, dan pemanfaatan data untuk pengambilan keputusan.</p>
-        </div>
-      </div>
-
-      <div class="grid-4">
-        <!-- Phase 1 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge">Fase 1 • Hulu (Inbound)</div>
-            <h3 class="card-heading">Inbound & Batch FIFO</h3>
-            <ul class="card-list">
-              <li>Pencatatan barang dari vendor garmen pada modul StockReceive.</li>
-              <li>Sistem menerbitkan ID batch terurut (FIFO Queue Sequence).</li>
-              <li>Pencatatan otomatis jurnal mutasi masuk (StockMovement IN) dan penetapan unit HPP batch.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Output: Batch FIFO Terdaftar</div>
-        </div>
-
-        <!-- Phase 2 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge">Fase 2 • Planning (Demand)</div>
-            <h3 class="card-heading">Eligibility & Profiling</h3>
-            <ul class="card-list">
-              <li>Keuangan mengaktifkan data mahasiswa lunas di EligibilityRecord.</li>
-              <li>Mahasiswa input profil ukuran badan mandiri di event portal.</li>
-              <li>Sistem menghitung Demand vs Shortage untuk acuan belanja pengadaan vendor.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Output: QR Code & Jadwal Aktif</div>
-        </div>
-
-        <!-- Phase 3 -->
-        <div class="card card-highlight">
-          <div>
-            <div class="card-top-badge">Fase 3 • Hilir (Outbound)</div>
-            <h3 class="card-heading">POS QR & 6-Lapis Validasi</h3>
-            <ul class="card-list">
-              <li>Staf memindai QR NIM mahasiswa di loket posko kampus.</li>
-              <li>Eksekusi 6-Lapis Validasi Atomik via pessimistic lock (lockForUpdate).</li>
-              <li>Pemotongan batch tertua otomatis (deductStockFifo) dan cetak tiket serah terima fisik.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Output: Seragam Diterima Pas</div>
-        </div>
-
-        <!-- Phase 4 -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge">Fase 4 • Kontrol (Audit)</div>
-            <h3 class="card-heading">Opname & Closed-Loop</h3>
-            <ul class="card-list">
-              <li>Stock Opname fisik berkala menghitung selisih variance otomatis.</li>
-              <li>Penerbitan jurnal penyesuaian susut/surplus stok gudang.</li>
-              <li>Generate analitik Gross Profit Margin (GPM) dan laporan sisa stok untuk pimpinan.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Output: Feedback Siklus Baru</div>
-        </div>
-      </div>
-
-      <div class="takeaway-box">
-        <i class="fa-solid fa-arrows-spin" style="color: var(--horizon-red); font-size: 16px;"></i>
-        <div>
-          <strong>Pengambilan Keputusan Closed-Loop:</strong> Data analitik stok sisa dan tren ukuran dari Fase 4 secara otomatis menjadi input penetapan kuota anggaran dan purchase order ke pabrik pada Fase 1 semester berikutnya.
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- SLIDE 7: IMPLEMENTATION AND RISKS -->
-    <!-- ========================================== -->
-    <section class="slide" id="slide-7">
-      <div class="slide-header">
-        <div class="header-accent-bar"></div>
-        <div class="header-content">
-          <div class="slide-meta">
-            <span class="meta-tag">Slide 07 • Implementation and Risks</span>
-            <span class="meta-rubric">Rubrik: Feasibility & Risk (15%)</span>
-          </div>
-          <h2 class="slide-title">PRIORITAS IMPLEMENTASI & MITIGASI RISIKO LAPANGAN</h2>
-          <p class="slide-desc">Tiga langkah penerapan terencana, kesiapan SDM, serta mitigasi risiko kontingensi darurat hari-H pembagian.</p>
-        </div>
-      </div>
-
-      <div class="split-2">
-        <!-- Priorities -->
-        <div class="card">
-          <div>
-            <div class="card-top-badge"><i class="fa-solid fa-list-check"></i> 3 Prioritas Implementasi</div>
-            <h3 class="card-heading">Tahapan Kesiapan Sistem</h3>
-            <ul class="card-list">
-              <li><strong>Prioritas 1 (Master Data):</strong> Pembersihan data lama, pembuatan skema SKU 5-segmen, impor data mahasiswa, dan konfigurasi hak seragam prodi.</li>
-              <li><strong>Prioritas 2 (Integrasi Portal):</strong> Integrasi status lunas Keuangan (Eligibility), pembukaan jendela waktu pengisian profil ukuran maba, dan rilis jadwal.</li>
-              <li><strong>Prioritas 3 (Kesiapan SDM):</strong> Pelatihan teknis staf posko memakai scanner webcam, prosedur fitting ukuran, dan drill skenario darurat.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Roadmap: 6 Minggu Implementasi Penuh</div>
-        </div>
-
-        <!-- Risks & Mitigations -->
-        <div class="card card-highlight">
-          <div>
-            <div class="card-top-badge"><i class="fa-solid fa-shield-virus"></i> 3 Risiko Darurat Lapangan & Mitigasi</div>
-            <h3 class="card-heading">SOP Kontingensi Hari-H Posko</h3>
-            <ul class="card-list">
-              <li><strong>RISIKO 1: Baterai HP Mahasiswa Mati / QR Rusak</strong><br>
-              <em>Mitigasi UniStock:</em> Bilah scanner staf posko dilengkapi fitur Fallback Search manual via NIM atau Nama yang langsung memanggil profil hak seketika.</li>
-              <li><strong>RISIKO 2: Ukuran Rak Habis / Fitting Beda</strong><br>
-              <em>Mitigasi UniStock:</em> Fitur Partial Pickup memungkinkan staf menyerahkan barang yang tersedia (sisa hak tidak hangus) dan mencatat tukar ukuran di <code>student_size_histories</code>.</li>
-              <li><strong>RISIKO 3: Jaringan Internet Kampus Lambat / Dobel Klik</strong><br>
-              <em>Mitigasi UniStock:</em> Transaksi dilindungi Pessimistic Row Locking (<code>lockForUpdate</code>) dan proteksi idempotensi, menjamin nol pemotongan stok ganda.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag">Toleransi Kesalahan: Resiliensi Operasional Tinggi</div>
-        </div>
-      </div>
-
-      <div class="takeaway-box">
-        <i class="fa-solid fa-shield-halved" style="color: var(--horizon-red); font-size: 16px;"></i>
-        <div>
-          <strong>Resiliensi Operasional Tinggi:</strong> UniStock dirancang dengan pertimbangan toleransi kesalahan nyata (fault-tolerant), menjamin pembagian di posko kampus tetap berjalan lancar dalam kondisi darurat apa pun.
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- SLIDE 8: CONCLUSION AND EXPECTED BENEFITS -->
-    <!-- ========================================== -->
-    <section class="slide" id="slide-8">
-      <div class="slide-header">
-        <div class="header-accent-bar"></div>
-        <div class="header-content">
-          <div class="slide-meta">
-            <span class="meta-tag">Slide 08 • Conclusion & Benefits</span>
-            <span class="meta-rubric">Rubrik: Presentation & Impact (15%)</span>
-          </div>
-          <h2 class="slide-title">KESIMPULAN & TIGA MANFAAT TERUKUR YANG DIHASILKAN</h2>
-          <p class="slide-desc">Rangkuman dampak nyata sistem informasi HorizonU Uniform (UniStock SCM) bagi efisiensi operasional dan akuntabilitas keuangan.</p>
-        </div>
-      </div>
-
-      <div class="grid-3">
-        <!-- Benefit 1 -->
-        <div class="card card-highlight">
-          <div class="metric-block">
-            <div class="card-top-badge">MANFAAT 01 • EFISIENSI WAKTU</div>
-            <div class="metric-num">&lt; 30s</div>
-            <h3 class="card-heading">Waktu Layan per Mahasiswa</h3>
-            <ul class="card-list" style="text-align: left;">
-              <li>Memangkas waktu layanan loket dari yang sebelumnya 15–20 menit per mahasiswa menjadi di bawah 30 detik.</li>
-              <li>Pemindaian QR Code instan berbasis NIM dan eksekusi 6-lapis validasi otomatis.</li>
-              <li>Mengeliminasi antrean panjang yang berdesakan di posko kampus setiap awal tahun ajaran baru.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag" style="justify-content: center;">Dampak: Pelayanan Mahasiswa Cepat & Nyaman</div>
-        </div>
-
-        <!-- Benefit 2 -->
-        <div class="card">
-          <div class="metric-block">
-            <div class="card-top-badge">MANFAAT 02 • AKURASI INVENTARIS</div>
-            <div class="metric-num" style="color: var(--slate-900);">0</div>
-            <h3 class="card-heading">Dead-Stock Seragam & Sepatu</h3>
-            <ul class="card-list" style="text-align: left;">
-              <li>Profiling ukuran mandiri oleh mahasiswa sebelum tender vendor garmen dibuka.</li>
-              <li>Kalkulasi Demand vs Shortage otomatis memastikan pesanan pabrik selaras 100% dengan kebutuhan tubuh riil mahasiswa.</li>
-              <li>Tidak ada lagi seragam berukuran ekstrem yang mengendap bertahun-tahun di gudang.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag" style="justify-content: center;">Dampak: Optimalisasi Modal Kerja Kampus</div>
-        </div>
-
-        <!-- Benefit 3 -->
-        <div class="card">
-          <div class="metric-block">
-            <div class="card-top-badge">MANFAAT 03 • AKUNTABILITAS BIAYA</div>
-            <div class="metric-num" style="color: var(--slate-900);">100%</div>
-            <h3 class="card-heading">Valuasi FIFO Real-Time</h3>
-            <ul class="card-list" style="text-align: left;">
-              <li>Mengeliminasi ketergantungan pada spreadsheet Excel raksasa yang rawan rusak atau korup.</li>
-              <li>Seluruh pergerakan stok dicatat otomatis ke kartu mutasi persediaan berbasis urutan batch FIFO.</li>
-              <li>Laporan Harga Pokok Penjualan (HPP) dan Gross Profit Margin (GPM) tersedia secara transparan bagi pimpinan.</li>
-            </ul>
-          </div>
-          <div class="card-footer-tag" style="justify-content: center;">Dampak: Audit Trail Keuangan Bebas Selisih</div>
-        </div>
-      </div>
-
-      <div class="takeaway-box" style="padding: 12px 18px;">
-        <i class="fa-solid fa-quote-left" style="color: var(--horizon-red); font-size: 20px;"></i>
-        <div>
-          <strong>Kesimpulan Strategis Sistem Informasi:</strong> "Sistem Informasi bukan sekadar alat pencatat administrasi, melainkan saraf penggerak rantai pasok yang mengunci fisik barang dengan kepatuhan finansial, serta mentransformasi tebakan manual menjadi keputusan bisnis berakurasi tinggi."
-        </div>
-      </div>
-    </section>
-
-  </div>
-</main>
-
-<!-- Teleprompter Drawer (Naskah Baca Presenter) -->
-<div class="teleprompter-drawer" id="teleprompter-drawer">
-  <div class="prompter-header">
-    <div class="prompter-label">
-      <i class="fa-solid fa-microphone-lines"></i>
-      <span>Naskah Baca Presenter (Teleprompter Mode) — Baca Langsung di Sini</span>
+  <!-- TOP MINIMAL NAVBAR -->
+  <header class="h-14 bg-white border-b border-slate-200 px-8 flex items-center justify-between shrink-0 z-20">
+    <div class="flex items-center gap-3">
+      <span class="bg-horizon-700 text-white text-[11px] font-extrabold tracking-wider px-2.5 py-1 rounded">TECHNOSPARK 2026</span>
+      <span class="text-sm text-slate-600 font-semibold">
+        <span class="text-horizon-700 font-bold">HorizonU Uniform</span> • Sistem Informasi Rantai Pasok Terpadu
+      </span>
     </div>
-    <div class="prompter-tools">
-      <span id="prompter-slide-badge" style="color: #FFF; font-family: var(--font-mono); font-weight:700;">Slide 1 / 8</span>
-      <span>Target Waktu: <strong id="prompter-time-badge">01:10 Menit</strong></span>
-      <button onclick="togglePrompter()" style="background:transparent; border:none; color:var(--slate-400); cursor:pointer; font-size:16px;">
-        <i class="fa-solid fa-xmark"></i>
+    <div class="flex items-center gap-4 text-xs text-slate-500 font-medium">
+      <span><kbd class="bg-slate-100 border border-slate-300 text-slate-700 font-mono px-1.5 py-0.5 rounded text-[11px] font-bold">Space</kbd> / <kbd class="bg-slate-100 border border-slate-300 text-slate-700 font-mono px-1.5 py-0.5 rounded text-[11px] font-bold">→</kbd> Ganti Slide</span>
+      <span><kbd class="bg-slate-100 border border-slate-300 text-slate-700 font-mono px-1.5 py-0.5 rounded text-[11px] font-bold">T</kbd> Naskah Bacaan</span>
+      <span><kbd class="bg-slate-100 border border-slate-300 text-slate-700 font-mono px-1.5 py-0.5 rounded text-[11px] font-bold">F</kbd> Layar Penuh</span>
+    </div>
+  </header>
+
+  <!-- MAIN SLIDE CANVAS (16:9 RESPONSIVE FRAME) -->
+  <main class="flex-1 flex items-center justify-center p-6 overflow-hidden">
+    <div class="w-full max-w-[1440px] h-full max-h-[820px] bg-white rounded-2xl border border-slate-200/90 shadow-sm flex flex-col justify-between p-8 relative">
+
+      <!-- ========================================== -->
+      <!-- SLIDE 1: CASE INTRODUCTION -->
+      <!-- ========================================== -->
+      <section class="slide-panel active" id="slide-1">
+        <div>
+          <div class="border-b border-slate-200 pb-3 mb-5 flex items-start gap-3.5">
+            <div class="w-1.5 h-12 bg-horizon-700 rounded-full shrink-0"></div>
+            <div>
+              <span class="text-horizon-700 text-xs font-extrabold tracking-wide uppercase">Universitas Horizon Indonesia • Departemen Keuangan</span>
+              <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">HorizonU Uniform: Transformasi Rantai Pasok Seragam Mahasiswa</h1>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Modernisasi Pengadaan, Tata Kelola Stok FIFO, dan Distribusi Berbasis Web Terintegrasi</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-5">
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[11px] font-extrabold uppercase tracking-wide flex items-center gap-1.5 mb-2">
+                  <i class="fa-solid fa-building-columns"></i> Profil Institusi & Objek
+                </span>
+                <h3 class="text-base font-bold text-slate-900 mb-2">Logistik Perlengkapan Kampus</h3>
+                <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                  <li>• <strong>Departemen Keuangan:</strong> Bertanggung jawab mengelola pengadaan barang, akuntansi, dan pembagian paket seragam ribuan maba.</li>
+                  <li>• <strong>Komoditas:</strong> Jas Almamater, Kemeja Putih, Celana/Rok Bahan, Sepatu Lab & Dinas, serta Medical Kit keperawatan/kebidanan.</li>
+                  <li>• <strong>Model Distribusi:</strong> Penyaluran langsung ke mahasiswa aktif tanpa perantara ritel komersial.</li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200 text-xs font-bold text-horizon-700 flex items-center gap-1.5">
+                <i class="fa-solid fa-arrows-spin"></i> Model: Direct Closed-Loop Campus SCM
+              </div>
+            </div>
+
+            <div class="bg-red-50/60 border border-red-200 rounded-xl p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[11px] font-extrabold uppercase tracking-wide flex items-center gap-1.5 mb-2">
+                  <i class="fa-solid fa-triangle-exclamation"></i> Kendala Operasional Utama
+                </span>
+                <h3 class="text-base font-bold text-slate-900 mb-2">Hambatan Spreadsheet & Loket</h3>
+                <ul class="text-xs text-slate-700 space-y-2 leading-relaxed">
+                  <li>• <strong>Excel Macet & Crash:</strong> File spreadsheet induk (~4.5 MB, 19 sheet) sering mengalami lag atau crash saat ribuan data maba diolah bersamaan.</li>
+                  <li>• <strong>Antrean Posko Mengular:</strong> Waktu verifikasi manual mencapai 15–20 menit per mahasiswa, memicu kerumunan ratusan orang di loket.</li>
+                  <li>• <strong>Dead-Stock & Salah Ukuran:</strong> Pemesanan vendor hanya berdasar tebakan rasio historis; ukuran populer habis, ukuran ekstrem menumpuk.</li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t border-red-200 text-xs font-bold text-horizon-700 flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-exclamation"></i> Dampak: Modal Tertahan & Risiko Klaim Ganda
+              </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[11px] font-extrabold uppercase tracking-wide flex items-center gap-1.5 mb-2">
+                  <i class="fa-solid fa-users"></i> Tim Pengembang
+                </span>
+                <h3 class="text-base font-bold text-slate-900 mb-2">Nirwana Development Team</h3>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div class="bg-white border border-slate-200 p-2 rounded">
+                    <p class="font-bold text-slate-800">Fhazar Raffiful A.</p>
+                    <p class="text-[10px] text-horizon-700 font-semibold">Project Manager</p>
+                  </div>
+                  <div class="bg-white border border-slate-200 p-2 rounded">
+                    <p class="font-bold text-slate-800">Ferry Noer H.</p>
+                    <p class="text-[10px] text-horizon-700 font-semibold">Frontend Engineer</p>
+                  </div>
+                  <div class="bg-white border border-slate-200 p-2 rounded">
+                    <p class="font-bold text-slate-800">Hildan Anugrah T.</p>
+                    <p class="text-[10px] text-horizon-700 font-semibold">Backend Engineer</p>
+                  </div>
+                  <div class="bg-white border border-slate-200 p-2 rounded">
+                    <p class="font-bold text-slate-800">Fadel Rahmadhan</p>
+                    <p class="text-[10px] text-horizon-700 font-semibold">Quality Assurance</p>
+                  </div>
+                  <div class="bg-white border border-slate-200 p-2 rounded">
+                    <p class="font-bold text-slate-800">Daffa Nazriel Z.</p>
+                    <p class="text-[10px] text-horizon-700 font-semibold">UI/UX Designer</p>
+                  </div>
+                  <div class="bg-white border border-slate-200 p-2 rounded">
+                    <p class="font-bold text-slate-800">Acep Ugan S.</p>
+                    <p class="text-[10px] text-horizon-700 font-semibold">System Analyst</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200 text-xs font-bold text-horizon-700 flex items-center gap-1.5">
+                <i class="fa-solid fa-globe"></i> Sistem Live: unistok.nirwana.biz.id
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-red-50/70 border-l-4 border-horizon-700 p-3 rounded-r-lg text-xs text-slate-800 flex items-center gap-2.5">
+          <i class="fa-solid fa-bullseye text-horizon-700 text-base"></i>
+          <div>
+            <strong class="text-horizon-700 font-bold">Misi Solusi HorizonU Uniform:</strong> Menghubungkan Hulu (Vendor Pabrik), Gudang Kampus, Bagian Keuangan, hingga Hilir (Mahasiswa) dalam satu arsitektur terintegrasi bertenaga Laravel 12 dan aturan FIFO.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SLIDE 2: SUPPLY CHAIN STRUCTURE -->
+      <!-- ========================================== -->
+      <section class="slide-panel" id="slide-2">
+        <div>
+          <div class="border-b border-slate-200 pb-3 mb-5 flex items-start gap-3.5">
+            <div class="w-1.5 h-12 bg-horizon-700 rounded-full shrink-0"></div>
+            <div>
+              <span class="text-horizon-700 text-xs font-extrabold tracking-wide uppercase">Struktur Rantai Pasok</span>
+              <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">Pemetaan Stakeholder & Aliran Fisik Barang</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Aliran terpadu dari pabrik vendor hingga serah terima mahasiswa dengan prinsip "Data Mengunci Fisik"</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-4 gap-4">
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">01 • Supplier (Hulu)</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-2">Pabrik Garmen & Sepatu</h3>
+                <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                  <li>• Memproduksi paket seragam dan sepatu sesuai pesanan pengadaan kampus (PO).</li>
+                  <li>• Menerapkan standarisasi kode varian SKU per kategori dan ukuran.</li>
+                  <li>• <strong>Titik Barang:</strong> Pengiriman kardus stok ke gudang kampus (Inbound Logistics).</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-slate-200 text-[11px] font-bold text-horizon-700">
+                Aliran: PO Agregat ➔ Fisik Masuk
+              </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">02 • Gudang (Inbound)</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-2">Gudang Logistik Kampus</h3>
+                <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                  <li>• Penerimaan fisik barang (StockReceive) dan pemeriksaan mutu (QC).</li>
+                  <li>• Pencatatan batch urutan FIFO (First-In, First-Out) dan nilai HPP unit.</li>
+                  <li>• <strong>Titik Barang:</strong> Transfer stok batch tertua menuju posko distribusi loket.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-slate-200 text-[11px] font-bold text-horizon-700">
+                Aliran: Inbound ➔ POS Loket
+              </div>
+            </div>
+
+            <div class="bg-red-50/60 border border-red-200 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">03 • Verifikator & Loket</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-2">Staf Keuangan & Posko</h3>
+                <ul class="text-xs text-slate-700 space-y-2 leading-relaxed">
+                  <li>• <strong>Keuangan:</strong> Otorisasi status pelunasan biaya kuliah mahasiswa (Eligibility).</li>
+                  <li>• <strong>Staf Posko:</strong> Melayani meja pembagian fisik seragam di posko kampus.</li>
+                  <li>• <strong>Titik Kritis:</strong> Validasi identitas QR Code dan pencocokan ukuran saat proses fitting.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-red-200 text-[11px] font-bold text-horizon-700">
+                Aliran: Data Lunas ➔ Serah Fisik
+              </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">04 • Konsumen (Hilir)</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-2">Mahasiswa (Customer)</h3>
+                <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                  <li>• Konsumen akhir yang memiliki hak jatah barang (Entitlement) sesuai prodi.</li>
+                  <li>• Mengisi profil ukuran mandiri di web dan menerima tiket jadwal pembagian.</li>
+                  <li>• <strong>Titik Info:</strong> Menunjukkan tiket QR Code beresolusi tinggi (NIM murni) di loket.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-slate-200 text-[11px] font-bold text-horizon-700">
+                Aliran: Profil ➔ Seragam Pas
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-red-50/70 border-l-4 border-horizon-700 p-3 rounded-r-lg text-xs text-slate-800 flex items-center gap-2.5">
+          <i class="fa-solid fa-shield-halved text-horizon-700 text-base"></i>
+          <div>
+            <strong class="text-horizon-700 font-bold">Prinsip Inti "Data Mengunci Fisik":</strong> Barang fisik di loket gudang pantang diserahkan tanpa otorisasi digital. Pemindaian QR Code mengeksekusi validasi atomik di database: jika belum lunas atau kuota habis, fisik seragam tidak dapat keluar.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SLIDE 3: PROBLEM ANALYSIS -->
+      <!-- ========================================== -->
+      <section class="slide-panel" id="slide-3">
+        <div>
+          <div class="border-b border-slate-200 pb-3 mb-5 flex items-start gap-3.5">
+            <div class="w-1.5 h-12 bg-horizon-700 rounded-full shrink-0"></div>
+            <div>
+              <span class="text-horizon-700 text-xs font-extrabold tracking-wide uppercase">Analisis Masalah Sistem Lama</span>
+              <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">Evaluasi Kendala Operasional & Dampak Sistemik</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Analisis akar masalah pengelolaan manual terhadap pembengkakan biaya, waktu kerja, dan penurunan mutu layanan</p>
+            </div>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-horizon-700 text-white font-bold text-[11.5px]">
+                <tr>
+                  <th class="py-3 px-4 w-1/4">Masalah Utama (Gejala Lapangan)</th>
+                  <th class="py-3 px-4 w-[38%]">Akar Penyebab Masalah (Root Cause)</th>
+                  <th class="py-3 px-4 w-[37%]">Dampak terhadap Biaya, Waktu, Stok & Layanan</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 leading-relaxed text-slate-700">
+                <tr class="hover:bg-slate-50">
+                  <td class="py-2.5 px-4 font-bold text-horizon-700">1. Ketidakcocokan Ukuran & Penumpukan Dead-Stock</td>
+                  <td class="py-2.5 px-4">Pemesanan pengadaan ke vendor pabrik hanya menggunakan tebakan rasio historis. Tidak ada sistem survey profil ukuran mandiri sebelum tender dibuka.</td>
+                  <td class="py-2.5 px-4"><strong>Dampak Stok & Biaya:</strong> Ukuran favorit (M/L) habis pada hari pertama pembagian, ukuran ekstrem (XS, 3XL) menumpuk bertahun-tahun. Modal kampus mengendap menjadi dead-stock.</td>
+                </tr>
+                <tr class="bg-red-50/40 hover:bg-red-50/70">
+                  <td class="py-2.5 px-4 font-bold text-horizon-700">2. File Excel Sering Crash & Pengumuman Lambat</td>
+                  <td class="py-2.5 px-4">Departemen Keuangan memakai satu file spreadsheet raksasa (~4.5 MB, 19 sheet) untuk ribuan data mahasiswa. Pengiriman jadwal disebarkan manual via surel.</td>
+                  <td class="py-2.5 px-4"><strong>Dampak Waktu & Layanan:</strong> Aplikasi sering not responding atau data korup. Rekapitulasi memakan waktu berminggu-minggu dan info jadwal terlambat diterima mahasiswa.</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="py-2.5 px-4 font-bold text-horizon-700">3. Bottleneck Loket Posko & Risiko Double-Claim</td>
+                  <td class="py-2.5 px-4">Pengecekan lunas, pencocokan hak prodi, dan paraf bukti serah terima dilakukan manual dengan mencentang map formulir kertas fisik.</td>
+                  <td class="py-2.5 px-4"><strong>Dampak Waktu & Akurasi:</strong> Waktu pelayanan lambat (15–20 menit per orang), antrean ratusan meter, serta rawan klaim ganda (double-claim) di loket atau hari berbeda.</td>
+                </tr>
+                <tr class="bg-red-50/40 hover:bg-red-50/70">
+                  <td class="py-2.5 px-4 font-bold text-horizon-700">4. Susut Stok Liar & Valuasi HPP Buram</td>
+                  <td class="py-2.5 px-4">Penerimaan seragam dari vendor dengan harga berbeda tidak dicatat per batch FIFO dan tanpa kartu mutasi stok otomatis yang terikat ke transaksi loket.</td>
+                  <td class="py-2.5 px-4"><strong>Dampak Biaya & Akuntansi:</strong> Selisih barang susut (shrinkage) tidak terlacak penanggungjawabnya. Valuasi HPP dan analisis Gross Profit Margin (GPM) terdistorsi.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-red-50/70 border-l-4 border-horizon-700 p-3 rounded-r-lg text-xs text-slate-800 flex items-center gap-2.5">
+          <i class="fa-solid fa-triangle-exclamation text-horizon-700 text-base"></i>
+          <div>
+            <strong class="text-horizon-700 font-bold">Akar Kegagalan Sistemik:</strong> Ketiadaan Single Source of Truth berbasis database relasional menyebabkan silo data antar-staf, memicu kebocoran persediaan, dan membahayakan akuntabilitas keuangan.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SLIDE 4: INFORMATION FLOW ANALYSIS -->
+      <!-- ========================================== -->
+      <section class="slide-panel" id="slide-4">
+        <div>
+          <div class="border-b border-slate-200 pb-3 mb-5 flex items-start gap-3.5">
+            <div class="w-1.5 h-12 bg-horizon-700 rounded-full shrink-0"></div>
+            <div>
+              <span class="text-horizon-700 text-xs font-extrabold tracking-wide uppercase">Analisis Aliran Informasi</span>
+              <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">Titik Kemacetan & Isolasi Data (As-Is State)</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Hambatan komunikasi antarbagian yang memicu keterlambatan, inkonsistensi data, dan pembatalan layanan</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">Aliran 01 • Mahasiswa ➔ Kampus</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-1.5">Kebutuhan: Profil Ukuran & Jadwal</h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 leading-relaxed">
+                  <li>• <strong>Asal & Tujuan:</strong> Mahasiswa mengisi formulir ke kampus dan menerima jadwal pembagian via email.</li>
+                  <li>• <strong>Titik Masalah:</strong> Google Form terpisah tanpa validasi SKU baku, memicu pengisian ganda dan rekapitulasi data staf terlambat berminggu-minggu.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2 border-t border-slate-200 text-[11px] font-bold text-horizon-700">Kondisi: Informasi Terlambat & Format Liar</div>
+            </div>
+
+            <div class="bg-red-50/60 border border-red-200 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">Aliran 02 • Keuangan ➔ Posko Hari-H</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-1.5">Kebutuhan: Status Lunas (Eligibility)</h3>
+                <ul class="text-xs text-slate-700 space-y-1.5 leading-relaxed">
+                  <li>• <strong>Asal & Tujuan:</strong> Staf Keuangan mengekspor data pelunasan ke staf meja posko pembagian seragam.</li>
+                  <li>• <strong>Titik Masalah:</strong> Data terisolasi di file Excel lokal staf. Saat ada pelunasan baru di bank pada hari-H, staf posko tidak terupdate sehingga maba tertolak.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2 border-t border-red-200 text-[11px] font-bold text-horizon-700">Kondisi: Informasi Terputus (Silo Data Lokal)</div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">Aliran 03 • Meja Posko ➔ Gudang</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-1.5">Kebutuhan: Kuota Hak & Kartu Mutasi</h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 leading-relaxed">
+                  <li>• <strong>Asal & Tujuan:</strong> Staf posko memverifikasi paket hak prodi dan mencatat mutasi seragam yang keluar.</li>
+                  <li>• <strong>Titik Masalah:</strong> Penyerahan seragam dicatat di lembaran kertas. Pengurangan saldo stok gudang baru direkap malam hari, memicu risiko susut stok.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2 border-t border-slate-200 text-[11px] font-bold text-horizon-700">Kondisi: Informasi Terlambat (Paper-Based Tracking)</div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">Aliran 04 • Pengadaan ➔ Pabrik</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-1.5">Kebutuhan: Purchase Order Agregat</h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 leading-relaxed">
+                  <li>• <strong>Asal & Tujuan:</strong> Pengadaan kampus mengirim rincian jumlah potong seragam dan sepatu ke pabrik.</li>
+                  <li>• <strong>Titik Masalah:</strong> Purchase Order ke pabrik hanya estimasi kasar tanpa dasar profil data riil maba, memicu lead-time penukaran barang berbulan-bulan.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2 border-t border-slate-200 text-[11px] font-bold text-horizon-700">Kondisi: Informasi Tidak Akurat (Blind Ordering)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-red-50/70 border-l-4 border-horizon-700 p-3 rounded-r-lg text-xs text-slate-800 flex items-center gap-2.5">
+          <i class="fa-solid fa-circle-nodes text-horizon-700 text-base"></i>
+          <div>
+            <strong class="text-horizon-700 font-bold">Diagnosa Kunci:</strong> Terjadi Information Latency dan Data Asymmetry akut yang melumpuhkan koordinasi antar-bagian. Solusi mutlak membutuhkan platform web tunggal terpusat.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SLIDE 5: RECOMMENDED INFORMATION SYSTEMS -->
+      <!-- ========================================== -->
+      <section class="slide-panel" id="slide-5">
+        <div>
+          <div class="border-b border-slate-200 pb-3 mb-5 flex items-start gap-3.5">
+            <div class="w-1.5 h-12 bg-horizon-700 rounded-full shrink-0"></div>
+            <div>
+              <span class="text-horizon-700 text-xs font-extrabold tracking-wide uppercase">Rekomendasi Sistem Terpadu</span>
+              <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">Pemilihan Arsitektur Sistem Informasi (UniStock Engine)</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Integrasi empat pilar sistem: ERP, SCM, POS, dan WMS dalam satu platform web modern</p>
+            </div>
+          </div>
+
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-horizon-700 text-white font-bold text-[11.5px]">
+                <tr>
+                  <th class="py-3 px-4 w-[22%]">Masalah yang Diselesaikan</th>
+                  <th class="py-3 px-4 w-[26%]">Sistem & Modul Terpilih</th>
+                  <th class="py-3 px-4 w-[34%]">Fungsi Sistem dalam Kasus</th>
+                  <th class="py-3 px-4 w-[18%]">Manfaat Terukur</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 leading-relaxed text-slate-700">
+                <tr class="hover:bg-slate-50">
+                  <td class="py-2.5 px-4 font-bold text-horizon-700">Excel Crash & Data Mahasiswa Terpecah</td>
+                  <td class="py-2.5 px-4"><strong>ERP Master & Entitlement Engine</strong><br><span class="text-[11px] text-slate-500">Database MySQL InnoDB</span></td>
+                  <td class="py-2.5 px-4">Mengelola master data mahasiswa, struktur base code 4-segmen, impor massal via Maatwebsite, serta matriks kuota hak (Entitlement) otomatis per jenjang dan prodi.</td>
+                  <td class="py-2.5 px-4"><strong>100% Bebas Crash Excel</strong>, data terisolasi ACID, single source of truth.</td>
+                </tr>
+                <tr class="bg-red-50/40 hover:bg-red-50/70">
+                  <td class="py-2.5 px-4 font-bold text-horizon-700">Dead-Stock & Pengumuman Jadwal Lambat</td>
+                  <td class="py-2.5 px-4"><strong>SCM Demand Planning Portal</strong><br><span class="text-[11px] text-slate-500">Size Event & Schedule Hub</span></td>
+                  <td class="py-2.5 px-4">Membuka event input profil ukuran mandiri mahasiswa (SizeChangeEvent), siaran jadwal terfilter per prodi, serta kalkulasi otomatis Demand vs Shortage untuk tender vendor.</td>
+                  <td class="py-2.5 px-4"><strong>Zero Dead-Stock</strong>, pengadaan pabrik presisi 100% sesuai ukuran riil.</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="py-2.5 px-4 font-bold text-horizon-700">Bottleneck Antrean & Risiko Double-Claim</td>
+                  <td class="py-2.5 px-4"><strong>POS QR Verification Engine</strong><br><span class="text-[11px] text-slate-500">BaconQrCode & HTML5 Scanner</span></td>
+                  <td class="py-2.5 px-4">Penerbitan QR Code NIM beresolusi tinggi (Level H) dan eksekusi 6-Lapis Validasi Atomik via kamera webcam loket (Lunas, Sesi, Prodi, Gender, Sisa Hak, Stok Rak).</td>
+                  <td class="py-2.5 px-4"><strong>Waktu layan &lt; 30 detik/mhs</strong>, nol risiko penyerahan ganda.</td>
+                </tr>
+                <tr class="bg-red-50/40 hover:bg-red-50/70">
+                  <td class="py-2.5 px-4 font-bold text-horizon-700">Susut Stok Gudang & Valuasi HPP Buram</td>
+                  <td class="py-2.5 px-4"><strong>WMS & FIFO Costing Engine</strong><br><span class="text-[11px] text-slate-500">StockBatch & Movement Ledger</span></td>
+                  <td class="py-2.5 px-4">Melacak batch penerimaan vendor tertua (FIFO), pemotongan stok berkartu audit, rekonsiliasi Stock Opname fisik via variance kalkulator, serta analitik margin laba kotor.</td>
+                  <td class="py-2.5 px-4"><strong>Valuasi HPP FIFO real-time</strong>, audit transparan, cegah selisih fisik.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-red-50/70 border-l-4 border-horizon-700 p-3 rounded-r-lg text-xs text-slate-800 flex items-center gap-2.5">
+          <i class="fa-solid fa-server text-horizon-700 text-base"></i>
+          <div>
+            <strong class="text-horizon-700 font-bold">Keunggulan Integrasi UniStock:</strong> Menyatukan keandalan ERP, perencanaan SCM, kecepatan POS loket, dan ketatnya WMS dalam satu portal monolitik Laravel 12 modern yang tangguh.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SLIDE 6: PROPOSED SOLUTION DESIGN -->
+      <!-- ========================================== -->
+      <section class="slide-panel" id="slide-6">
+        <div>
+          <div class="border-b border-slate-200 pb-3 mb-5 flex items-start gap-3.5">
+            <div class="w-1.5 h-12 bg-horizon-700 rounded-full shrink-0"></div>
+            <div>
+              <span class="text-horizon-700 text-xs font-extrabold tracking-wide uppercase">Desain Arsitektur Solusi</span>
+              <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">Aliran 4-Fase Closed-Loop Supply Chain Engine</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Konektivitas sistem end-to-end, pemrosesan transaksi atomik, dan closed-loop data feedback</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-4 gap-4">
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">Fase 1 • Hulu (Inbound)</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-2">Inbound & Batch FIFO</h3>
+                <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                  <li>• Pencatatan barang dari vendor garmen pada modul StockReceive.</li>
+                  <li>• Sistem menerbitkan ID batch terurut (FIFO Queue Sequence).</li>
+                  <li>• Pencatatan otomatis jurnal mutasi masuk (StockMovement IN) dan penetapan unit HPP batch.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-slate-200 text-[11px] font-bold text-horizon-700">Output: Batch FIFO Terdaftar</div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">Fase 2 • Demand (Planning)</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-2">Eligibility & Profiling</h3>
+                <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                  <li>• Keuangan mengaktifkan data mahasiswa lunas di EligibilityRecord.</li>
+                  <li>• Mahasiswa input profil ukuran badan mandiri di event portal.</li>
+                  <li>• Sistem menghitung Demand vs Shortage untuk acuan belanja pengadaan vendor.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-slate-200 text-[11px] font-bold text-horizon-700">Output: QR Code & Jadwal Aktif</div>
+            </div>
+
+            <div class="bg-red-50/60 border border-red-200 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">Fase 3 • Hilir (Outbound)</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-2">POS QR & 6-Lapis Validasi</h3>
+                <ul class="text-xs text-slate-700 space-y-2 leading-relaxed">
+                  <li>• Staf memindai QR NIM mahasiswa di loket posko kampus.</li>
+                  <li>• Eksekusi 6-Lapis Validasi Atomik via pessimistic lock (lockForUpdate).</li>
+                  <li>• Pemotongan batch tertua otomatis (deductStockFifo) dan cetak tiket serah terima fisik.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-red-200 text-[11px] font-bold text-horizon-700">Output: Seragam Diterima Pas</div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[10.5px] font-extrabold uppercase tracking-wide">Fase 4 • Kontrol (Audit)</span>
+                <h3 class="text-sm font-bold text-slate-900 mt-1 mb-2">Opname & Closed-Loop</h3>
+                <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+                  <li>• Stock Opname fisik berkala menghitung selisih variance otomatis.</li>
+                  <li>• Penerbitan jurnal penyesuaian susut/surplus stok gudang.</li>
+                  <li>• Generate analitik Gross Profit Margin (GPM) dan laporan sisa stok untuk pimpinan.</li>
+                </ul>
+              </div>
+              <div class="mt-3 pt-2.5 border-t border-slate-200 text-[11px] font-bold text-horizon-700">Output: Feedback Siklus Baru</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-red-50/70 border-l-4 border-horizon-700 p-3 rounded-r-lg text-xs text-slate-800 flex items-center gap-2.5">
+          <i class="fa-solid fa-arrows-spin text-horizon-700 text-base"></i>
+          <div>
+            <strong class="text-horizon-700 font-bold">Pengambilan Keputusan Closed-Loop:</strong> Data analitik stok sisa dan tren ukuran dari Fase 4 secara otomatis menjadi input penetapan kuota anggaran dan purchase order ke pabrik pada Fase 1 semester berikutnya.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SLIDE 7: IMPLEMENTATION AND RISKS -->
+      <!-- ========================================== -->
+      <section class="slide-panel" id="slide-7">
+        <div>
+          <div class="border-b border-slate-200 pb-3 mb-5 flex items-start gap-3.5">
+            <div class="w-1.5 h-12 bg-horizon-700 rounded-full shrink-0"></div>
+            <div>
+              <span class="text-horizon-700 text-xs font-extrabold tracking-wide uppercase">Rencana Penerapan & Mitigasi</span>
+              <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">Prioritas Implementasi & Manajemen Risiko Lapangan</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Tahapan kesiapan operasional serta prosedur kontingensi darurat saat hari-H distribusi</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-5">
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[11px] font-extrabold uppercase tracking-wide flex items-center gap-1.5 mb-2">
+                  <i class="fa-solid fa-list-check"></i> 3 Prioritas Implementasi
+                </span>
+                <h3 class="text-base font-bold text-slate-900 mb-3">Tahapan Kesiapan Sistem</h3>
+                <ul class="text-xs text-slate-700 space-y-3 leading-relaxed">
+                  <li>• <strong>Prioritas 1 (Master Data):</strong> Pembersihan data lama, pembuatan skema SKU 5-segmen, impor data mahasiswa, dan konfigurasi hak seragam prodi.</li>
+                  <li>• <strong>Prioritas 2 (Integrasi Portal):</strong> Integrasi status lunas Keuangan (Eligibility), pembukaan jendela waktu pengisian profil ukuran maba, dan rilis jadwal.</li>
+                  <li>• <strong>Prioritas 3 (Kesiapan SDM):</strong> Pelatihan teknis staf posko memakai scanner webcam, prosedur fitting ukuran, dan drill skenario darurat.</li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200 text-xs font-bold text-horizon-700">Roadmap: 6 Minggu Implementasi Penuh</div>
+            </div>
+
+            <div class="bg-red-50/60 border border-red-200 rounded-xl p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-horizon-700 text-[11px] font-extrabold uppercase tracking-wide flex items-center gap-1.5 mb-2">
+                  <i class="fa-solid fa-shield-virus"></i> 3 Risiko Lapangan & Cara Mitigasi
+                </span>
+                <h3 class="text-base font-bold text-slate-900 mb-3">SOP Kontingensi Hari-H Posko</h3>
+                <ul class="text-xs text-slate-700 space-y-3 leading-relaxed">
+                  <li>• <strong>RISIKO 1: Baterai HP Mahasiswa Mati / QR Rusak</strong><br>
+                  <span class="text-slate-600"><em>Mitigasi UniStock:</em> Bilah scanner staf posko dilengkapi fitur Fallback Search manual via NIM atau Nama yang langsung memanggil profil hak seketika.</span></li>
+                  <li>• <strong>RISIKO 2: Ukuran Rak Habis / Fitting Beda</strong><br>
+                  <span class="text-slate-600"><em>Mitigasi UniStock:</em> Fitur Partial Pickup memungkinkan staf menyerahkan barang yang tersedia (sisa hak tidak hangus) dan mencatat tukar ukuran di <code>student_size_histories</code>.</span></li>
+                  <li>• <strong>RISIKO 3: Jaringan Internet Kampus Lambat / Dobel Klik</strong><br>
+                  <span class="text-slate-600"><em>Mitigasi UniStock:</em> Transaksi dilindungi Pessimistic Row Locking (<code>lockForUpdate</code>) dan proteksi idempotensi, menjamin nol pemotongan stok ganda.</span></li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t border-red-200 text-xs font-bold text-horizon-700">Toleransi Kesalahan: Resiliensi Operasional Tinggi</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-red-50/70 border-l-4 border-horizon-700 p-3 rounded-r-lg text-xs text-slate-800 flex items-center gap-2.5">
+          <i class="fa-solid fa-shield-halved text-horizon-700 text-base"></i>
+          <div>
+            <strong class="text-horizon-700 font-bold">Resiliensi Operasional Tinggi:</strong> UniStock dirancang dengan pertimbangan toleransi kesalahan nyata (fault-tolerant), menjamin pembagian di posko kampus tetap berjalan lancar dalam kondisi darurat apa pun.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SLIDE 8: CONCLUSION AND EXPECTED BENEFITS -->
+      <!-- ========================================== -->
+      <section class="slide-panel" id="slide-8">
+        <div>
+          <div class="border-b border-slate-200 pb-3 mb-5 flex items-start gap-3.5">
+            <div class="w-1.5 h-12 bg-horizon-700 rounded-full shrink-0"></div>
+            <div>
+              <span class="text-horizon-700 text-xs font-extrabold tracking-wide uppercase">Kesimpulan & Hasil Terukur</span>
+              <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">Dampak Strategis & Manfaat Nyata Implementasi</h2>
+              <p class="text-xs text-slate-500 font-medium mt-0.5">Transformasi operasional Departemen Keuangan Universitas Horizon Indonesia pasca-digitalisasi</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-5">
+            <div class="bg-red-50/60 border border-red-200 rounded-xl p-6 flex flex-col justify-between text-center">
+              <div>
+                <span class="text-horizon-700 text-[11px] font-extrabold uppercase tracking-wide">MANFAAT 01 • EFISIENSI WAKTU</span>
+                <div class="text-4xl font-extrabold text-horizon-700 my-2 tracking-tight">&lt; 30s</div>
+                <h3 class="text-sm font-bold text-slate-900 mb-2">Waktu Layan per Mahasiswa</h3>
+                <ul class="text-xs text-slate-600 text-left space-y-1.5 leading-relaxed">
+                  <li>• Memangkas waktu layanan loket dari 15–20 menit menjadi di bawah 30 detik.</li>
+                  <li>• Pemindaian QR Code instan berbasis NIM dan validasi 6-lapis otomatis.</li>
+                  <li>• Mengeliminasi antrean panjang berdesakan di posko kampus.</li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t border-red-200 text-xs font-bold text-horizon-700">Dampak: Pelayanan Mahasiswa Cepat & Nyaman</div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-6 flex flex-col justify-between text-center">
+              <div>
+                <span class="text-horizon-700 text-[11px] font-extrabold uppercase tracking-wide">MANFAAT 02 • AKURASI INVENTARIS</span>
+                <div class="text-4xl font-extrabold text-slate-900 my-2 tracking-tight">0</div>
+                <h3 class="text-sm font-bold text-slate-900 mb-2">Dead-Stock Seragam & Sepatu</h3>
+                <ul class="text-xs text-slate-600 text-left space-y-1.5 leading-relaxed">
+                  <li>• Profiling ukuran mandiri maba sebelum tender vendor garmen dibuka.</li>
+                  <li>• Kalkulasi Demand vs Shortage otomatis memastikan pesanan selaras 100%.</li>
+                  <li>• Tidak ada lagi seragam ukuran ekstrem yang mengendap bertahun-tahun.</li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200 text-xs font-bold text-slate-800">Dampak: Optimalisasi Modal Kerja Kampus</div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-6 flex flex-col justify-between text-center">
+              <div>
+                <span class="text-horizon-700 text-[11px] font-extrabold uppercase tracking-wide">MANFAAT 03 • AKUNTABILITAS BIAYA</span>
+                <div class="text-4xl font-extrabold text-slate-900 my-2 tracking-tight">100%</div>
+                <h3 class="text-sm font-bold text-slate-900 mb-2">Valuasi FIFO Real-Time</h3>
+                <ul class="text-xs text-slate-600 text-left space-y-1.5 leading-relaxed">
+                  <li>• Mengeliminasi ketergantungan pada spreadsheet Excel yang rawan rusak.</li>
+                  <li>• Pergerakan stok dicatat otomatis ke kartu mutasi berurutan batch FIFO.</li>
+                  <li>• Laporan Harga Pokok Penjualan (HPP) dan Gross Profit Margin (GPM) transparan.</li>
+                </ul>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200 text-xs font-bold text-slate-800">Dampak: Audit Trail Keuangan Bebas Selisih</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-red-50/70 border-l-4 border-horizon-700 p-3 rounded-r-lg text-xs text-slate-800 flex items-center gap-2.5">
+          <i class="fa-solid fa-quote-left text-horizon-700 text-base"></i>
+          <div>
+            <strong class="text-horizon-700 font-bold">Kesimpulan Strategis Sistem Informasi:</strong> "Sistem Informasi bukan sekadar alat pencatat administrasi, melainkan saraf penggerak rantai pasok yang mengunci fisik barang dengan kepatuhan finansial, serta mentransformasi tebakan manual menjadi keputusan bisnis berakurasi tinggi."
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- TELEPROMPTER DRAWER (NASKAH BACA PRESENTER) -->
+  <div class="fixed bottom-14 left-0 right-0 h-64 bg-slate-900 text-white border-t-4 border-horizon-700 shadow-2xl flex flex-col z-50 transition-all duration-300" id="prompter-drawer" style="display: none;">
+    <div class="bg-slate-800/90 px-8 py-2.5 border-b border-slate-700 flex items-center justify-between">
+      <div class="flex items-center gap-2 text-xs font-bold text-red-300 uppercase tracking-wider">
+        <i class="fa-solid fa-microphone-lines"></i>
+        <span>Naskah Baca Presenter (Teleprompter Mode) — Baca Langsung di Sini</span>
+      </div>
+      <div class="flex items-center gap-4 text-xs text-slate-300">
+        <span id="prompter-slide-badge" class="font-mono font-bold text-white">Slide 1 / 8</span>
+        <span>Target Durasi: <strong id="prompter-time-badge" class="text-amber-400 font-mono font-bold">01:10 Menit</strong></span>
+        <button onclick="togglePrompter()" class="text-slate-400 hover:text-white text-base">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+    <div class="flex-1 overflow-y-auto px-8 py-4 text-[15px] leading-relaxed text-slate-100" id="prompter-body">
+      <!-- Verbatim speech text inserted via JS -->
+    </div>
+  </div>
+
+  <!-- BOTTOM DOCK TOOLBAR -->
+  <footer class="h-14 bg-white border-t border-slate-200 px-8 flex items-center justify-between shrink-0 z-20">
+    <div class="flex items-center gap-4 text-xs text-slate-600">
+      <span><strong class="text-slate-900">UniStock SCM</strong> • Departemen Keuangan Horizon University</span>
+      <div class="bg-slate-100 border border-slate-200 px-3 py-1 rounded-full font-mono text-xs font-bold text-horizon-700 flex items-center gap-2">
+        <i class="fa-regular fa-clock"></i>
+        <span id="timer-text">00:00</span>
+        <button onclick="toggleTimer()" class="text-slate-600 hover:text-slate-900" title="Play/Pause">
+          <i class="fa-solid fa-play" id="timer-icon"></i>
+        </button>
+        <button onclick="resetTimer()" class="text-slate-600 hover:text-slate-900" title="Reset">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button class="bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm transition" onclick="prevSlide()">
+        <i class="fa-solid fa-arrow-left"></i> Sebelumnya
+      </button>
+      <div class="font-mono text-xs font-bold text-horizon-700 px-2 min-w-[75px] text-center" id="slide-counter">Slide 1 / 8</div>
+      <button class="bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm transition" onclick="nextSlide()">
+        Selanjutnya <i class="fa-solid fa-arrow-right"></i>
       </button>
     </div>
-  </div>
-  <div class="prompter-body" id="prompter-body">
-    <!-- Verbatim speaker script injected here -->
-  </div>
-</div>
 
-<!-- Bottom Clean Dock -->
-<footer class="bottom-dock">
-  <div class="dock-info">
-    <div><strong>UniStock SCM</strong> • Departemen Keuangan Horizon University</div>
-    <div class="timer-box">
-      <i class="fa-regular fa-clock"></i>
-      <span id="timer-text">00:00</span>
-      <button class="timer-icon-btn" onclick="toggleTimer()" title="Play/Pause Timer">
-        <i class="fa-solid fa-play" id="timer-icon"></i>
+    <div class="flex items-center gap-2">
+      <button class="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition" onclick="togglePrompter()">
+        <i class="fa-solid fa-microphone"></i> Naskah Bacaan (T)
       </button>
-      <button class="timer-icon-btn" onclick="resetTimer()" title="Reset Timer">
-        <i class="fa-solid fa-rotate-left"></i>
+      <a href="HorizonU_Uniform_UniStock_SCM_Presentasi_Technospark.pptx" download class="bg-horizon-700 hover:bg-horizon-800 text-white px-4 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+        <i class="fa-solid fa-download"></i> Unduh File PPTX
+      </a>
+      <button class="bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 p-1.5 px-2.5 rounded-lg text-xs font-semibold shadow-sm transition" onclick="toggleFullscreen()">
+        <i class="fa-solid fa-expand"></i>
       </button>
     </div>
-  </div>
+  </footer>
 
-  <div class="dock-nav">
-    <button class="btn-dock" onclick="prevSlide()" title="Slide Sebelumnya (Panah Kiri)">
-      <i class="fa-solid fa-arrow-left"></i> Sebelumnya
-    </button>
-    <div class="counter-pill" id="slide-counter">Slide 1 / 8</div>
-    <button class="btn-dock" onclick="nextSlide()" title="Slide Selanjutnya (Spasi / Panah Kanan)">
-      Selanjutnya <i class="fa-solid fa-arrow-right"></i>
-    </button>
-  </div>
-
-  <div style="display:flex; align-items:center; gap:8px;">
-    <button class="btn-dock btn-prompter" onclick="togglePrompter()" title="Buka Naskah Bacaan Presenter (Shortcut: T)">
-      <i class="fa-solid fa-microphone"></i> Naskah Bacaan (T)
-    </button>
-    <button class="btn-dock btn-download-pptx" onclick="downloadPowerPoint()" title="Download file PowerPoint (.pptx) lengkap dengan naskah pembicara">
-      <i class="fa-solid fa-download"></i> Unduh File PPTX
-    </button>
-    <button class="btn-dock" onclick="toggleFullscreen()" title="Fullscreen (Shortcut: F)">
-      <i class="fa-solid fa-expand"></i>
-    </button>
-  </div>
-</footer>
-
-<script>
-  // ==========================================
-  // NASKAH BACA PRESENTER LENGKAP (FULL VERBATIM SCRIPT)
-  // DISESUAIKAN PAS DENGAN DURASI 10 MENIT
-  // ==========================================
-  const SPEAKER_SCRIPTS = [
-    {
-      slide: 1,
-      targetTime: "01:10 Menit",
-      script: `
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">PEMBUKAAN</span>
-          "Selamat pagi/siang Yang Terhormat Bapak/Ibu Dosen Penguji dan Dewan Juri Technospark. Kami dari <strong>Tim Nirwana</strong>, yang beranggotakan Fhazar, Ferry, Hildan, Fadel, Daffa, dan Acep. Hari ini kami mempresentasikan analisis dan solusi sistem informasi rantai pasok terpadu bertajuk: <strong>HorizonU Uniform</strong>, dengan engine sistem bernama <strong>UniStock</strong>."
-        </p>
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">LATAR BELAKANG</span>
-          "Studi kasus kami berfokus pada <strong>Departemen Keuangan Universitas Horizon Indonesia</strong>, yang bertanggung jawab atas pengadaan dan distribusi ribuan paket seragam kuliah, jas almamater, sepatu laboratorium, hingga perlengkapan medis mahasiswa baru setiap tahunnya."
-        </p>
-        <p>
-          <span class="prompter-badge">MASALAH UTAMA</span>
-          "Sebelum UniStock dibangun, pengelolaan dilakukan manual memakai spreadsheet Excel induk sebesar 4.5 Megabytes dengan belasan lembar kerja yang sering sekali mengalami <em>lag</em> dan <em>crash</em>. Di lapangan terjadi antrean panjang hingga 20 menit per mahasiswa, ketidakcocokan ukuran pakaian yang memicu penumpukan <em>dead-stock</em>, serta kerentanan klaim ganda. Mari kita lihat bagaimana rantai pasok ini bekerja."
-        </p>
-      `
-    },
-    {
-      slide: 2,
-      targetTime: "01:15 Menit",
-      script: `
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">STRUKTUR SCM</span>
-          "Masuk ke Slide 2 mengenai Struktur Rantai Pasok. Rantai pasok HorizonU Uniform menghubungkan empat entitas stakeholder secara <em>closed-loop</em>:"
-        </p>
-        <p style="margin-bottom: 12px;">
-          "Pertama, di sisi <strong>Hulu (Supplier)</strong>, terdapat Pabrik Garmen dan Sepatu yang memproduksi barang sesuai Purchase Order agregat kampus.<br>
-          Kedua, <strong>Gudang Logistik Kampus</strong>, yang bertindak sebagai distributor internal untuk memeriksa fisik, mencatat penerimaan batch, dan memberi nomor urut FIFO.<br>
-          Ketiga, <strong>Departemen Keuangan dan Staf Posko</strong>, yang bertugas memvalidasi status kelayakan pelunasan biaya serta melayani serah terima barang di loket.<br>
-          Dan keempat, di sisi <strong>Hilir (Customer)</strong>, adalah Mahasiswa yang memiliki kuota hak barang sesuai prodinya."
-        </p>
-        <p>
-          <span class="prompter-badge">PENEKANAN KUNCI</span>
-          "<strong>Prinsip dasar yang kami tanamkan adalah: 'Data Mengunci Fisik'.</strong> Artinya, seragam fisik di meja loket pantang keluar sebelum sistem memindai QR Code mahasiswa dan memastikan hak kuota serta status pembayarannya sah."
-        </p>
-      `
-    },
-    {
-      slide: 3,
-      targetTime: "01:30 Menit",
-      script: `
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">ANALISIS MASALAH</span>
-          "Pada Slide 3, kami membedah empat akar masalah utama melalui tabel hubungan Masalah, Penyebab, dan Dampak sistemik:"
-        </p>
-        <p style="margin-bottom: 12px;">
-          "<strong>Masalah Pertama:</strong> Ketidakcocokan ukuran dan penumpukan <em>dead-stock</em>. Penyebabnya adalah pemesanan ke vendor hanya berbasis estimasi historis tanpa survey ukuran mandiri mahasiswa. Dampaknya, ukuran favorit habis seketika, ukuran ekstrem menumpuk bertahun-tahun, dan dana kampus tertahan.<br><br>
-          <strong>Masalah Kedua:</strong> Ketergantungan pada lembar kerja Excel raksasa yang sering <em>crash</em> saat mengolah ribuan data maba, ditambah broadcast jadwal dikirim manual per surel. Dampaknya waktu kerja staf terbuang berminggu-minggu dan informasi jadwal terlambat diterima mahasiswa.<br><br>
-          <strong>Masalah Ketiga:</strong> Kemacetan parah di loket posko karena verifikasi lunas dan pencatatan dilakukan manual di atas kertas. Dampaknya antrean meliuk ratusan meter dengan waktu layan hingga 15-20 menit per orang, serta rawan klaim ganda.<br><br>
-          <strong>Masalah Keempat:</strong> Penyusutan stok tanpa jejak audit karena pencampuran barang antar-pembelian tanpa kaidah FIFO, sehingga nilai HPP dan laba kotor tidak dapat dihitung akurat."
-        </p>
-      `
-    },
-    {
-      slide: 4,
-      targetTime: "01:15 Menit",
-      script: `
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">ALIRAN INFORMASI</span>
-          "Selanjutnya pada Slide 4, kami memetakan Analisis Aliran Informasi pada kondisi As-Is dan titik-titik kemacetannya:"
-        </p>
-        <p style="margin-bottom: 12px;">
-          "Pada <strong>Aliran 1</strong> dari Mahasiswa ke Kampus, data ukuran diisi via formulir acak tanpa validasi SKU baku, sehingga rekapitulasi data terlambat dan penuh duplikasi.<br>
-          Pada <strong>Aliran 2</strong> dari Keuangan ke Posko, data pelunasan terisolasi di laptop staf finance. Saat mahasiswa baru saja melunasi di bank pada hari-H, staf posko tidak mengetahuinya karena data belum tersinkronisasi.<br>
-          Pada <strong>Aliran 3</strong> di meja posko, pencatatan serah terima memakai kertas checklist yang baru direkap malam hari, memicu celah barang hilang dan manipulasi.<br>
-          Dan pada <strong>Aliran 4</strong> ke pabrik vendor, order produksi dibuat berdasar tebakan kasar sehingga waktu tunggu revisi ukuran memakan waktu berbulan-bulan."
-        </p>
-        <p>
-          "Kesimpulannya, terjadi <em>silo data</em> dan <em>keterlambatan informasi</em> akut yang melumpuhkan efisiensi."
-        </p>
-      `
-    },
-    {
-      slide: 5,
-      targetTime: "01:30 Menit",
-      script: `
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">REKOMENDASI SISTEM</span>
-          "Untuk mengatasi persoalan tersebut, pada Slide 5 kami merekomendasikan empat subsistem terpadu di dalam arsitektur <strong>HorizonU Uniform (UniStock)</strong>:"
-        </p>
-        <p>
-          "1. <strong>ERP Master & Entitlement Engine:</strong> Berfungsi menggantikan Excel dengan basis data relasional MySQL InnoDB terstruktur, mengelola kuota hak per program studi, dan mengunci integritas transaksi. Manfaatnya: 100% bebas kendala Excel rusak.<br><br>
-          2. <strong>SCM Demand Planning Portal:</strong> Membuka portal mandiri bagi mahasiswa untuk mengisi ukuran baju dan sepatu sebelum produksi, serta menghitung kalkulasi <em>demand vs shortage</em> secara otomatis. Manfaatnya: Zero dead-stock dan pengadaan pabrik tepat sasaran.<br><br>
-          3. <strong>POS QR Verification Engine:</strong> Menghasilkan QR Code instan berbasis NIM dan mengeksekusi 6-Lapis Validasi otomatis melalui kamera webcam posko. Manfaatnya: Memangkas waktu layan menjadi di bawah 30 detik dan nol risiko klaim ganda.<br><br>
-          4. <strong>WMS & FIFO Inventory Costing Engine:</strong> Mengatur pemotongan mutasi dari batch pembelian tertua secara FIFO, rekonsiliasi stock opname fisik, serta perhitungan valuasi HPP dan margin laba secara presisi."
-        </p>
-      `
-    },
-    {
-      slide: 6,
-      targetTime: "01:25 Menit",
-      script: `
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">DESAIN ARSITEKTUR</span>
-          "Pada Slide 6, kami tampilkan Desain Arsitektur Solusi yang bekerja dalam 4 Fase Tertutup (<em>Closed-Loop Engine</em>):"
-        </p>
-        <p style="margin-bottom: 12px;">
-          "<strong>Fase 1 (Inbound):</strong> Saat barang dari pabrik tiba, staf gudang mencatatnya pada modul StockReceive, menetapkan batch FIFO, dan mencatat unit HPP pembelian.<br><br>
-          <strong>Fase 2 (Planning):</strong> Departemen Keuangan mengaktifkan status lunas di Eligibility Record, mahasiswa mengisi profil ukuran di portal, dan sistem mengalokasikan paket hak barang.<br><br>
-          <strong>Fase 3 (Outbound):</strong> Di posko hari-H, staf memindai QR Code mahasiswa. Sistem mengeksekusi 6-lapis validasi menggunakan teknik <em>pessimistic locking</em>, memotong stok batch tertua, dan menyerahkan seragam.<br><br>
-          <strong>Fase 4 (Audit & Control):</strong> Stock opname fisik berkala menghitung selisih varians, dan sistem menerbitkan laporan Gross Profit Margin."
-        </p>
-        <p>
-          "Data sisa stok dan tren ukuran dari Fase 4 ini secara otomatis menjadi acuan belanja pengadaan Fase 1 pada semester berikutnya, menutup siklus rantai pasok secara sempurna."
-        </p>
-      `
-    },
-    {
-      slide: 7,
-      targetTime: "01:15 Menit",
-      script: `
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">IMPLEMENTASI & RISIKO</span>
-          "Masuk ke Slide 7 mengenai Prioritas Implementasi dan Mitigasi Risiko Lapangan."
-        </p>
-        <p>
-          "Kami membagi tahapan implementasi menjadi 3 prioritas: Prioritas 1 adalah standarisasi master data dan SKU; Prioritas 2 adalah sinkronisasi status keuangan dan pembukaan portal ukuran; dan Prioritas 3 adalah pelatihan staf loket serta simulasi antrean posko.<br><br>
-          Kami juga telah merancang solusi atas 3 risiko darurat nyata di lapangan:<br>
-          Pertama, jika <strong>baterai HP mahasiswa mati</strong> atau tidak membawa QR, staf posko dapat menggunakan fitur <em>fallback search</em> manual via NIM.<br>
-          Kedua, jika <strong>stok ukuran di rak habis saat fitting</strong>, sistem mendukung fitur <em>Partial Pickup</em> di mana barang yang ada diserahkan tanpa menghanguskan sisa hak mahasiswa.<br>
-          Ketiga, jika <strong>koneksi internet kampus fluktuatif</strong>, database diproteksi oleh <em>pessimistic row locking</em> agar tidak terjadi pengurangan stok ganda."
-        </p>
-      `
-    },
-    {
-      slide: 8,
-      targetTime: "00:55 Menit",
-      script: `
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">KESIMPULAN & PENUTUP</span>
-          "Sebagai penutup pada Slide 8, implementasi HorizonU Uniform menghadirkan 3 manfaat nyata dan terukur:"
-        </p>
-        <p style="margin-bottom: 12px;">
-          "1. <strong>Efisiensi Waktu:</strong> Waktu pelayanan posko berhasil dipangkas dari 15–20 menit menjadi <strong>di bawah 30 detik per mahasiswa</strong>.<br>
-          2. <strong>Akurasi Persediaan:</strong> Mewujudkan target <strong>Zero Dead-Stock</strong> karena pengadaan pabrik 100% selaras dengan ukuran tubuh riil mahasiswa.<br>
-          3. <strong>Akuntabilitas Biaya:</strong> Menghilangkan kerentanan crash Excel dengan sistem penilaian inventaris berbasis <strong>FIFO dan analitik Gross Profit Margin real-time</strong>."
-        </p>
-        <p style="margin-bottom: 12px;">
-          <span class="prompter-badge">STATEMENT AKHIR</span>
-          "Kesimpulan kami: <em>Sistem Informasi bukan sekadar alat pencatat administrasi, melainkan saraf penggerak utama rantai pasok yang mengunci fisik barang dengan kepatuhan finansial, serta mengubah tebakan manual menjadi keputusan bisnis berakurasi tinggi.</em>"
-        </p>
-        <p>
-          "Sekian presentasi dari Tim Nirwana. Kami siap menerima pertanyaan dari Dewan Juri. Terima kasih."
-        </p>
-      `
-    }
-  ];
-
-  let currentSlide = 1;
-  const totalSlides = 8;
-  let timerInterval = null;
-  let timerSeconds = 0;
-  let timerRunning = false;
-
-  function updateSlide() {
-    for (let i = 1; i <= totalSlides; i++) {
-      const el = document.getElementById(`slide-${i}`);
-      if (el) el.classList.toggle('active', i === currentSlide);
-    }
-
-    const counter = document.getElementById('slide-counter');
-    if (counter) counter.textContent = `Slide ${currentSlide} / ${totalSlides}`;
-
-    const scriptObj = SPEAKER_SCRIPTS.find(s => s.slide === currentSlide);
-    const body = document.getElementById('prompter-body');
-    const badge = document.getElementById('prompter-slide-badge');
-    const time = document.getElementById('prompter-time-badge');
-
-    if (scriptObj && body) {
-      body.innerHTML = scriptObj.script;
-      body.scrollTop = 0;
-      if (badge) badge.textContent = `Slide ${currentSlide} / ${totalSlides}`;
-      if (time) time.textContent = scriptObj.targetTime;
-    }
-  }
-
-  function nextSlide() {
-    if (currentSlide < totalSlides) {
-      currentSlide++;
-      updateSlide();
-    }
-  }
-
-  function prevSlide() {
-    if (currentSlide > 1) {
-      currentSlide--;
-      updateSlide();
-    }
-  }
-
-  function jumpToSlide(n) {
-    if (n >= 1 && n <= totalSlides) {
-      currentSlide = n;
-      updateSlide();
-    }
-  }
-
-  // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-      e.preventDefault();
-      nextSlide();
-    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-      e.preventDefault();
-      prevSlide();
-    } else if (e.key.toLowerCase() === 't') {
-      togglePrompter();
-    } else if (e.key.toLowerCase() === 'f') {
-      toggleFullscreen();
-    } else if (e.key >= '1' && e.key <= '8') {
-      jumpToSlide(parseInt(e.key));
-    }
-  });
-
-  function togglePrompter() {
-    const el = document.getElementById('teleprompter-drawer');
-    if (el) el.classList.toggle('active');
-  }
-
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(err => console.log(err));
-    } else {
-      if (document.exitFullscreen) document.exitFullscreen();
-    }
-  }
-
-  // Timer
-  function toggleTimer() {
-    const icon = document.getElementById('timer-icon');
-    if (!timerRunning) {
-      timerRunning = true;
-      if (icon) {
-        icon.classList.remove('fa-play');
-        icon.classList.add('fa-pause');
+  <script>
+    const SPEAKER_SCRIPTS = [
+      {
+        slide: 1,
+        targetTime: "01:10 Menit",
+        script: `
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">PEMBUKAAN</span>
+            "Selamat pagi/siang Yang Terhormat Bapak/Ibu Dosen Penguji dan Dewan Juri Technospark. Kami dari <strong>Tim Nirwana</strong>, yang beranggotakan Fhazar, Ferry, Hildan, Fadel, Daffa, dan Acep. Hari ini kami mempresentasikan analisis dan solusi sistem informasi rantai pasok terpadu bertajuk: <strong>HorizonU Uniform</strong>, dengan engine sistem bernama <strong>UniStock</strong>."
+          </p>
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">LATAR BELAKANG</span>
+            "Studi kasus kami berfokus pada <strong>Departemen Keuangan Universitas Horizon Indonesia</strong>, yang bertanggung jawab atas pengadaan dan distribusi ribuan paket seragam kuliah, jas almamater, sepatu laboratorium, hingga perlengkapan medis mahasiswa baru setiap tahunnya."
+          </p>
+          <p>
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">MASALAH UTAMA</span>
+            "Sebelum UniStock dibangun, pengelolaan dilakukan manual memakai spreadsheet Excel induk sebesar 4.5 Megabytes dengan belasan lembar kerja yang sering sekali mengalami <em>lag</em> dan <em>crash</em>. Di lapangan terjadi antrean panjang hingga 20 menit per mahasiswa, ketidakcocokan ukuran pakaian yang memicu penumpukan <em>dead-stock</em>, serta kerentanan klaim ganda. Mari kita lihat bagaimana rantai pasok ini bekerja."
+          </p>
+        `
+      },
+      {
+        slide: 2,
+        targetTime: "01:15 Menit",
+        script: `
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">STRUKTUR SCM</span>
+            "Masuk ke Slide 2 mengenai Struktur Rantai Pasok. Rantai pasok HorizonU Uniform menghubungkan empat entitas stakeholder secara <em>closed-loop</em>:"
+          </p>
+          <p class="mb-3">
+            "Pertama, di sisi <strong>Hulu (Supplier)</strong>, terdapat Pabrik Garmen dan Sepatu yang memproduksi barang sesuai Purchase Order agregat kampus.<br>
+            Kedua, <strong>Gudang Logistik Kampus</strong>, yang bertindak sebagai distributor internal untuk memeriksa fisik, mencatat penerimaan batch, dan memberi nomor urut FIFO.<br>
+            Ketiga, <strong>Departemen Keuangan dan Staf Posko</strong>, yang bertugas memvalidasi status kelayakan pelunasan biaya serta melayani serah terima barang di loket.<br>
+            Dan keempat, di sisi <strong>Hilir (Customer)</strong>, adalah Mahasiswa yang memiliki kuota hak barang sesuai prodinya."
+          </p>
+          <p>
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">PENEKANAN KUNCI</span>
+            "<strong>Prinsip dasar yang kami tanamkan adalah: 'Data Mengunci Fisik'.</strong> Artinya, seragam fisik di meja loket pantang keluar sebelum sistem memindai QR Code mahasiswa dan memastikan hak kuota serta status pembayarannya sah."
+          </p>
+        `
+      },
+      {
+        slide: 3,
+        targetTime: "01:30 Menit",
+        script: `
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">ANALISIS MASALAH</span>
+            "Pada Slide 3, kami membedah empat akar masalah utama melalui tabel hubungan Masalah, Penyebab, dan Dampak sistemik:"
+          </p>
+          <p class="mb-3">
+            "<strong>Masalah Pertama:</strong> Ketidakcocokan ukuran dan penumpukan <em>dead-stock</em>. Penyebabnya adalah pemesanan ke vendor hanya berbasis estimasi historis tanpa survey ukuran mandiri mahasiswa. Dampaknya, ukuran favorit habis seketika, ukuran ekstrem menumpuk bertahun-tahun, dan dana kampus tertahan.<br><br>
+            <strong>Masalah Kedua:</strong> Ketergantungan pada lembar kerja Excel raksasa yang sering <em>crash</em> saat mengolah ribuan data maba, ditambah broadcast jadwal dikirim manual per surel. Dampaknya waktu kerja staf terbuang berminggu-minggu dan informasi jadwal terlambat diterima mahasiswa.<br><br>
+            <strong>Masalah Ketiga:</strong> Kemacetan parah di loket posko karena verifikasi lunas dan pencatatan dilakukan manual di atas kertas. Dampaknya antrean meliuk ratusan meter dengan waktu layan hingga 15-20 menit per orang, serta rawan klaim ganda.<br><br>
+            <strong>Masalah Keempat:</strong> Penyusutan stok tanpa jejak audit karena pencampuran barang antar-pembelian tanpa kaidah FIFO, sehingga nilai HPP dan laba kotor tidak dapat dihitung akurat."
+          </p>
+        `
+      },
+      {
+        slide: 4,
+        targetTime: "01:15 Menit",
+        script: `
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">ALIRAN INFORMASI</span>
+            "Selanjutnya pada Slide 4, kami memetakan Analisis Aliran Informasi pada kondisi As-Is dan titik-titik kemacetannya:"
+          </p>
+          <p class="mb-3">
+            "Pada <strong>Aliran 1</strong> dari Mahasiswa ke Kampus, data ukuran diisi via formulir acak tanpa validasi SKU baku, sehingga rekapitulasi data terlambat dan penuh duplikasi.<br>
+            Pada <strong>Aliran 2</strong> dari Keuangan ke Posko, data pelunasan terisolasi di laptop staf finance. Saat mahasiswa baru saja melunasi di bank pada hari-H, staf posko tidak mengetahuinya karena data belum tersinkronisasi.<br>
+            Pada <strong>Aliran 3</strong> di meja posko, pencatatan serah terima memakai kertas checklist yang baru direkap malam hari, memicu celah barang hilang dan manipulasi.<br>
+            Dan pada <strong>Aliran 4</strong> ke pabrik vendor, order produksi dibuat berdasar tebakan kasar sehingga waktu tunggu revisi ukuran memakan waktu berbulan-bulan."
+          </p>
+          <p>
+            "Kesimpulannya, terjadi <em>silo data</em> dan <em>keterlambatan informasi</em> akut yang melumpuhkan efisiensi."
+          </p>
+        `
+      },
+      {
+        slide: 5,
+        targetTime: "01:30 Menit",
+        script: `
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">REKOMENDASI SISTEM</span>
+            "Untuk mengatasi persoalan tersebut, pada Slide 5 kami merekomendasikan empat subsistem terpadu di dalam arsitektur <strong>HorizonU Uniform (UniStock)</strong>:"
+          </p>
+          <p>
+            "1. <strong>ERP Master & Entitlement Engine:</strong> Berfungsi menggantikan Excel dengan basis data relasional MySQL InnoDB terstruktur, mengelola kuota hak per program studi, dan mengunci integritas transaksi. Manfaatnya: 100% bebas kendala Excel rusak.<br><br>
+            2. <strong>SCM Demand Planning Portal:</strong> Membuka portal mandiri bagi mahasiswa untuk mengisi ukuran baju dan sepatu sebelum produksi, serta menghitung kalkulasi <em>demand vs shortage</em> secara otomatis. Manfaatnya: Zero dead-stock dan pengadaan pabrik tepat sasaran.<br><br>
+            3. <strong>POS QR Verification Engine:</strong> Menghasilkan QR Code instan berbasis NIM dan mengeksekusi 6-Lapis Validasi otomatis melalui kamera webcam posko. Manfaatnya: Memangkas waktu layan menjadi di bawah 30 detik dan nol risiko klaim ganda.<br><br>
+            4. <strong>WMS & FIFO Inventory Costing Engine:</strong> Mengatur pemotongan mutasi dari batch pembelian tertua secara FIFO, rekonsiliasi stock opname fisik, serta perhitungan valuasi HPP dan margin laba secara presisi."
+          </p>
+        `
+      },
+      {
+        slide: 6,
+        targetTime: "01:25 Menit",
+        script: `
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">DESAIN ARSITEKTUR</span>
+            "Pada Slide 6, kami tampilkan Desain Arsitektur Solusi yang bekerja dalam 4 Fase Tertutup (<em>Closed-Loop Engine</em>):"
+          </p>
+          <p class="mb-3">
+            "<strong>Fase 1 (Inbound):</strong> Saat barang dari pabrik tiba, staf gudang mencatatnya pada modul StockReceive, menetapkan batch FIFO, dan mencatat unit HPP pembelian.<br><br>
+            <strong>Fase 2 (Planning):</strong> Departemen Keuangan mengaktifkan status lunas di Eligibility Record, mahasiswa mengisi profil ukuran di portal, dan sistem mengalokasikan paket hak barang.<br><br>
+            <strong>Fase 3 (Outbound):</strong> Di posko hari-H, staf memindai QR Code mahasiswa. Sistem mengeksekusi 6-lapis validasi menggunakan teknik <em>pessimistic locking</em>, memotong stok batch tertua, dan menyerahkan seragam.<br><br>
+            <strong>Fase 4 (Audit & Control):</strong> Stock opname fisik berkala menghitung selisih varians, dan sistem menerbitkan laporan Gross Profit Margin."
+          </p>
+          <p>
+            "Data sisa stok dan tren ukuran dari Fase 4 ini secara otomatis menjadi acuan belanja pengadaan Fase 1 pada semester berikutnya, menutup siklus rantai pasok secara sempurna."
+          </p>
+        `
+      },
+      {
+        slide: 7,
+        targetTime: "01:15 Menit",
+        script: `
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">IMPLEMENTASI & RISIKO</span>
+            "Masuk ke Slide 7 mengenai Prioritas Implementasi dan Mitigasi Risiko Lapangan."
+          </p>
+          <p>
+            "Kami membagi tahapan implementasi menjadi 3 prioritas: Prioritas 1 adalah standarisasi master data dan SKU; Prioritas 2 adalah sinkronisasi status keuangan dan pembukaan portal ukuran; dan Prioritas 3 adalah pelatihan staf loket serta simulasi antrean posko.<br><br>
+            Kami juga telah merancang solusi atas 3 risiko darurat nyata di lapangan:<br>
+            Pertama, jika <strong>baterai HP mahasiswa mati</strong> atau tidak membawa QR, staf posko dapat menggunakan fitur <em>fallback search</em> manual via NIM.<br>
+            Kedua, jika <strong>stok ukuran di rak habis saat fitting</strong>, sistem mendukung fitur <em>Partial Pickup</em> di mana barang yang ada diserahkan tanpa menghanguskan sisa hak mahasiswa.<br>
+            Ketiga, jika <strong>koneksi internet kampus fluktuatif</strong>, database diproteksi oleh <em>pessimistic row locking</em> agar tidak terjadi pengurangan stok ganda."
+          </p>
+        `
+      },
+      {
+        slide: 8,
+        targetTime: "00:55 Menit",
+        script: `
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">KESIMPULAN & PENUTUP</span>
+            "Sebagai penutup pada Slide 8, implementasi HorizonU Uniform menghadirkan 3 manfaat nyata dan terukur:"
+          </p>
+          <p class="mb-3">
+            "1. <strong>Efisiensi Waktu:</strong> Waktu pelayanan posko berhasil dipangkas dari 15–20 menit menjadi <strong>di bawah 30 detik per mahasiswa</strong>.<br>
+            2. <strong>Akurasi Persediaan:</strong> Mewujudkan target <strong>Zero Dead-Stock</strong> karena pengadaan pabrik 100% selaras dengan ukuran tubuh riil mahasiswa.<br>
+            3. <strong>Akuntabilitas Biaya:</strong> Menghilangkan kerentanan crash Excel dengan sistem penilaian inventaris berbasis <strong>FIFO dan analitik Gross Profit Margin real-time</strong>."
+          </p>
+          <p class="mb-3">
+            <span class="bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5">STATEMENT AKHIR</span>
+            "Kesimpulan kami: <em>Sistem Informasi bukan sekadar alat pencatat administrasi, melainkan saraf penggerak utama rantai pasok yang mengunci fisik barang dengan kepatuhan finansial, serta mengubah tebakan manual menjadi keputusan bisnis berakurasi tinggi.</em>"
+          </p>
+          <p>
+            "Sekian presentasi dari Tim Nirwana. Kami siap menerima pertanyaan dari Dewan Juri. Terima kasih."
+          </p>
+        `
       }
-      timerInterval = setInterval(() => {
-        timerSeconds++;
-        const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
-        const secs = String(timerSeconds % 60).padStart(2, '0');
-        const text = document.getElementById('timer-text');
-        if (text) text.textContent = `${mins}:${secs}`;
-      }, 1000);
-    } else {
-      timerRunning = false;
+    ];
+
+    let currentSlide = 1;
+    const totalSlides = 8;
+    let timerInterval = null;
+    let timerSeconds = 0;
+    let timerRunning = false;
+
+    function updateView() {
+      for (let i = 1; i <= totalSlides; i++) {
+        const p = document.getElementById(`slide-${i}`);
+        if (p) p.classList.toggle('active', i === currentSlide);
+      }
+
+      const counter = document.getElementById('slide-counter');
+      if (counter) counter.textContent = `Slide ${currentSlide} / ${totalSlides}`;
+
+      const cur = SPEAKER_SCRIPTS.find(s => s.slide === currentSlide);
+      const b = document.getElementById('prompter-body');
+      const badge = document.getElementById('prompter-slide-badge');
+      const time = document.getElementById('prompter-time-badge');
+
+      if (cur && b) {
+        b.innerHTML = cur.script;
+        b.scrollTop = 0;
+        if (badge) badge.textContent = `Slide ${currentSlide} / ${totalSlides}`;
+        if (time) time.textContent = cur.targetTime;
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateView();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateView();
+      }
+    }
+
+    function jumpSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updateView();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key.toLowerCase() === 't') {
+        togglePrompter();
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      } else if (e.key >= '1' && e.key <= '8') {
+        jumpSlide(parseInt(e.key));
+      }
+    });
+
+    function togglePrompter() {
+      const el = document.getElementById('prompter-drawer');
+      if (el) {
+        el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    function toggleTimer() {
+      const icon = document.getElementById('timer-icon');
+      if (!timerRunning) {
+        timerRunning = true;
+        if (icon) {
+          icon.classList.remove('fa-play');
+          icon.classList.add('fa-pause');
+        }
+        timerInterval = setInterval(() => {
+          timerSeconds++;
+          const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+          const secs = String(timerSeconds % 60).padStart(2, '0');
+          const txt = document.getElementById('timer-text');
+          if (txt) txt.textContent = `${mins}:${secs}`;
+        }, 1000);
+      } else {
+        timerRunning = false;
+        clearInterval(timerInterval);
+        if (icon) {
+          icon.classList.remove('fa-pause');
+          icon.classList.add('fa-play');
+        }
+      }
+    }
+
+    function resetTimer() {
       clearInterval(timerInterval);
+      timerRunning = false;
+      timerSeconds = 0;
+      const txt = document.getElementById('timer-text');
+      const icon = document.getElementById('timer-icon');
+      if (txt) txt.textContent = '00:00';
       if (icon) {
         icon.classList.remove('fa-pause');
         icon.classList.add('fa-play');
       }
     }
-  }
 
-  function resetTimer() {
-    clearInterval(timerInterval);
-    timerRunning = false;
-    timerSeconds = 0;
-    const text = document.getElementById('timer-text');
-    const icon = document.getElementById('timer-icon');
-    if (text) text.textContent = '00:00';
-    if (icon) {
-      icon.classList.remove('fa-pause');
-      icon.classList.add('fa-play');
-    }
-  }
-
-  // Download PPTX Button Function
-  function downloadPowerPoint() {
-    // Direct link to the generated local file or trigger pptxgenjs
-    const a = document.createElement('a');
-    a.href = 'HorizonU_Uniform_UniStock_SCM_Presentasi_Technospark.pptx';
-    a.download = 'HorizonU_Uniform_UniStock_SCM_Presentasi_Technospark.pptx';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
-  // Init
-  updateSlide();
-</script>
+    updateView();
+  </script>
 </body>
 </html>
