@@ -173,7 +173,7 @@ add_card(s1, 8.76, 1.55, 3.75, 5.25, "Tim Pengembang", "Nirwana Development Team
     "Fadel Rahmadhan — Quality Assurance",
     "Daffa Nazriel Zaidan — UI/UX Designer",
     "Acep Ugan Saputra — System Analyst"
-], "URL Sistem: unistok.nirwana.biz.id")
+], "Tim Nirwana • Horizon University")
 
 set_notes(s1, """NASKAH BACA PRESENTER SLIDE 1 (Target: 01:10 Menit):
 "Selamat pagi/siang Yang Terhormat Bapak/Ibu Dosen Penguji dan Dewan Juri Technospark. Kami dari Tim Nirwana, yang beranggotakan Fhazar, Ferry, Hildan, Fadel, Daffa, dan Acep. Hari ini kami mempresentasikan analisis dan solusi sistem informasi rantai pasok terpadu bertajuk: HorizonU Uniform, dengan engine sistem bernama UniStock.
