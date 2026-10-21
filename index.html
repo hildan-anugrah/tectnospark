@@ -60,6 +60,28 @@
   .slide-panel.active {
     display: flex;
   }
+  #slide-stage:fullscreen,
+  #slide-stage:-webkit-full-screen {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 3rem 4.5rem !important;
+    background-color: #ffffff !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+  .fullscreen-bar {
+    display: none;
+  }
+  #slide-stage:fullscreen .fullscreen-bar,
+  #slide-stage:-webkit-full-screen .fullscreen-bar {
+    display: flex;
+  }
 </style>
 </head>
 <body class="bg-[#F3F4F6] text-slate-900 font-sans h-screen w-screen overflow-hidden flex flex-col select-none">
@@ -83,7 +105,7 @@
 
   <!-- MAIN SLIDE CANVAS -->
   <main class="flex-1 flex items-center justify-center p-6 overflow-hidden">
-    <div class="w-full max-w-[1440px] h-full max-h-[820px] bg-white rounded-2xl border-2 border-slate-900 shadow-neo-lg flex flex-col justify-between p-8 relative">
+    <div id="slide-stage" class="w-full max-w-[1440px] h-full max-h-[820px] bg-white rounded-2xl border-2 border-slate-900 shadow-neo-lg flex flex-col justify-between p-8 relative overflow-hidden">
 
       <!-- ========================================== -->
       <!-- SLIDE 1: CLEAN LANDING PAGE / OPENING HERO -->
@@ -563,28 +585,46 @@
         </div>
       </section>
 
-    </div>
-  </main>
-
-  <!-- TELEPROMPTER DRAWER (NASKAH BACA PRESENTER) -->
-  <div class="fixed bottom-14 left-0 right-0 h-64 bg-slate-900 text-white border-t-4 border-horizon-700 shadow-2xl flex flex-col z-50 transition-all duration-300" id="prompter-drawer" style="display: none;">
-    <div class="bg-slate-800 px-8 py-2.5 border-b border-slate-700 flex items-center justify-between">
-      <div class="flex items-center gap-2 text-xs font-bold text-red-300 uppercase tracking-wider">
-        <i class="fa-solid fa-microphone-lines"></i>
-        <span>Naskah Baca Presenter (Teleprompter Mode) — Baca Langsung di Sini</span>
+      <!-- TELEPROMPTER DRAWER (INSIDE STAGE FOR SEAMLESS FULLSCREEN SUPPORT) -->
+      <div class="absolute bottom-0 left-0 right-0 h-64 bg-slate-900 text-white border-t-4 border-horizon-700 shadow-2xl flex flex-col z-50 transition-all duration-300" id="prompter-drawer" style="display: none;">
+        <div class="bg-slate-800 px-8 py-2.5 border-b border-slate-700 flex items-center justify-between">
+          <div class="flex items-center gap-2 text-xs font-bold text-red-300 uppercase tracking-wider">
+            <i class="fa-solid fa-microphone-lines"></i>
+            <span>Naskah Baca Presenter (Teleprompter Mode) — Baca Langsung di Sini</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs text-slate-300">
+            <span id="prompter-slide-badge" class="font-mono font-bold text-white">Slide 1 / 8</span>
+            <span>Target Durasi: <strong id="prompter-time-badge" class="text-amber-400 font-mono font-bold">01:10 Menit</strong></span>
+            <button onclick="togglePrompter()" class="text-slate-400 hover:text-white text-base">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
+        <div class="flex-1 overflow-y-auto px-8 py-4 text-[15px] leading-relaxed text-slate-100" id="prompter-body">
+          <!-- Verbatim speech text inserted via JS -->
+        </div>
       </div>
-      <div class="flex items-center gap-4 text-xs text-slate-300">
-        <span id="prompter-slide-badge" class="font-mono font-bold text-white">Slide 1 / 8</span>
-        <span>Target Durasi: <strong id="prompter-time-badge" class="text-amber-400 font-mono font-bold">01:10 Menit</strong></span>
-        <button onclick="togglePrompter()" class="text-slate-400 hover:text-white text-base">
-          <i class="fa-solid fa-xmark"></i>
+
+      <!-- FULLSCREEN FLOATING CONTROLLER (AUTO-SHOWS ONLY IN FULLSCREEN MODE) -->
+      <div class="fullscreen-bar absolute bottom-6 right-8 bg-white/95 backdrop-blur border-2 border-slate-900 rounded-xl p-2 shadow-neo-lg z-40 items-center gap-2">
+        <button onclick="prevSlide()" class="hover:bg-slate-100 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-black border-2 border-slate-900 shadow-neo-sm transition" title="Slide Sebelumnya (←)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <span id="fullscreen-slide-counter" class="font-mono text-xs font-black text-horizon-700 px-3 py-1 bg-red-50 border-2 border-slate-900 rounded-md shadow-neo-sm">Slide 1 / 8</span>
+        <button onclick="nextSlide()" class="hover:bg-slate-100 text-slate-900 px-3 py-1.5 rounded-lg text-xs font-black border-2 border-slate-900 shadow-neo-sm transition" title="Slide Selanjutnya (→ / Space)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <div class="w-[1px] h-5 bg-slate-300 mx-1"></div>
+        <button onclick="togglePrompter()" class="bg-slate-900 hover:bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-slate-900 shadow-neo-sm transition flex items-center gap-1.5" title="Buka Naskah Bacaan (T)">
+          <i class="fa-solid fa-microphone"></i> Naskah (T)
+        </button>
+        <button onclick="toggleFullscreen()" class="bg-red-50 hover:bg-red-100 text-horizon-700 px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-slate-900 shadow-neo-sm transition flex items-center gap-1.5" title="Keluar Fullscreen (Esc)">
+          <i class="fa-solid fa-compress"></i> Keluar (Esc)
         </button>
       </div>
+
     </div>
-    <div class="flex-1 overflow-y-auto px-8 py-4 text-[15px] leading-relaxed text-slate-100" id="prompter-body">
-      <!-- Verbatim speech text inserted via JS -->
-    </div>
-  </div>
+  </main>
 
   <!-- BOTTOM NEO-DOCK TOOLBAR -->
   <footer class="h-14 bg-white border-t-2 border-slate-900 px-8 flex items-center justify-between shrink-0 z-20">
@@ -619,7 +659,7 @@
       <a href="HorizonU_Uniform_UniStock_SCM_Presentasi_Technospark.pptx" download class="bg-horizon-700 hover:bg-horizon-800 text-white px-4 py-1 rounded-lg text-xs font-black flex items-center gap-1.5 border-2 border-slate-900 shadow-neo-sm transition">
         <i class="fa-solid fa-download"></i> Unduh File PPTX
       </a>
-      <button class="bg-white hover:bg-slate-50 border-2 border-slate-900 text-slate-900 p-1 px-2.5 rounded-lg text-xs font-bold shadow-neo-sm transition" onclick="toggleFullscreen()">
+      <button id="fs-toggle-btn" class="bg-white hover:bg-slate-50 border-2 border-slate-900 text-slate-900 p-1 px-2.5 rounded-lg text-xs font-bold shadow-neo-sm transition" onclick="toggleFullscreen()" title="Fullscreen (F)">
         <i class="fa-solid fa-expand"></i>
       </button>
     </div>
@@ -791,6 +831,9 @@
       const counter = document.getElementById('slide-counter');
       if (counter) counter.textContent = `Slide ${currentSlide} / ${totalSlides}`;
 
+      const fsCounter = document.getElementById('fullscreen-slide-counter');
+      if (fsCounter) fsCounter.textContent = `Slide ${currentSlide} / ${totalSlides}`;
+
       const cur = SPEAKER_SCRIPTS.find(s => s.slide === currentSlide);
       const b = document.getElementById('prompter-body');
       const badge = document.getElementById('prompter-slide-badge');
@@ -849,10 +892,32 @@
     }
 
     function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      const stage = document.getElementById('slide-stage');
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (stage.requestFullscreen) {
+          stage.requestFullscreen().catch(err => console.log(err));
+        } else if (stage.webkitRequestFullscreen) {
+          stage.webkitRequestFullscreen();
+        } else if (stage.msRequestFullscreen) {
+          stage.msRequestFullscreen();
+        }
       } else {
-        if (document.exitFullscreen) document.exitFullscreen();
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+    function handleFullscreenChange() {
+      const fsBtn = document.getElementById('fs-toggle-btn');
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      if (fsBtn) {
+        fsBtn.innerHTML = isFs ? '<i class="fa-solid fa-compress"></i>' : '<i class="fa-solid fa-expand"></i>';
       }
     }
 
