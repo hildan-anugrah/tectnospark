@@ -154,19 +154,19 @@ apply_header(s1, "Universitas Horizon Indonesia • Departemen Keuangan",
              "HorizonU Uniform: Transformasi Rantai Pasok Seragam Mahasiswa",
              "Modernisasi Pengadaan, Tata Kelola Stok FIFO, dan Distribusi Berbasis Web Terintegrasi")
 
-add_card(s1, 0.8, 1.55, 3.75, 4.7, "Profil Institusi & Objek", "Logistik Perlengkapan Kampus", [
+add_card(s1, 0.8, 1.55, 3.75, 5.25, "Profil Institusi & Objek", "Logistik Perlengkapan Kampus", [
     "Departemen Keuangan mengelola siklus pengadaan, pencatatan keuangan, dan distribusi perlengkapan maba.",
     "Komoditas: Jas Almamater, Kemeja Putih, Celana/Rok Bahan, Sepatu Lab & Dinas, serta Medical Kit.",
     "Karakteristik: Penyaluran langsung ke ribuan mahasiswa baru tanpa perantara ritel komersial."
 ], "Model: Direct Closed-Loop Campus SCM")
 
-add_card(s1, 4.78, 1.55, 3.75, 4.7, "Kendala Operasional Utama", "Hambatan Spreadsheet & Posko", [
+add_card(s1, 4.78, 1.55, 3.75, 5.25, "Kendala Operasional Utama", "Hambatan Spreadsheet & Posko", [
     "Spreadsheet Excel Induk (~4.5 MB, 19 sheet) sering mengalami lag atau crash saat data membesar.",
     "Antrean di posko kampus sangat lambat (15–20 menit per mahasiswa) akibat verifikasi berkas manual.",
     "Pemesanan seragam ke pabrik hanya estimasi historis tanpa survey ukuran mandiri, memicu dead-stock."
 ], "Dampak: Modal Mengendap & Risiko Klaim Ganda", is_highlight=True)
 
-add_card(s1, 8.76, 1.55, 3.75, 4.7, "Tim Pengembang", "Nirwana Development Team", [
+add_card(s1, 8.76, 1.55, 3.75, 5.25, "Tim Pengembang", "Nirwana Development Team", [
     "Fhazar Raffiful Aqyla — Project Manager",
     "Ferry Noer Hendriawan — Frontend Engineer",
     "Hildan Anugrah Tamadi Putra — Backend Engineer",
@@ -174,9 +174,6 @@ add_card(s1, 8.76, 1.55, 3.75, 4.7, "Tim Pengembang", "Nirwana Development Team"
     "Daffa Nazriel Zaidan — UI/UX Designer",
     "Acep Ugan Saputra — System Analyst"
 ], "URL Sistem: unistok.nirwana.biz.id")
-
-add_banner(s1, "Misi Solusi HorizonU Uniform",
-           "Menghubungkan Hulu (Vendor Pabrik), Gudang Kampus, Bagian Keuangan, hingga Hilir (Mahasiswa) dalam satu arsitektur terintegrasi bertenaga Laravel 12 dan aturan FIFO.")
 
 set_notes(s1, """NASKAH BACA PRESENTER SLIDE 1 (Target: 01:10 Menit):
 "Selamat pagi/siang Yang Terhormat Bapak/Ibu Dosen Penguji dan Dewan Juri Technospark. Kami dari Tim Nirwana, yang beranggotakan Fhazar, Ferry, Hildan, Fadel, Daffa, dan Acep. Hari ini kami mempresentasikan analisis dan solusi sistem informasi rantai pasok terpadu bertajuk: HorizonU Uniform, dengan engine sistem bernama UniStock.
@@ -193,32 +190,29 @@ apply_header(s2, "Struktur Rantai Pasok",
              "Pemetaan Stakeholder & Aliran Fisik Barang",
              "Aliran terpadu dari pabrik vendor hingga serah terima mahasiswa dengan prinsip 'Data Mengunci Fisik'")
 
-add_card(s2, 0.8, 1.55, 2.78, 4.7, "01 • Supplier (Hulu)", "Pabrik Garmen & Sepatu", [
+add_card(s2, 0.8, 1.55, 2.78, 5.25, "01 • Supplier (Hulu)", "Pabrik Garmen & Sepatu", [
     "Memproduksi paket seragam dan sepatu sesuai pesanan pengadaan kampus (PO).",
     "Menerapkan standarisasi kode SKU per kategori dan ukuran.",
     "Titik Barang: Pengiriman kontainer stok ke gudang kampus (Inbound Logistics)."
 ], "Aliran: PO Agregat ➔ Fisik Masuk")
 
-add_card(s2, 3.78, 1.55, 2.78, 4.7, "02 • Gudang (Inbound)", "Gudang Logistik Kampus", [
+add_card(s2, 3.78, 1.55, 2.78, 5.25, "02 • Gudang (Inbound)", "Gudang Logistik Kampus", [
     "Penerimaan fisik barang (StockReceive) dan pemeriksaan mutu (QC).",
     "Pencatatan batch urutan FIFO (First-In, First-Out) dan penetapan harga beli unit.",
     "Titik Barang: Transfer stok batch tertua menuju posko distribusi loket."
 ], "Aliran: Inbound ➔ POS Loket")
 
-add_card(s2, 6.76, 1.55, 2.78, 4.7, "03 • Verifikator & Loket", "Staf Keuangan & Posko", [
+add_card(s2, 6.76, 1.55, 2.78, 5.25, "03 • Verifikator & Loket", "Staf Keuangan & Posko", [
     "Keuangan: Otorisasi status pelunasan biaya kuliah mahasiswa (Eligibility).",
     "Staf Posko: Melayani meja pembagian fisik seragam di posko kampus.",
     "Titik Kritis: Validasi identitas QR Code dan pencocokan ukuran saat proses fitting."
 ], "Aliran: Data Lunas ➔ Serah Fisik", is_highlight=True)
 
-add_card(s2, 9.74, 1.55, 2.78, 4.7, "04 • Konsumen (Hilir)", "Mahasiswa (Customer)", [
+add_card(s2, 9.74, 1.55, 2.78, 5.25, "04 • Konsumen (Hilir)", "Mahasiswa (Customer)", [
     "Konsumen akhir yang memiliki hak jatah barang (Entitlement) sesuai prodi.",
     "Mengisi profil ukuran mandiri di web dan menerima tiket jadwal pembagian.",
     "Titik Info: Menunjukkan tiket QR Code beresolusi tinggi (NIM murni) di loket."
 ], "Aliran: Profil ➔ Seragam Pas")
-
-add_banner(s2, "Prinsip Inti 'Data Mengunci Fisik'",
-           "Barang fisik di loket gudang pantang diserahkan tanpa otorisasi digital. Pemindaian QR Code mengeksekusi validasi atomik di database: jika belum lunas atau kuota habis, fisik seragam tidak dapat keluar.")
 
 set_notes(s2, """NASKAH BACA PRESENTER SLIDE 2 (Target: 01:15 Menit):
 "Masuk ke Slide 2 mengenai Struktur Rantai Pasok. Rantai pasok HorizonU Uniform menghubungkan empat entitas stakeholder secara closed-loop:
@@ -238,7 +232,7 @@ apply_header(s3, "Analisis Masalah Sistem Lama",
              "Evaluasi Kendala Operasional & Dampak Sistemik",
              "Analisis akar masalah pengelolaan manual terhadap pembengkakan biaya, waktu kerja, dan penurunan mutu layanan")
 
-t_s3 = s3.shapes.add_table(5, 3, Inches(0.8), Inches(1.55), Inches(11.733), Inches(4.7)).table
+t_s3 = s3.shapes.add_table(5, 3, Inches(0.8), Inches(1.55), Inches(11.733), Inches(5.25)).table
 t_s3.columns[0].width = Inches(3.2)
 t_s3.columns[1].width = Inches(4.2)
 t_s3.columns[2].width = Inches(4.333)
@@ -282,9 +276,6 @@ for r_i, (m, p_c, d) in enumerate(rows_s3):
         p.font.color.rgb = C_RED if c_i == 0 else C_TEXT_DARK
         if c_i == 0: p.font.bold = True
 
-add_banner(s3, "Akar Kegagalan Sistemik",
-           "Ketiadaan Single Source of Truth berbasis database relasional menyebabkan silo data antar-staf, memicu kebocoran persediaan, dan membahayakan akuntabilitas keuangan.")
-
 set_notes(s3, """NASKAH BACA PRESENTER SLIDE 3 (Target: 01:30 Menit):
 "Pada Slide 3, kami membedah empat akar masalah utama melalui tabel hubungan Masalah, Penyebab, dan Dampak sistemik:
 
@@ -304,28 +295,25 @@ apply_header(s4, "Analisis Aliran Informasi",
              "Titik Kemacetan & Isolasi Data (As-Is State)",
              "Hambatan komunikasi antarbagian yang memicu keterlambatan, inkonsistensi data, dan pembatalan layanan")
 
-add_card(s4, 0.8, 1.55, 5.75, 2.25, "Aliran 01 • Mahasiswa ➔ Kampus", "Kebutuhan: Profil Ukuran & Jadwal", [
+add_card(s4, 0.8, 1.55, 5.75, 2.55, "Aliran 01 • Mahasiswa ➔ Kampus", "Kebutuhan: Profil Ukuran & Jadwal", [
     "Asal & Tujuan: Mahasiswa mengisi form ke kampus dan menerima jadwal pembagian via email.",
     "Titik Masalah: Google Form terpisah tanpa validasi SKU baku, memicu input ganda dan rekapitulasi data staf terlambat berminggu-minggu."
 ], "Kondisi: Informasi Terlambat & Format Liar")
 
-add_card(s4, 6.78, 1.55, 5.75, 2.25, "Aliran 02 • Keuangan ➔ Posko Hari-H", "Kebutuhan: Status Lunas (Eligibility)", [
+add_card(s4, 6.78, 1.55, 5.75, 2.55, "Aliran 02 • Keuangan ➔ Posko Hari-H", "Kebutuhan: Status Lunas (Eligibility)", [
     "Asal & Tujuan: Staf Keuangan mengekspor data lunas ke staf meja posko pembagian seragam.",
     "Titik Masalah: Data terisolasi di file Excel lokal staf. Saat ada pelunasan baru di bank pada hari-H, staf posko tidak terupdate sehingga maba tertolak."
 ], "Kondisi: Informasi Terputus (Silo Data Lokal)", is_highlight=True)
 
-add_card(s4, 0.8, 4.0, 5.75, 2.25, "Aliran 03 • Meja Posko ➔ Gudang", "Kebutuhan: Kuota Hak & Kartu Mutasi", [
+add_card(s4, 0.8, 4.25, 5.75, 2.55, "Aliran 03 • Meja Posko ➔ Gudang", "Kebutuhan: Kuota Hak & Kartu Mutasi", [
     "Asal & Tujuan: Staf posko memverifikasi paket hak prodi dan mencatat mutasi seragam yang keluar.",
     "Titik Masalah: Penyerahan seragam dicatat di lembaran kertas. Pengurangan saldo stok gudang baru direkap malam hari, memicu risiko susut stok."
 ], "Kondisi: Informasi Terlambat (Paper-Based Tracking)")
 
-add_card(s4, 6.78, 4.0, 5.75, 2.25, "Aliran 04 • Pengadaan ➔ Pabrik", "Kebutuhan: Purchase Order Agregat", [
+add_card(s4, 6.78, 4.25, 5.75, 2.55, "Aliran 04 • Pengadaan ➔ Pabrik", "Kebutuhan: Purchase Order Agregat", [
     "Asal & Tujuan: Pengadaan kampus mengirim rincian jumlah potong seragam dan sepatu ke pabrik.",
     "Titik Masalah: Purchase Order ke pabrik hanya estimasi kasar tanpa dasar profil data riil maba, memicu lead-time penukaran barang berbulan-bulan."
 ], "Kondisi: Informasi Tidak Akurat (Blind Ordering)")
-
-add_banner(s4, "Diagnosa Kunci",
-           "Terjadi Information Latency dan Data Asymmetry akut yang melumpuhkan koordinasi antar-bagian. Solusi mutlak membutuhkan platform web tunggal terpusat.")
 
 set_notes(s4, """NASKAH BACA PRESENTER SLIDE 4 (Target: 01:15 Menit):
 "Selanjutnya pada Slide 4, kami memetakan Analisis Aliran Informasi pada kondisi As-Is dan titik-titik kemacetannya:
@@ -345,7 +333,7 @@ apply_header(s5, "Rekomendasi Sistem Terpadu",
              "Pemilihan Arsitektur Sistem Informasi (UniStock Engine)",
              "Integrasi empat pilar sistem: ERP, SCM, POS, dan WMS dalam satu platform web modern")
 
-t_s5 = s5.shapes.add_table(5, 4, Inches(0.8), Inches(1.55), Inches(11.733), Inches(4.7)).table
+t_s5 = s5.shapes.add_table(5, 4, Inches(0.8), Inches(1.55), Inches(11.733), Inches(5.25)).table
 t_s5.columns[0].width = Inches(2.5)
 t_s5.columns[1].width = Inches(2.9)
 t_s5.columns[2].width = Inches(4.1)
@@ -394,9 +382,6 @@ for r_i, (m, sys, fn, ben) in enumerate(rows_s5):
         p.font.color.rgb = C_RED if c_i == 0 else C_TEXT_DARK
         if c_i == 0: p.font.bold = True
 
-add_banner(s5, "Keunggulan Integrasi UniStock",
-           "Menyatukan keandalan ERP, perencanaan SCM, kecepatan POS loket, dan ketatnya WMS dalam satu portal monolitik Laravel 12 modern yang tangguh.")
-
 set_notes(s5, """NASKAH BACA PRESENTER SLIDE 5 (Target: 01:30 Menit):
 "Untuk mengatasi persoalan tersebut, pada Slide 5 kami merekomendasikan empat subsistem terpadu di dalam arsitektur HorizonU Uniform (UniStock):
 
@@ -416,32 +401,29 @@ apply_header(s6, "Desain Arsitektur Solusi",
              "Aliran 4-Fase Closed-Loop Supply Chain Engine",
              "Konektivitas sistem end-to-end, pemrosesan transaksi atomik, dan closed-loop data feedback")
 
-add_card(s6, 0.8, 1.55, 2.78, 4.7, "Fase 1 • Hulu (Inbound)", "Inbound & Batch FIFO", [
+add_card(s6, 0.8, 1.55, 2.78, 5.25, "Fase 1 • Hulu (Inbound)", "Inbound & Batch FIFO", [
     "Pencatatan barang dari vendor garmen pada modul StockReceive.",
     "Sistem menerbitkan ID batch terurut (FIFO Queue Sequence).",
     "Pencatatan otomatis jurnal mutasi masuk (StockMovement IN) dan penetapan unit HPP batch."
 ], "Output: Batch FIFO Terdaftar")
 
-add_card(s6, 3.78, 1.55, 2.78, 4.7, "Fase 2 • Demand (Planning)", "Eligibility & Profiling", [
+add_card(s6, 3.78, 1.55, 2.78, 5.25, "Fase 2 • Demand (Planning)", "Eligibility & Profiling", [
     "Keuangan mengaktifkan data mahasiswa lunas di EligibilityRecord.",
     "Mahasiswa input profil ukuran badan mandiri di event portal.",
     "Sistem menghitung Demand vs Shortage untuk acuan belanja pengadaan vendor."
 ], "Output: QR Code & Jadwal Aktif")
 
-add_card(s6, 6.76, 1.55, 2.78, 4.7, "Fase 3 • Hilir (Outbound)", "POS QR & 6-Lapis Validasi", [
+add_card(s6, 6.76, 1.55, 2.78, 5.25, "Fase 3 • Hilir (Outbound)", "POS QR & 6-Lapis Validasi", [
     "Staf memindai QR NIM mahasiswa di loket posko kampus.",
     "Eksekusi 6-Lapis Validasi Atomik via pessimistic lock (lockForUpdate).",
     "Pemotongan batch tertua otomatis (deductStockFifo) dan cetak tiket serah terima fisik."
 ], "Output: Seragam Diterima Pas", is_highlight=True)
 
-add_card(s6, 9.74, 1.55, 2.78, 4.7, "Fase 4 • Kontrol (Audit)", "Opname & Closed-Loop", [
+add_card(s6, 9.74, 1.55, 2.78, 5.25, "Fase 4 • Kontrol (Audit)", "Opname & Closed-Loop", [
     "Stock Opname fisik berkala menghitung selisih variance otomatis.",
     "Penerbitan jurnal penyesuaian susut/surplus stok gudang.",
     "Generate analitik Gross Profit Margin (GPM) dan laporan sisa stok untuk pimpinan."
 ], "Output: Feedback Siklus Baru")
-
-add_banner(s6, "Pengambilan Keputusan Closed-Loop",
-           "Data analitik stok sisa dan tren ukuran dari Fase 4 secara otomatis menjadi input penetapan kuota anggaran dan purchase order ke pabrik pada Fase 1 semester berikutnya.")
 
 set_notes(s6, """NASKAH BACA PRESENTER SLIDE 6 (Target: 01:25 Menit):
 "Pada Slide 6, kami tampilkan Desain Arsitektur Solusi yang bekerja dalam 4 Fase Tertutup (Closed-Loop Engine):
@@ -464,20 +446,17 @@ apply_header(s7, "Rencana Penerapan & Mitigasi",
              "Prioritas Implementasi & Manajemen Risiko Lapangan",
              "Tahapan kesiapan operasional serta prosedur kontingensi darurat saat hari-H distribusi")
 
-add_card(s7, 0.8, 1.55, 3.75, 4.7, "3 Prioritas Implementasi", "Tahapan Kesiapan Sistem", [
+add_card(s7, 0.8, 1.55, 3.75, 5.25, "3 Prioritas Implementasi", "Tahapan Kesiapan Sistem", [
     "Prioritas 1 (Master Data): Pembersihan data lama, pembuatan skema SKU 5-segmen, impor data mahasiswa, dan konfigurasi hak seragam prodi.",
     "Prioritas 2 (Integrasi Portal): Integrasi status lunas Keuangan (Eligibility), pembukaan jendela waktu pengisian profil ukuran maba, dan rilis jadwal.",
     "Prioritas 3 (Kesiapan SDM): Pelatihan teknis staf posko memakai scanner webcam, prosedur fitting ukuran, dan drill skenario darurat."
 ], "Roadmap: 6 Minggu Implementasi Penuh")
 
-add_card(s7, 4.78, 1.55, 7.75, 4.7, "3 Risiko Lapangan & Cara Mitigasi", "SOP Kontingensi Hari-H Posko", [
+add_card(s7, 4.78, 1.55, 7.75, 5.25, "3 Risiko Lapangan & Cara Mitigasi", "SOP Kontingensi Hari-H Posko", [
     "RISIKO 1: Baterai HP Mahasiswa Mati / QR Rusak\n• Kendala: Mahasiswa tidak bisa menampilkan QR Code di layar ponsel.\n• Mitigasi UniStock: Bilah scanner staf posko dilengkapi fitur Fallback Search manual via NIM atau Nama yang langsung memanggil profil hak seketika.",
     "RISIKO 2: Ukuran Rak Habis / Fitting Beda\n• Kendala: Ukuran fisik seragam di rak posko habis saat dicoba langsung.\n• Mitigasi UniStock: Fitur Partial Pickup memungkinkan staf menyerahkan barang yang tersedia (sisa hak tidak hangus & dijadwal ulang) dan mencatat tukar ukuran di student_size_histories.",
     "RISIKO 3: Jaringan Internet Kampus Lambat / Dobel Klik\n• Kendala: Sinyal wifi fluktuatif menyebabkan staf mengklik tombol konfirmasi berulang kali.\n• Mitigasi UniStock: Transaksi dilindungi Pessimistic Row Locking (lockForUpdate) dan proteksi idempotensi, menjamin nol pemotongan stok ganda."
 ], "Toleransi Kesalahan: Resiliensi Operasional Tinggi", is_highlight=True)
-
-add_banner(s7, "Resiliensi Operasional Tinggi",
-           "UniStock dirancang dengan pertimbangan toleransi kesalahan nyata (fault-tolerant), menjamin pembagian di posko kampus tetap berjalan lancar dalam kondisi darurat apa pun.")
 
 set_notes(s7, """NASKAH BACA PRESENTER SLIDE 7 (Target: 01:15 Menit):
 "Masuk ke Slide 7 mengenai Prioritas Implementasi dan Mitigasi Risiko Lapangan.
@@ -497,26 +476,23 @@ apply_header(s8, "Kesimpulan & Hasil Terukur",
              "Dampak Strategis & Manfaat Nyata Implementasi",
              "Transformasi operasional Departemen Keuangan Universitas Horizon Indonesia pasca-digitalisasi")
 
-add_card(s8, 0.8, 1.55, 3.75, 4.7, "Manfaat 01 • Efisiensi Waktu", "< 30 Detik per Mahasiswa", [
+add_card(s8, 0.8, 1.55, 3.75, 5.25, "Manfaat 01 • Efisiensi Waktu", "< 30 Detik per Mahasiswa", [
     "Memangkas waktu layanan loket dari yang sebelumnya 15–20 menit per mahasiswa menjadi di bawah 30 detik.",
     "Pemindaian QR Code instan berbasis NIM dan eksekusi 6-lapis validasi otomatis.",
     "Mengeliminasi antrean panjang yang berdesakan di posko kampus setiap awal tahun ajaran baru."
 ], "Dampak: Pelayanan Mahasiswa Cepat & Nyaman", is_highlight=True)
 
-add_card(s8, 4.78, 1.55, 3.75, 4.7, "Manfaat 02 • Akurasi Inventaris", "Zero (0) Dead-Stock", [
+add_card(s8, 4.78, 1.55, 3.75, 5.25, "Manfaat 02 • Akurasi Inventaris", "Zero (0) Dead-Stock", [
     "Profiling ukuran mandiri oleh mahasiswa sebelum tender vendor garmen dibuka.",
     "Kalkulasi Demand vs Shortage otomatis memastikan pesanan pabrik selaras 100% dengan kebutuhan tubuh riil mahasiswa.",
     "Tidak ada lagi seragam berukuran ekstrem yang mengendap bertahun-tahun di gudang."
 ], "Dampak: Optimalisasi Modal Kerja Kampus")
 
-add_card(s8, 8.76, 1.55, 3.75, 4.7, "Manfaat 03 • Akuntabilitas Biaya", "100% Valuasi FIFO Real-Time", [
+add_card(s8, 8.76, 1.55, 3.75, 5.25, "Manfaat 03 • Akuntabilitas Biaya", "100% Valuasi FIFO Real-Time", [
     "Mengeliminasi ketergantungan pada spreadsheet Excel raksasa yang rawan rusak atau korup.",
     "Seluruh pergerakan stok dicatat otomatis ke kartu mutasi persediaan berbasis urutan batch FIFO.",
     "Laporan Harga Pokok Penjualan (HPP) dan Gross Profit Margin (GPM) tersedia secara transparan bagi pimpinan."
 ], "Dampak: Audit Trail Keuangan Bebas Selisih")
-
-add_banner(s8, "Kesimpulan Strategis Sistem Informasi",
-           "Sistem Informasi bukan sekadar alat pencatat administrasi, melainkan saraf penggerak rantai pasok yang mengunci fisik barang dengan kepatuhan finansial, serta mentransformasi tebakan manual menjadi keputusan bisnis berakurasi tinggi.")
 
 set_notes(s8, """NASKAH BACA PRESENTER SLIDE 8 (Target: 00:55 Menit):
 "Sebagai penutup pada Slide 8, implementasi HorizonU Uniform menghadirkan 3 manfaat nyata dan terukur:
