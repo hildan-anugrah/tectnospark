@@ -1,0 +1,341 @@
+window.I18N_EN_DATA = {
+  "common": {
+    "docTitle": "HorizonU Uniform — Technospark Presentation",
+    "technosparkBadge": "Technospark 2026",
+    "appTitle": "HorizonU Uniform",
+    "appSubtitle": "Finance Department of Horizon University Indonesia",
+    "prev": "Previous",
+    "next": "Next",
+    "prompter": "Script (T)",
+    "downloadPptx": "Download PPTX",
+    "fullscreen": "Fullscreen (F)",
+    "prompterHeader": "Presenter Speech Script (Teleprompter Mode) — Read Directly Here",
+    "targetDurationLabel": "Target Duration:"
+  },
+  "slide1": {
+    "headerDept": "Finance Department • Horizon University Indonesia",
+    "eyebrow": "Integrated Campus Logistics Supply Chain Solution",
+    "title": "HORIZONU <span class=\"text-horizon-700 underline decoration-4 underline-offset-4\">UNIFORM</span>",
+    "titlePrefix": "HORIZONU ",
+    "titleAccent": "UNIFORM",
+    "desc": "Digital transformation of student uniform operations: Connecting Upstream (Apparel Vendor), Campus Warehouse, and Finance to Downstream (Students) powered by precision data and FIFO inventory rules.",
+    "box1": {
+      "title": "Logistics Commodity & Scope",
+      "desc": "Annual procurement and distribution of thousands of freshman packages: <strong>Alma Mater Blazers, White Shirts, Formal Trousers/Skirts, Lab & Clinical Shoes</strong>, and <strong>Medical Kits</strong> without commercial retail intermediaries."
+    },
+    "box2": {
+      "title": "Core Operational Challenges",
+      "desc": "<strong>4.5 MB master Excel spreadsheet prone to crashing</strong> during peak enrollment, queue times reaching <strong>15–20 minutes per student</strong>, and heuristic order ratios triggering massive <strong>dead-stock</strong> and trapped campus capital."
+    }
+  },
+  "slide2": {
+    "badge": "Development Team Profile",
+    "title": "Our Team • Nirwana Development Team",
+    "subtitle": "Cross-disciplinary collaboration across system architecture, software engineering, and platform governance",
+    "badgeCount": "6 Core Engineers",
+    "members": {
+      "ferry": {
+        "name": "Ferry Noer Hendriawan",
+        "role": "Frontend Developer"
+      },
+      "fhazar": {
+        "name": "Fhazar Raffiful Aqyla",
+        "role": "Project Manager"
+      },
+      "hildan": {
+        "name": "Hildan Anugrah Tamadi Putra",
+        "role": "Backend Developer"
+      },
+      "fadel": {
+        "name": "Fadel Rahmadhan",
+        "role": "Quality Assurance"
+      },
+      "daffa": {
+        "name": "Daffa Nazriel Zaidan",
+        "role": "UI/UX Designer"
+      },
+      "acep": {
+        "name": "Acep Ugan Saputra",
+        "role": "System Analyst"
+      }
+    }
+  },
+  "slide3": {
+    "badge": "Supply Chain Structure",
+    "title": "Stakeholder Mapping & Physical Cargo Flow",
+    "subtitle": "Integrated physical flow from garment vendor to student handoff under the 'Data Locks Physical Asset' doctrine",
+    "col1": {
+      "step": "01 • Supplier (Upstream)",
+      "title": "Garment & Shoe Factories",
+      "p1": "• Produces uniform and footwear packages based on aggregate purchase orders (PO).",
+      "p2": "• Enforces strict 5-segment SKU coding standards per category and size.",
+      "p3": "• Cargo Point: Inbound container shipments delivered to campus warehouse (Inbound Logistics).",
+      "flow": "Flow: Aggregate PO ➔ Inbound Freight"
+    },
+    "col2": {
+      "step": "02 • Warehouse (Inbound)",
+      "title": "Campus Logistics Warehouse",
+      "p1": "• Physical cargo receiving (StockReceive) and quality control (QC).",
+      "p2": "• Strict FIFO (First-In, First-Out) batch recording and landed unit cost assignment.",
+      "p3": "• Cargo Point: Outbound transfer of oldest batches to distribution booths.",
+      "flow": "Flow: Inbound ➔ POS Distribution Booths"
+    },
+    "col3": {
+      "step": "03 • Verifiers & Booths",
+      "title": "Finance & On-Site Booth Staff",
+      "p1": "• Finance: Authorizes student tuition payment status (Eligibility verification).",
+      "p2": "• Booth Staff: Serves physical garment distribution at campus pickup booths.",
+      "p3": "• Critical Point: QR Code identity scanning and size fitting validation.",
+      "flow": "Flow: Paid Status ➔ Physical Handover"
+    },
+    "col4": {
+      "step": "04 • Consumer (Downstream)",
+      "title": "Freshman Students (Customers)",
+      "p1": "• End consumers with official package entitlements per study program.",
+      "p2": "• Submits body size profiles via student portal and receives assigned schedule tickets.",
+      "p3": "• Info Point: Presents high-resolution QR Code ticket (student ID) at pickup booth.",
+      "flow": "Flow: Size Profile ➔ Tailored Uniform Package"
+    }
+  },
+  "slide4": {
+    "badge": "Legacy System Problem Analysis",
+    "title": "Operational Bottlenecks & Systemic Impact Evaluation",
+    "subtitle": "Comprehensive root cause analysis of manual spreadsheets causing cost overruns, delays, and service degradation",
+    "thProblem": "Primary Problem (Field Symptom)",
+    "thCause": "Root Cause",
+    "thImpact": "Impact on Cost, Time, Inventory & Service",
+    "row1": {
+      "problem": "1. Size Mismatches & Dead-Stock Accumulation",
+      "cause": "Factory procurement orders were based purely on historical heuristic ratios. No pre-enrollment self-service size survey existed prior to vendor contract tenders.",
+      "impact": "<strong>Inventory & Cost Impact:</strong> Popular sizes (M/L) depleted on day one, while extreme sizes (XS, 3XL) gathered dust for years. University working capital locked in dead-stock."
+    },
+    "row2": {
+      "problem": "2. Excel Crashes & Delayed Schedule Broadcasts",
+      "cause": "Finance managed a massive spreadsheet file (~4.5 MB, 19 sheets) for thousands of students. Pickup appointment slots were distributed via manual email blasts.",
+      "impact": "<strong>Time & Service Impact:</strong> Constant software freezes and data corruption risks. Data reconciliation consumed weeks and distribution schedules reached students late."
+    },
+    "row3": {
+      "problem": "3. Booth Queue Bottlenecks & Double-Claim Exposure",
+      "cause": "Tuition clearance verification, academic entitlement matching, and physical handover confirmations were handled manually by paper checklist tick marks.",
+      "impact": "<strong>Time & Accuracy Impact:</strong> Service times lagged at 15–20 minutes per student with hundred-meter queues, leaving high exposure to duplicate claims across different booths or days."
+    },
+    "row4": {
+      "problem": "4. Shrinkage & Opaque COGS / FIFO Valuation",
+      "cause": "Uniform receipts from vendors with fluctuating prices were not tracked via FIFO queues or automated ledger entries tied to booth POS handovers.",
+      "impact": "<strong>Cost & Audit Impact:</strong> Unaccounted inventory shrinkage without audit trails. Real-time Cost of Goods Sold (COGS) and Gross Profit Margin (GPM) calculations were severely distorted."
+    }
+  },
+  "slide5": {
+    "badge": "Information Flow Analysis",
+    "title": "Data Bottlenecks & Information Silos (As-Is State)",
+    "subtitle": "Inter-departmental communication barriers triggering service delays, data inconsistencies, and transaction friction",
+    "card1": {
+      "flow": "Flow 01 • Student ➔ University",
+      "title": "Requirement: Size Profiles & Schedules",
+      "p1": "• Source & Target: Students submit data to campus; receive schedule via email.",
+      "p2": "• Problem: Disconnected Google Forms without standardized SKU validation, resulting in duplicate entries and manual staff consolidation delays of 2–3 weeks.",
+      "status": "Status: Delayed Information & Unstandardized Format"
+    },
+    "card2": {
+      "flow": "Flow 02 • Finance ➔ Day-Of Distribution",
+      "title": "Requirement: Tuition Paid Status (Eligibility)",
+      "p1": "• Source & Target: Finance exports paid clearance status to booth staff.",
+      "p2": "• Problem: Static local Excel exports. Day-of bank clearing updates fail to reach booth stations in real time, causing paid students to be wrongly turned away.",
+      "status": "Status: Severed Communication (Local Data Silos)"
+    },
+    "card3": {
+      "flow": "Flow 03 • Booth Desk ➔ Warehouse",
+      "title": "Requirement: Package Entitlement & Stock Ledger",
+      "p1": "• Source & Target: Booth staff verifies entitlements and logs item release.",
+      "p2": "• Problem: Physical logbooks tallying handovers. Warehouse stock balances were only reconciled at night, leaving large gaps for shrinkage and stock discrepancies.",
+      "status": "Status: Lagging Records (Paper-Based Handover)"
+    },
+    "card4": {
+      "flow": "Flow 04 • Procurement ➔ Factory",
+      "title": "Requirement: Aggregate Purchase Orders (PO)",
+      "p1": "• Source & Target: Procurement dispatches garment production quantities to vendor.",
+      "p2": "• Problem: Purchase orders drafted from crude estimates rather than validated student anthropometric demand, triggering multi-month return-exchange lead times.",
+      "status": "Status: Blind Ordering (Lack of Real Demand Signal)"
+    }
+  },
+  "slide6": {
+    "badge": "Integrated System Recommendation",
+    "title": "Information System Architecture Selection (HorizonU Uniform Engine)",
+    "subtitle": "Unified convergence of four enterprise pillars: ERP, SCM, POS, and WMS in a modern web platform",
+    "thProblem": "Problem Addressed",
+    "thSystem": "Recommended System & Module",
+    "thFunc": "System Function in Case Study",
+    "thBenefit": "Measurable Value Delivered",
+    "row1": {
+      "problem": "Excel Crashes & Fragmented Student Records",
+      "system": "ERP Master & Entitlement Engine",
+      "tech": "Database MySQL InnoDB",
+      "func": "Governs student master data, 4-segment base SKU hierarchy, bulk excel imports via background jobs, and automated academic entitlement matrix per program.",
+      "benefit": "100% immune to spreadsheet crashes; full ACID transaction integrity with a unified single source of truth."
+    },
+    "row2": {
+      "problem": "Dead-Stock & Delayed Schedule Broadcasts",
+      "system": "SCM Demand Planning Portal",
+      "tech": "Size Event & Announcement Hub",
+      "func": "Opens pre-enrollment self-service size selection windows (SizeChangeEvent), program-filtered slot broadcasts, and automated Demand vs. Shortage calculus for procurement tenders.",
+      "benefit": "Zero Dead-Stock: Factory purchase orders match 100% of verified student physical measurements."
+    },
+    "row3": {
+      "problem": "Queue Congestion & Double-Claim Risk",
+      "system": "POS QR Verification Engine",
+      "tech": "BaconQrCode & HTML5 Scanner",
+      "func": "Issues tamper-proof Level-H QR code passes and executes 6-tier atomic validation on scanner read (Payment, Time Slot, Program, Gender, Entitlement Balance, Rack Stock).",
+      "benefit": "Service time slashed to under 30 seconds per student with zero duplicate claim vulnerability."
+    },
+    "row4": {
+      "problem": "Warehouse Shrinkage & Opaque COGS Valuation",
+      "system": "WMS & FIFO Costing Engine",
+      "tech": "StockBatch & Movement Ledger",
+      "func": "Tracks oldest vendor intake batches (FIFO), ledger-backed stock deductions, physical Stock Opname variance audits, and real-time gross margin profit analytics.",
+      "benefit": "Real-time FIFO inventory valuation, transparent audit trails, and elimination of physical discrepancies."
+    }
+  },
+  "slide7": {
+    "badge": "Proposed Solution Design",
+    "title": "4-Phase Closed-Loop Supply Chain Architecture",
+    "subtitle": "End-to-end system connectivity, atomic transaction processing, and closed-loop data feedback",
+    "phase1": {
+      "step": "Phase 1 • Upstream (Inbound)",
+      "title": "Inbound & FIFO Batch Registry",
+      "p1": "• Logs bulk cargo shipments from apparel suppliers via StockReceive module.",
+      "p2": "• Assigns sequential FIFO batch tracking IDs (First-In, First-Out sequence).",
+      "p3": "• Automatically posts inventory journal inflows (StockMovement IN) and fixes batch cost basis.",
+      "output": "Output: Tracked FIFO Batch Inflow"
+    },
+    "phase2": {
+      "step": "Phase 2 • Demand (Planning)",
+      "title": "Eligibility Clearance & Size Profiling",
+      "p1": "• Finance authorizes enrolled students in EligibilityRecord table.",
+      "p2": "• Freshmen log in to self-submit body size measurements through student portal.",
+      "p3": "• System aggregates Demand vs. Shortage analytics to drive supplier procurement contracts.",
+      "output": "Output: Active QR Pass & Assigned Time Slot"
+    },
+    "phase3": {
+      "step": "Phase 3 • Downstream (Outbound)",
+      "title": "POS QR & 6-Tier Atomic Validation",
+      "p1": "• Booth staff scans student QR code using webcam-based scanner client.",
+      "p2": "• Executes 6-tier atomic validation under pessimistic database row locking (lockForUpdate).",
+      "p3": "• Automatically depletes oldest FIFO batches (deductStockFifo) and prints handover receipt.",
+      "output": "Output: Verified Zero-Defect Handover"
+    },
+    "phase4": {
+      "step": "Phase 4 • Control (Audit)",
+      "title": "Stock Opname & Closed-Loop Feedback",
+      "p1": "• Periodic physical stock audit with automated discrepancy variance calculation.",
+      "p2": "• Generates shrinkage/surplus adjustment journal vouchers instantly.",
+      "p3": "• Produces executive Gross Profit Margin (GPM) dashboards and dead-stock alerts for management.",
+      "output": "Output: Continuous Closed-Loop Feedback"
+    }
+  },
+  "slide8": {
+    "badge": "Deployment Plan & Risk Governance",
+    "title": "Implementation Priorities & Field Risk Mitigation",
+    "subtitle": "Operational readiness roadmap alongside battle-tested contingency protocols for distribution day",
+    "priorities": {
+      "badge": "3 Implementation Priorities",
+      "title": "System Readiness Roadmap",
+      "p1": "• <strong>Priority 1 (Master Data):</strong> Cleanse legacy records, deploy 5-segment SKU schema, import student cohorts, and configure program entitlement rules.",
+      "p2": "• <strong>Priority 2 (Portal Integration):</strong> Bridge live tuition clearance feeds (Eligibility), launch self-service size survey portal, and broadcast assigned schedule slots.",
+      "p3": "• <strong>Priority 3 (Human Readiness):</strong> Conduct operational drills for booth staff on webcam scanners, size exchange SOPs, and offline fallback procedures.",
+      "roadmap": "Roadmap: 6-Week Turnkey Deployment"
+    },
+    "risks": {
+      "badge": "3 Field Risks & Contingency SOPs",
+      "title": "Booth Operational Protocols",
+      "r1Title": "RISK 1: Dead Student Phone Battery / Damaged QR",
+      "r1Mitigation": "<em>HorizonU Uniform Mitigation:</em> Scanner client features instant fallback manual search by Student ID or Full Name, loading entitlement profiles immediately.",
+      "r2Title": "RISK 2: Rack Size Exhaustion / On-Site Fit Mismatch",
+      "r2Mitigation": "<em>HorizonU Uniform Mitigation:</em> Partial Pickup feature dispenses available items (retaining remaining balance) and logs exchange requests in <code>student_size_histories</code>.",
+      "r3Title": "RISK 3: Network Latency / Rapid Double Clicking",
+      "r3Mitigation": "<em>HorizonU Uniform Mitigation:</em> Transactions guarded by database Pessimistic Row Locking (<code>lockForUpdate</code>) and idempotency keys, guaranteeing zero duplicate deductions.",
+      "tolerance": "Fault Tolerance: High Operational Resilience",
+      "item1": "• <strong>RISK 1: Dead Student Phone Battery / Damaged QR</strong><br><span class=\"text-slate-600\"><em>HorizonU Uniform Mitigation:</em> Scanner client features instant fallback manual search by Student ID or Full Name, loading entitlement profiles immediately.</span>",
+      "item2": "• <strong>RISK 2: Rack Size Exhaustion / On-Site Fit Mismatch</strong><br><span class=\"text-slate-600\"><em>HorizonU Uniform Mitigation:</em> Partial Pickup feature dispenses available items (retaining remaining balance) and logs exchange requests in <code>student_size_histories</code>.</span>",
+      "item3": "• <strong>RISK 3: Network Latency / Rapid Double Clicking</strong><br><span class=\"text-slate-600\"><em>HorizonU Uniform Mitigation:</em> Transactions guarded by database Pessimistic Row Locking (<code>lockForUpdate</code>) and idempotency keys, guaranteeing zero duplicate deductions.</span>"
+    }
+  },
+  "slide9": {
+    "badge": "Conclusion & Measured Impact",
+    "title": "Strategic Outcomes & Measurable Business Value",
+    "subtitle": "Operational transformation of Horizon University Indonesia Finance Department post-digitalization",
+    "m1": {
+      "badge": "VALUE 01 • SERVICE EFFICIENCY",
+      "value": "< 30s",
+      "title": "Per Student Pickup Time",
+      "p1": "• Slashed booth turnaround time from 15–20 minutes down to under 30 seconds per student.",
+      "p2": "• Instant QR scanning combined with automated 6-tier validation checks.",
+      "p3": "• Completely eradicated chaotic, overcrowded campus queues during orientation week.",
+      "impact": "Impact: Swift & Professional Student Experience"
+    },
+    "m2": {
+      "badge": "VALUE 02 • INVENTORY ACCURACY",
+      "value": "Zero",
+      "title": "Dead-Stock Accumulation",
+      "p1": "• Pre-enrollment size profiling prior to supplier manufacturing tenders.",
+      "p2": "• Automated Demand vs. Shortage calculations align factory orders 100% with real student body sizes.",
+      "p3": "• Eliminated stagnant piles of obsolete extreme sizes tying up warehouse space.",
+      "impact": "Impact: Maximum Working Capital Efficiency"
+    },
+    "m3": {
+      "badge": "VALUE 03 • FINANCIAL AUDITABILITY",
+      "value": "100%",
+      "title": "Real-Time FIFO Valuation",
+      "p1": "• Eliminated fragile, crash-prone Excel master spreadsheets permanently.",
+      "p2": "• Every single inventory movement automatically posted to FIFO batch ledgers.",
+      "p3": "• Real-time Cost of Goods Sold (COGS) and Gross Profit Margin (GPM) dashboards for university leadership.",
+      "impact": "Impact: Discrepancy-Free Financial Audit Trail"
+    }
+  },
+  "speakerScripts": {
+    "slide1": {
+      "targetTime": "01:10 Mins",
+      "html": "<p class=\"mb-3\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">OPENING</span>\"Good morning/afternoon, Distinguished Judges of Technospark and respected audience. We are from the Nirwana Team, consisting of Fhazar, Ferry, Hildan, Fadel, Daffa, and Acep. Today, we are proud to present an integrated supply chain information system solution entitled: <strong>HorizonU Uniform</strong>.</p><p class=\"mb-3\">Our case study focuses on the Finance Department of Horizon University Indonesia, which is responsible for the annual procurement and distribution of thousands of uniform packages, blazers, lab shoes, and medical kits for incoming freshmen.</p><p>Before HorizonU Uniform was developed, operations relied on a massive 4.5 MB master Excel spreadsheet across 19 worksheets that frequently froze and crashed. In the field, students waited 15–20 minutes in line, size mismatches created massive dead-stock, and duplicate claims were a constant risk. Let us examine how this supply chain operates.\"</p>",
+      "text": "SPEAKER PRESENTATION SCRIPT SLIDE 1 (Target: 01:10 Mins):\n\"Good morning/afternoon, Distinguished Judges of Technospark and respected audience. We are from the Nirwana Team, consisting of Fhazar, Ferry, Hildan, Fadel, Daffa, and Acep. Today, we are proud to present an integrated supply chain information system solution entitled: HorizonU Uniform.\n\nOur case study focuses on the Finance Department of Horizon University Indonesia, which is responsible for the annual procurement and distribution of thousands of uniform packages, blazers, lab shoes, and medical kits for incoming freshmen.\n\nBefore HorizonU Uniform was developed, operations relied on a massive 4.5 MB master Excel spreadsheet across 19 worksheets that frequently froze and crashed. In the field, students waited 15–20 minutes in line, size mismatches created massive dead-stock, and duplicate claims were a constant risk. Let us examine how this supply chain operates.\""
+    },
+    "slide2": {
+      "targetTime": "00:45 Mins",
+      "html": "<p class=\"mb-3\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">TEAM PROFILE</span>\"On Slide 2, allow us to introduce the 6 members of <strong>Nirwana Team</strong>, each specializing in critical domains to build HorizonU Uniform:\"</p><p class=\"mb-3\">\"1. <strong>Fhazar Raffiful Aqyla</strong> as <em>Project Manager</em>, leading product roadmaps and strategic SCM alignment.<br>2. <strong>Ferry Noer Hendriawan</strong> as <em>Frontend Developer</em>, architecting the responsive UI and posko scanner client.<br>3. <strong>Hildan Anugrah Tamadi Putra</strong> as <em>Backend Developer</em>, engineering the Laravel 12 engine, FIFO costing, and concurrency locking.<br>4. <strong>Fadel Rahmadhan</strong> as <em>Quality Assurance</em>, validating high concurrency resilience and anti-double claim defenses.<br>5. <strong>Daffa Nazriel Zaidan</strong> as <em>UI/UX Designer</em>, crafting the ergonomic Neo-Brutalist design system.<br>6. <strong>Acep Ugan Saputra</strong> as <em>System Analyst</em>, modeling BPMN workflows and relational database architectures.\"</p><p>\"Through this cross-functional collaboration, we deliver a complete operational transformation.\"</p>",
+      "text": "SPEAKER PRESENTATION SCRIPT SLIDE 2 (Target: 00:45 Mins):\n\"On Slide 2, allow us to introduce the 6 members of Nirwana Team, each specializing in critical domains to build HorizonU Uniform:\n\n1. Fhazar Raffiful Aqyla as Project Manager, leading product roadmaps and strategic SCM alignment.\n2. Ferry Noer Hendriawan as Frontend Developer, architecting the responsive UI and posko scanner client.\n3. Hildan Anugrah Tamadi Putra as Backend Developer, engineering the Laravel 12 engine, FIFO costing, and concurrency locking.\n4. Fadel Rahmadhan as Quality Assurance, validating high concurrency resilience and anti-double claim defenses.\n5. Daffa Nazriel Zaidan as UI/UX Designer, crafting the ergonomic Neo-Brutalist design system.\n6. Acep Ugan Saputra as System Analyst, modeling BPMN workflows and relational database architectures.\n\nThrough this cross-functional collaboration, we deliver a complete operational transformation.\""
+    },
+    "slide3": {
+      "targetTime": "01:15 Mins",
+      "html": "<p class=\"mb-3\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">SCM STRUCTURE</span>\"Moving to Slide 3 regarding Supply Chain Structure. The HorizonU Uniform supply chain bridges four key stakeholders:\"</p><p class=\"mb-3\">\"1. <strong>Suppliers (Upstream):</strong> Garment and footwear factories manufacturing items based on university procurement orders.<br>2. <strong>Campus Warehouse (Inbound):</strong> Inspects incoming shipments (QC) and registers batches under strict FIFO rules.<br>3. <strong>Finance & Booth Staff (Verifiers):</strong> Finance verifies tuition clearance (Eligibility), while booth teams scan QR codes for physical handover.<br>4. <strong>Students (Downstream):</strong> The end consumers who submit size measurements online and present digital passes at pickup stations.\"</p><p>\"All four entities operate under one core rule: <em>'Data Locks Physical Asset'</em>—no goods leave without real-time digital verification.\"</p>",
+      "text": "SPEAKER PRESENTATION SCRIPT SLIDE 3 (Target: 01:15 Mins):\n\"Moving to Slide 3 regarding Supply Chain Structure. The HorizonU Uniform supply chain bridges four key stakeholders:\n\n1. Suppliers (Upstream): Garment and footwear factories manufacturing items based on university procurement orders.\n2. Campus Warehouse (Inbound): Inspects incoming shipments (QC) and registers batches under strict FIFO rules.\n3. Finance & Booth Staff (Verifiers): Finance verifies tuition clearance (Eligibility), while booth teams scan QR codes for physical handover.\n4. Students (Downstream): The end consumers who submit size measurements online and present digital passes at pickup stations.\n\nAll four entities operate under one core rule: 'Data Locks Physical Asset'—no goods leave without real-time digital verification.\""
+    },
+    "slide4": {
+      "targetTime": "01:30 Mins",
+      "html": "<p class=\"mb-3\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">PROBLEM ANALYSIS</span>\"On Slide 4, we examine the four primary root causes and their systemic impacts:\"</p><p class=\"mb-3\">\"<strong>First, Size Mismatches:</strong> Factory orders based on heuristic estimates meant popular sizes ran out on day one while extreme sizes accumulated for years as dead-stock.<br><strong>Second, Spreadsheet Crashes:</strong> Managing 4.5 MB Excel workbooks for thousands of students caused software freezes and delayed schedules.<br><strong>Third, Booth Queuing:</strong> Manual paper checklists led to 15–20 minute turnaround times per student and high double-claim exposure.<br><strong>Fourth, Opaque Costs:</strong> Inventory lacked FIFO batch tracking, obscuring real-time COGS and auditability.\"</p><p>\"These challenges prove that manual spreadsheets are incapable of scaling for modern campus operations.\"</p>",
+      "text": "SPEAKER PRESENTATION SCRIPT SLIDE 4 (Target: 01:30 Mins):\n\"On Slide 4, we examine the four primary root causes and their systemic impacts:\n\nFirst, Size Mismatches: Factory orders based on heuristic estimates meant popular sizes ran out on day one while extreme sizes accumulated for years as dead-stock.\nSecond, Spreadsheet Crashes: Managing 4.5 MB Excel workbooks for thousands of students caused software freezes and delayed schedules.\nThird, Booth Queuing: Manual paper checklists led to 15–20 minute turnaround times per student and high double-claim exposure.\nFourth, Opaque Costs: Inventory lacked FIFO batch tracking, obscuring real-time COGS and auditability.\n\nThese challenges prove that manual spreadsheets are incapable of scaling for modern campus operations.\""
+    },
+    "slide5": {
+      "targetTime": "01:15 Mins",
+      "html": "<p class=\"mb-3\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">INFORMATION FLOW</span>\"Next on Slide 5, we map the As-Is Information Flow and its communication bottlenecks:\"</p><p class=\"mb-3\">\"<strong>Flow 1 (Student to Campus):</strong> Unstandardized Google Forms created duplicate entries and prolonged data cleanup by weeks.<br><strong>Flow 2 (Finance to Booths):</strong> Local Excel files created data silos; day-of bank clearances failed to reach booth staff in real time.<br><strong>Flow 3 (Booths to Warehouse):</strong> Paper logs reconciled only at night left open windows for inventory shrinkage.<br><strong>Flow 4 (Procurement to Factory):</strong> Blind ordering without verified student demand resulted in multi-month exchange cycles.\"</p><p>\"The solution requires centralizing all four data streams into a single real-time transactional platform.\"</p>",
+      "text": "SPEAKER PRESENTATION SCRIPT SLIDE 5 (Target: 01:15 Mins):\n\"Next on Slide 5, we map the As-Is Information Flow and its communication bottlenecks:\n\nFlow 1 (Student to Campus): Unstandardized Google Forms created duplicate entries and prolonged data cleanup by weeks.\nFlow 2 (Finance to Booths): Local Excel files created data silos; day-of bank clearances failed to reach booth staff in real time.\nFlow 3 (Booths to Warehouse): Paper logs reconciled only at night left open windows for inventory shrinkage.\nFlow 4 (Procurement to Factory): Blind ordering without verified student demand resulted in multi-month exchange cycles.\n\nThe solution requires centralizing all four data streams into a single real-time transactional platform.\""
+    },
+    "slide6": {
+      "targetTime": "01:30 Mins",
+      "html": "<p class=\"mb-3\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">RECOMMENDED SYSTEMS</span>\"To resolve these bottlenecks, on Slide 6 we recommend four integrated enterprise pillars:\"</p><p class=\"mb-3\">\"1. <strong>ERP Master & Entitlement Engine:</strong> Enforces 5-segment SKU standards and automatic academic entitlement matrices under MySQL InnoDB ACID compliance.<br>2. <strong>SCM Demand Planning Portal:</strong> Provides self-service size survey events and broadcasts schedule slots, achieving Zero Dead-Stock.<br>3. <strong>POS QR Verification Engine:</strong> High-density QR code scanning with 6-tier atomic checks cuts service time to under 30 seconds per student.<br>4. <strong>WMS & FIFO Costing Engine:</strong> Automatically pulls oldest inventory batches and records movement ledgers for 100% transparent audit trails.\"</p><p>\"Together, these modules form an enterprise-grade platform specifically designed for campus logistics.\"</p>",
+      "text": "SPEAKER PRESENTATION SCRIPT SLIDE 6 (Target: 01:30 Mins):\n\"To resolve these bottlenecks, on Slide 6 we recommend four integrated enterprise pillars:\n\n1. ERP Master & Entitlement Engine: Enforces 5-segment SKU standards and automatic academic entitlement matrices under MySQL InnoDB ACID compliance.\n2. SCM Demand Planning Portal: Provides self-service size survey events and broadcasts schedule slots, achieving Zero Dead-Stock.\n3. POS QR Verification Engine: High-density QR code scanning with 6-tier atomic checks cuts service time to under 30 seconds per student.\n4. WMS & FIFO Costing Engine: Automatically pulls oldest inventory batches and records movement ledgers for 100% transparent audit trails.\n\nTogether, these modules form an enterprise-grade platform specifically designed for campus logistics.\""
+    },
+    "slide7": {
+      "targetTime": "01:25 Mins",
+      "html": "<p class=\"mb-3\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">ARCHITECTURE DESIGN</span>\"On Slide 7, we present the 4-Phase Closed-Loop Architecture:\"</p><p class=\"mb-3\">\"<strong>Phase 1 (Inbound):</strong> Vendor shipments recorded in StockReceive with sequential FIFO batch IDs and landed cost entries.<br><strong>Phase 2 (Demand):</strong> Finance activates cleared students; students submit body measurements; Demand vs. Shortage calculus drives procurement.<br><strong>Phase 3 (Outbound):</strong> Booth scanning triggers 6-tier atomic validation under pessimistic database row locking (lockForUpdate).<br><strong>Phase 4 (Audit & Control):</strong> Periodic physical stock audits generate variance journals and real-time gross margin analytics.\"</p><p>\"This closed loop guarantees end-to-end data integrity from factory intake to student handoff.\"</p>",
+      "text": "SPEAKER PRESENTATION SCRIPT SLIDE 7 (Target: 01:25 Mins):\n\"On Slide 7, we present the 4-Phase Closed-Loop Architecture:\n\nPhase 1 (Inbound): Vendor shipments recorded in StockReceive with sequential FIFO batch IDs and landed cost entries.\nPhase 2 (Demand): Finance activates cleared students; students submit body measurements; Demand vs. Shortage calculus drives procurement.\nPhase 3 (Outbound): Booth scanning triggers 6-tier atomic validation under pessimistic database row locking (lockForUpdate).\nPhase 4 (Audit & Control): Periodic physical stock audits generate variance journals and real-time gross margin analytics.\n\nThis closed loop guarantees end-to-end data integrity from factory intake to student handoff.\""
+    },
+    "slide8": {
+      "targetTime": "01:15 Mins",
+      "html": "<p class=\"mb-3\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">IMPLEMENTATION & RISKS</span>\"Moving to Slide 8 on Implementation Priorities and Field Risk Mitigation.\"</p><p class=\"mb-3\">\"We structure deployment into 3 core priorities: Master Data setup in Weeks 1–2, Portal Integration in Weeks 3–4, and Staff Drills in Weeks 5–6.<br><br>For field contingency, we prepare 3 resilience protocols:<br>• <strong>Dead Student Phone:</strong> Instant fallback search by Student ID or Name.<br>• <strong>Size Stockout:</strong> Partial Pickup dispenses available items without voiding remaining balances.<br>• <strong>Network Latency:</strong> Pessimistic row locking ensures zero double deductions.\"</p><p>\"With these SOPs, the university maintains uninterrupted operations under peak pressure.\"</p>",
+      "text": "SPEAKER PRESENTATION SCRIPT SLIDE 8 (Target: 01:15 Mins):\n\"Moving to Slide 8 on Implementation Priorities and Field Risk Mitigation.\n\nWe structure deployment into 3 core priorities: Master Data setup in Weeks 1–2, Portal Integration in Weeks 3–4, and Staff Drills in Weeks 5–6.\n\nFor field contingency, we prepare 3 resilience protocols:\n• Dead Student Phone: Instant fallback search by Student ID or Name.\n• Size Stockout: Partial Pickup dispenses available items without voiding remaining balances.\n• Network Latency: Pessimistic row locking ensures zero double deductions.\n\nWith these SOPs, the university maintains uninterrupted operations under peak pressure.\""
+    },
+    "slide9": {
+      "targetTime": "00:55 Mins",
+      "html": "<p class=\"mb-3\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">CONCLUSION & SUMMARY</span>\"In conclusion on Slide 9, HorizonU Uniform delivers 3 strategic, measurable outcomes:\"</p><p class=\"mb-3\">\"1. <strong>Service Speed (< 30s):</strong> Turnaround times cut from 20 minutes to under 30 seconds, eliminating registration lines entirely.<br>2. <strong>Zero Dead-Stock:</strong> Accurate pre-enrollment demand matching eliminates trapped working capital.<br>3. <strong>100% Real-Time FIFO Valuation:</strong> Full ledger transparency and automated audit trails eliminate discrepancies.\"</p><p>\"HorizonU Uniform is ready to transform campus logistics into an efficient, professional, and audited enterprise ecosystem. Thank you.\"</p>",
+      "text": "SPEAKER PRESENTATION SCRIPT SLIDE 9 (Target: 00:55 Mins):\n\"In conclusion on Slide 9, HorizonU Uniform delivers 3 strategic, measurable outcomes:\n\n1. Service Speed (< 30s): Turnaround times cut from 20 minutes to under 30 seconds, eliminating registration lines entirely.\n2. Zero Dead-Stock: Accurate pre-enrollment demand matching eliminates trapped working capital.\n3. 100% Real-Time FIFO Valuation: Full ledger transparency and automated audit trails eliminate discrepancies.\n\nHorizonU Uniform is ready to transform campus logistics into an efficient, professional, and audited enterprise ecosystem. Thank you.\""
+    }
+  }
+};

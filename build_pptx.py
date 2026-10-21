@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
+import json
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
+
+# Load i18n locale strings as single source of truth
+LOCALE_PATH = os.path.join(os.path.dirname(__file__), "assets", "locales", "id.json")
+with open(LOCALE_PATH, "r", encoding="utf-8") as f:
+    I18N_DATA = json.load(f)
 
 prs = Presentation()
 prs.slide_width = Inches(13.333)
@@ -144,8 +150,11 @@ def add_banner(slide, label, desc):
     run.font.size = Pt(10.5)
     run.font.color.rgb = C_TEXT_DARK
 
-def set_notes(slide, notes):
-    slide.notes_slide.notes_text_frame.text = notes
+def set_notes(slide, slide_num):
+    key = f"slide{slide_num}"
+    script = I18N_DATA.get("speakerScripts", {}).get(key, {})
+    note_text = script.get("text", "")
+    slide.notes_slide.notes_text_frame.text = note_text
 
 # ==========================================
 # SLIDE 1: LANDING PAGE OPENING HERO
@@ -242,12 +251,7 @@ add_card(s1, 6.78, 3.85, 5.75, 2.95, "Tantangan Operasional Utama", "Hambatan Sp
     "Tebakan rasio order pengadaan pabrik memicu dead-stock ekstrem dan modal kampus mengendap."
 ], "Dampak: Modal Mengendap & Risiko Klaim Ganda", is_highlight=True)
 
-set_notes(s1, """NASKAH BACA PRESENTER SLIDE 1 (Target: 01:10 Menit):
-"Selamat pagi/siang Yang Terhormat Bapak/Ibu Dosen Penguji dan Dewan Juri Technospark. Kami dari Tim Nirwana, yang beranggotakan Fhazar, Ferry, Hildan, Fadel, Daffa, dan Acep. Hari ini kami mempresentasikan analisis dan solusi sistem informasi rantai pasok terpadu bertajuk: HorizonU Uniform.
-
-Studi kasus kami berfokus pada Departemen Keuangan Universitas Horizon Indonesia, yang bertanggung jawab atas pengadaan dan distribusi ribuan paket seragam kuliah, jas almamater, sepatu laboratorium, hingga perlengkapan medis mahasiswa baru setiap tahunnya.
-
-Sebelum HorizonU Uniform dibangun, pengelolaan dilakukan manual memakai spreadsheet Excel induk sebesar 4.5 Megabytes dengan belasan lembar kerja yang sering sekali mengalami lag dan crash. Di lapangan terjadi antrean panjang hingga 20 menit per mahasiswa, ketidakcocokan ukuran pakaian yang memicu penumpukan dead-stock, serta kerentanan klaim ganda. Mari kita lihat bagaimana rantai pasok ini bekerja." """)
+set_notes(s1, 1)
 
 # ==========================================
 # SLIDE 2: OUR TEAM (NIRWANA DEVELOPMENT TEAM)
@@ -361,17 +365,7 @@ for m in team_members:
     p_r.font.color.rgb = C_RED if m["is_pm"] else C_TEXT_DARK
     p_r.alignment = PP_ALIGN.CENTER
 
-set_notes(s2, """NASKAH BACA PRESENTER SLIDE 2 (Target: 00:45 Menit):
-"Pada Slide 2, izinkan kami memperkenalkan 6 anggota Tim Nirwana yang memiliki spesialisasi peran masing-masing dalam membangun HorizonU Uniform:
-
-1. Fhazar Raffiful Aqyla sebagai Project Manager, memimpin perumusan roadmap produk dan keselarasan strategi rantai pasok.
-2. Ferry Noer Hendriawan sebagai Frontend Developer, merancang tampilan antarmuka interaktif dan modul scanner posko.
-3. Hildan Anugrah Tamadi Putra sebagai Backend Developer, membangun logic Laravel 12, algoritma FIFO, dan concurrency lock.
-4. Fadel Rahmadhan sebagai Quality Assurance, menguji ketahanan sistem terhadap skenario double-claim dan stress test transaksi.
-5. Daffa Nazriel Zaidan sebagai UI/UX Designer, menyusun prototipe sistem desain Neo-Brutalism yang ergonomis bagi mahasiswa.
-6. Acep Ugan Saputra sebagai System Analyst, merancang pemodelan proses bisnis BPMN dan normalisasi basis data relasional.
-
-Dengan sinergi lintas peran inilah kami mentransformasi sistem rantai pasok seragam kampus secara utuh." """)
+set_notes(s2, 2)
 
 # ==========================================
 # SLIDE 3: SUPPLY CHAIN STRUCTURE
@@ -405,15 +399,7 @@ add_card(s3, 9.74, 1.55, 2.78, 5.25, "04 • Konsumen (Hilir)", "Mahasiswa (Cust
     "Titik Info: Menunjukkan tiket QR Code beresolusi tinggi (NIM murni) di loket."
 ], "Aliran: Profil ➔ Seragam Pas")
 
-set_notes(s3, """NASKAH BACA PRESENTER SLIDE 3 (Target: 01:15 Menit):
-"Masuk ke Slide 3 mengenai Struktur Rantai Pasok. Rantai pasok HorizonU Uniform menghubungkan empat entitas stakeholder secara closed-loop:
-
-Pertama, di sisi Hulu (Supplier), terdapat Pabrik Garmen dan Sepatu yang memproduksi barang sesuai Purchase Order agregat kampus.
-Kedua, Gudang Logistik Kampus, yang bertindak sebagai distributor internal untuk memeriksa fisik, mencatat penerimaan batch, dan memberi nomor urut FIFO.
-Ketiga, Departemen Keuangan dan Staf Posko, yang bertugas memvalidasi status kelayakan pelunasan biaya serta melayani serah terima barang di loket.
-Dan keempat, di sisi Hilir (Customer), adalah Mahasiswa yang memiliki kuota hak barang sesuai prodinya.
-
-Prinsip dasar yang kami tanamkan adalah: 'Data Mengunci Fisik'. Artinya, seragam fisik di meja loket pantang keluar sebelum sistem memindai QR Code mahasiswa dan memastikan hak kuota serta status pembayarannya sah." """)
+set_notes(s3, 3)
 
 # ==========================================
 # SLIDE 4: PROBLEM ANALYSIS
@@ -467,16 +453,7 @@ for r_i, (m, p_c, d) in enumerate(rows_s4):
         p.font.color.rgb = C_RED if c_i == 0 else C_TEXT_DARK
         if c_i == 0: p.font.bold = True
 
-set_notes(s4, """NASKAH BACA PRESENTER SLIDE 4 (Target: 01:30 Menit):
-"Pada Slide 4, kami membedah empat akar masalah utama melalui tabel hubungan Masalah, Penyebab, dan Dampak sistemik:
-
-Masalah Pertama: Ketidakcocokan ukuran dan penumpukan dead-stock. Penyebabnya adalah pemesanan ke vendor hanya berbasis estimasi historis tanpa survey ukuran mandiri mahasiswa. Dampaknya, ukuran favorit habis seketika, ukuran ekstrem menumpuk bertahun-tahun, dan dana kampus tertahan.
-
-Masalah Kedua: Ketergantungan pada lembar kerja Excel raksasa yang sering crash saat mengolah ribuan data maba, ditambah broadcast jadwal dikirim manual per surel. Dampaknya waktu kerja staf terbuang berminggu-minggu dan informasi jadwal terlambat diterima mahasiswa.
-
-Masalah Ketiga: Kemacetan parah di loket posko karena verifikasi lunas dan pencatatan dilakukan manual di atas kertas. Dampaknya antrean meliuk ratusan meter dengan waktu layan hingga 15-20 menit per orang, serta rawan klaim ganda.
-
-Masalah Keempat: Penyusutan stok tanpa jejak audit karena pencampuran barang antar-pembelian tanpa kaidah FIFO, sehingga nilai HPP dan laba kotor tidak dapat dihitung akurat." """)
+set_notes(s4, 4)
 
 # ==========================================
 # SLIDE 5: INFORMATION FLOW ANALYSIS
@@ -506,15 +483,7 @@ add_card(s5, 6.78, 4.25, 5.75, 2.55, "Aliran 04 • Pengadaan ➔ Pabrik", "Kebu
     "Titik Masalah: Purchase Order ke pabrik hanya estimasi kasar tanpa dasar profil data riil maba, memicu lead-time penukaran barang berbulan-bulan."
 ], "Kondisi: Informasi Tidak Akurat (Blind Ordering)")
 
-set_notes(s5, """NASKAH BACA PRESENTER SLIDE 5 (Target: 01:15 Menit):
-"Selanjutnya pada Slide 5, kami memetakan Analisis Aliran Informasi pada kondisi As-Is dan titik-titik kemacetannya:
-
-Pada Aliran 1 dari Mahasiswa ke Kampus, data ukuran diisi via formulir acak tanpa validasi SKU baku, sehingga rekapitulasi data terlambat dan penuh duplikasi.
-Pada Aliran 2 dari Keuangan ke Posko, data pelunasan terisolasi di laptop staf finance. Saat mahasiswa baru saja melunasi di bank pada hari-H, staf posko tidak mengetahuinya karena data belum tersinkronisasi.
-Pada Aliran 3 di meja posko, pencatatan serah terima memakai kertas checklist yang baru direkap malam hari, memicu celah barang hilang dan manipulasi.
-Dan pada Aliran 4 ke pabrik vendor, order produksi dibuat berdasar tebakan kasar sehingga waktu tunggu revisi ukuran memakan waktu berbulan-bulan.
-
-Kesimpulannya, terjadi silo data dan keterlambatan informasi akut yang melumpuhkan efisiensi." """)
+set_notes(s5, 5)
 
 # ==========================================
 # SLIDE 6: RECOMMENDED INFORMATION SYSTEMS
@@ -573,16 +542,7 @@ for r_i, (m, sys, fn, ben) in enumerate(rows_s6):
         p.font.color.rgb = C_RED if c_i == 0 else C_TEXT_DARK
         if c_i == 0: p.font.bold = True
 
-set_notes(s6, """NASKAH BACA PRESENTER SLIDE 6 (Target: 01:30 Menit):
-"Untuk mengatasi persoalan tersebut, pada Slide 6 kami merekomendasikan empat subsistem terpadu di dalam arsitektur HorizonU Uniform:
-
-1. ERP Master & Entitlement Engine: Berfungsi menggantikan Excel dengan basis data relasional MySQL InnoDB terstruktur, mengelola kuota hak per program studi, dan mengunci integritas transaksi. Manfaatnya: 100% bebas kendala Excel rusak.
-
-2. SCM Demand Planning Portal: Membuka portal mandiri bagi mahasiswa untuk mengisi ukuran baju dan sepatu sebelum produksi, serta menghitung kalkulasi demand vs shortage secara otomatis. Manfaatnya: Zero dead-stock dan pengadaan pabrik tepat sasaran.
-
-3. POS QR Verification Engine: Menghasilkan QR Code instan berbasis NIM dan mengeksekusi 6-Lapis Validasi otomatis melalui kamera webcam posko. Manfaatnya: Memangkas waktu layan menjadi di bawah 30 detik dan nol risiko klaim ganda.
-
-4. WMS & FIFO Inventory Costing Engine: Mengatur pemotongan mutasi dari batch pembelian tertua secara FIFO, rekonsiliasi stock opname fisik, serta perhitungan valuasi HPP dan margin laba secara presisi." """)
+set_notes(s6, 6)
 
 # ==========================================
 # SLIDE 7: PROPOSED SOLUTION DESIGN
@@ -616,18 +576,7 @@ add_card(s7, 9.74, 1.55, 2.78, 5.25, "Fase 4 • Kontrol (Audit)", "Opname & Clo
     "Generate analitik Gross Profit Margin (GPM) dan laporan sisa stok untuk pimpinan."
 ], "Output: Feedback Siklus Baru")
 
-set_notes(s7, """NASKAH BACA PRESENTER SLIDE 7 (Target: 01:25 Menit):
-"Pada Slide 7, kami tampilkan Desain Arsitektur Solusi yang bekerja dalam 4 Fase Tertutup (Closed-Loop Engine):
-
-Fase 1 (Inbound): Saat barang dari pabrik tiba, staf gudang mencatatnya pada modul StockReceive, menetapkan batch FIFO, dan mencatat unit HPP pembelian.
-
-Fase 2 (Planning): Departemen Keuangan mengaktifkan status lunas di Eligibility Record, mahasiswa mengisi profil ukuran di portal, dan sistem mengalokasikan paket hak barang.
-
-Fase 3 (Outbound): Di posko hari-H, staf memindai QR Code mahasiswa. Sistem mengeksekusi 6-lapis validasi menggunakan teknik pessimistic locking, memotong stok batch tertua, dan menyerahkan seragam.
-
-Fase 4 (Audit & Control): Stock opname fisik berkala menghitung selisih varians, dan sistem menerbitkan laporan Gross Profit Margin.
-
-Data sisa stok dan tren ukuran dari Fase 4 ini secara otomatis menjadi acuan belanja pengadaan Fase 1 pada semester berikutnya, menutup siklus rantai pasok secara sempurna." """)
+set_notes(s7, 7)
 
 # ==========================================
 # SLIDE 8: IMPLEMENTATION AND RISKS
@@ -649,15 +598,7 @@ add_card(s8, 4.78, 1.55, 7.75, 5.25, "3 Risiko Lapangan & Cara Mitigasi", "SOP K
     "RISIKO 3 (Jaringan Internet Kampus Lambat): Pessimistic Row Locking (lockForUpdate) dan idempotensi menjamin nol pemotongan ganda."
 ], "Toleransi Kesalahan: Resiliensi Operasional Tinggi", is_highlight=True)
 
-set_notes(s8, """NASKAH BACA PRESENTER SLIDE 8 (Target: 01:15 Menit):
-"Masuk ke Slide 8 mengenai Prioritas Implementasi dan Mitigasi Risiko Lapangan.
-
-Kami membagi tahapan implementasi menjadi 3 prioritas: Prioritas 1 adalah standarisasi master data dan SKU; Prioritas 2 adalah sinkronisasi status keuangan dan pembukaan portal ukuran; dan Prioritas 3 adalah pelatihan staf loket serta simulasi antrean posko.
-
-Kami juga telah merancang solusi atas 3 risiko darurat nyata di lapangan:
-Pertama, jika baterai HP mahasiswa mati atau tidak membawa QR, staf posko dapat menggunakan fitur fallback search manual via NIM.
-Kedua, jika stok ukuran di rak habis saat fitting, sistem mendukung fitur Partial Pickup di mana barang yang ada diserahkan tanpa menghanguskan sisa hak mahasiswa.
-Ketiga, jika koneksi internet kampus fluktuatif, database diproteksi oleh pessimistic row locking agar tidak terjadi pengurangan stok ganda." """)
+set_notes(s8, 8)
 
 # ==========================================
 # SLIDE 9: CONCLUSION AND BENEFITS
@@ -685,16 +626,7 @@ add_card(s9, 8.76, 1.55, 3.75, 5.25, "Manfaat 03 • Akuntabilitas Biaya", "100%
     "Laporan Harga Pokok Penjualan (HPP) dan Gross Profit Margin (GPM) tersedia secara transparan bagi pimpinan."
 ], "Dampak: Audit Trail Keuangan Bebas Selisih")
 
-set_notes(s9, """NASKAH BACA PRESENTER SLIDE 9 (Target: 00:55 Menit):
-"Sebagai penutup pada Slide 9, implementasi HorizonU Uniform menghadirkan 3 manfaat nyata dan terukur:
-
-1. Efisiensi Waktu: Waktu pelayanan posko berhasil dipangkas dari 15–20 menit menjadi di bawah 30 detik per mahasiswa.
-2. Akurasi Persediaan: Mewujudkan target Zero Dead-Stock karena pengadaan pabrik 100% selaras dengan ukuran tubuh riil mahasiswa.
-3. Akuntabilitas Biaya: Menghilangkan kerentanan crash Excel dengan sistem penilaian inventaris berbasis FIFO dan analitik Gross Profit Margin real-time.
-
-Statement akhir kami: Sistem Informasi bukan sekadar alat pencatat administrasi, melainkan saraf penggerak utama rantai pasok yang mengunci fisik barang dengan kepatuhan finansial, serta mengubah tebakan manual menjadi keputusan bisnis berakurasi tinggi.
-
-Sekian presentasi dari Tim Nirwana. Kami siap menerima pertanyaan dari Dewan Juri. Terima kasih." """)
+set_notes(s9, 9)
 
 prs.save("HorizonU_Uniform_SCM_Presentasi_Technospark.pptx")
 print("Clean executive 9-slide PPTX successfully created!")
