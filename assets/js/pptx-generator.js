@@ -1,65 +1,83 @@
 /**
- * HorizonU Uniform — Client-Side PPTX Generator
- * Generates an executive 16:9 PowerPoint presentation dynamically in the browser using PptxGenJS.
- * Data source: assets/locales/id.json via i18next & assets/js/images-data.js (base64).
+ * HorizonU Uniform — Client-Side PPTX Generator (Neo-Brutalism Edition)
+ * Generates an executive 16:9 PowerPoint presentation directly in the browser using PptxGenJS.
+ * Fully incorporates Neo-Brutalism styling:
+ * - 2pt Solid Slate-900 (#0F172A) borders
+ * - Hard offset drop shadows (shadow-neo)
+ * - Crimson Horizon (#980517) highlights & Red-50 tints
+ * - Amber badges, big metric numbers, and clean typography
+ * - English locale by default (window.I18N_EN_DATA)
  */
 
 (function (window) {
   'use strict';
 
-  const C_RED = '980517';
-  const C_RED_BG = 'FEF2F2';
-  const C_WHITE = 'FFFFFF';
-  const C_CARD_BG = 'F8FAFC';
-  const C_BORDER = 'E2E8F0';
-  const C_TEXT_DARK = '0F172A';
-  const C_TEXT_MUTED = '475569';
-  const FONT_TITLE = 'Arial';
-  const FONT_BODY = 'Calibri';
+  // Neo-Brutalism Color System
+  const C_RED        = '980517'; // Official Horizon Crimson
+  const C_RED_BG     = 'FEF2F2'; // Neo-red tint
+  const C_WHITE      = 'FFFFFF'; // Pure white canvas
+  const C_CARD_BG    = 'FBFBFA'; // Neo off-white card
+  const C_DARK       = '0F172A'; // Slate-900 border & text
+  const C_MUTED      = '475569'; // Slate-600 secondary text
+  const C_AMBER_BG   = 'FEF3C7'; // Amber-100 badge
+  const FONT_TITLE   = 'Arial';
+  const FONT_BODY    = 'Calibri';
 
-  function getActiveLang() {
-    if (window.i18next && i18next.language) return i18next.language;
-    const path = (window.location.pathname || '').toLowerCase();
-    const hash = (window.location.hash || '').toLowerCase();
-    if (path === '/en' || path.startsWith('/en/') || hash === '#en') return 'en';
-    return 'id';
+  const SHADOW_OFFSET    = 0.055; // 4px hard neo-shadow
+  const SHADOW_OFFSET_SM = 0.038; // 3px hard neo-shadow
+
+  function stripHtml(html) {
+    if (!html) return '';
+    return html
+      .replace(/<br\s*[\/]?>/gi, '\n')
+      .replace(/<[^>]*>?/gm, '')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .trim();
   }
 
-  function getI18nData() {
-    const lang = getActiveLang();
-    if (lang === 'en' && window.I18N_EN_DATA) return window.I18N_EN_DATA;
-    return window.I18N_ID_DATA || {};
+  // Always use English data for download as requested by user
+  function getEnglishData() {
+    return window.I18N_EN_DATA || window.I18N_ID_DATA || {};
   }
 
   function getSpeakerNote(slideNum) {
-    const data = getI18nData();
+    const data = getEnglishData();
     const s = data.speakerScripts && data.speakerScripts['slide' + slideNum];
     if (s && s.text) return s.text;
-    if (window.i18next && i18next.exists('speakerScripts.slide' + slideNum + '.text')) {
-      return i18next.t('speakerScripts.slide' + slideNum + '.text');
-    }
     return '';
   }
 
-  function applyHeader(slide, pptx, categoryTag, mainTitle, subtitle) {
-    // Pure white background
+  // Neo-Brutalist Slide Header
+  function applyHeader(slide, pptx, categoryTag, mainTitle, subtitle, rightBadgeText) {
     slide.background = { fill: C_WHITE };
 
-    // Left accent vertical line
+    // Left vertical accent bar with Neo shadow
+    slide.addShape(pptx.ShapeType.rect, {
+      x: 0.8 + SHADOW_OFFSET_SM,
+      y: 0.42 + SHADOW_OFFSET_SM,
+      w: 0.08,
+      h: 0.78,
+      fill: { color: C_DARK },
+      line: { color: C_DARK }
+    });
     slide.addShape(pptx.ShapeType.rect, {
       x: 0.8,
       y: 0.42,
-      w: 0.06,
+      w: 0.08,
       h: 0.78,
       fill: { color: C_RED },
-      line: { color: C_RED }
+      line: { color: C_DARK, width: 1.5 }
     });
 
-    // Category Tag
+    // Category Tag (Monospace/Bold)
     slide.addText(categoryTag.toUpperCase(), {
-      x: 0.95,
+      x: 1.02,
       y: 0.38,
-      w: 11.5,
+      w: 9.5,
       h: 0.24,
       fontFace: FONT_TITLE,
       fontSize: 9.5,
@@ -70,80 +88,168 @@
 
     // Main Title
     slide.addText(mainTitle, {
-      x: 0.95,
+      x: 1.02,
       y: 0.60,
-      w: 11.5,
+      w: 9.5,
       h: 0.42,
       fontFace: FONT_TITLE,
-      fontSize: 19,
+      fontSize: 18,
       bold: true,
-      color: C_TEXT_DARK,
+      color: C_DARK,
       margin: 0
     });
 
     // Subtitle
     slide.addText(subtitle, {
-      x: 0.95,
+      x: 1.02,
       y: 1.02,
-      w: 11.5,
+      w: 9.5,
       h: 0.28,
       fontFace: FONT_BODY,
       fontSize: 11,
-      color: C_TEXT_MUTED,
+      color: C_MUTED,
       margin: 0
     });
 
-    // Subtle divider line
+    // Optional Right Badge (e.g., 6 Core Engineers)
+    if (rightBadgeText) {
+      const bW = 1.9;
+      const bH = 0.38;
+      const bX = 12.533 - bW;
+      const bY = 0.58;
+
+      // Badge shadow
+      slide.addShape(pptx.ShapeType.roundRect, {
+        x: bX + SHADOW_OFFSET_SM,
+        y: bY + SHADOW_OFFSET_SM,
+        w: bW,
+        h: bH,
+        fill: { color: C_DARK },
+        line: { color: C_DARK },
+        rectRadius: 0.08
+      });
+      // Badge body
+      slide.addShape(pptx.ShapeType.roundRect, {
+        x: bX,
+        y: bY,
+        w: bW,
+        h: bH,
+        fill: { color: C_AMBER_BG },
+        line: { color: C_DARK, width: 1.5 },
+        rectRadius: 0.08
+      });
+      slide.addText(rightBadgeText, {
+        x: bX,
+        y: bY,
+        w: bW,
+        h: bH,
+        fontFace: FONT_TITLE,
+        fontSize: 9.5,
+        bold: true,
+        color: C_DARK,
+        align: 'center',
+        valign: 'middle',
+        margin: 0
+      });
+    }
+
+    // Neo-Brutalist 2pt bottom divider line
     slide.addShape(pptx.ShapeType.rect, {
       x: 0.8,
       y: 1.36,
       w: 11.733,
-      h: 0.015,
-      fill: { color: C_BORDER },
-      line: { color: C_BORDER }
+      h: 0.025,
+      fill: { color: C_DARK },
+      line: { color: C_DARK }
     });
   }
 
-  function addCard(slide, pptx, x, y, w, h, badge, title, bullets, note, isHighlight) {
-    // Background card shape
+  // Neo-Brutalist Card with solid offset shadow & bold 2pt border
+  function addNeoCard(slide, pptx, x, y, w, h, badge, title, bullets, footerText, isHighlight) {
+    // 1. Neo-Brutalist hard shadow backing shape
+    slide.addShape(pptx.ShapeType.roundRect, {
+      x: x + SHADOW_OFFSET,
+      y: y + SHADOW_OFFSET,
+      w: w,
+      h: h,
+      fill: { color: C_DARK },
+      line: { color: C_DARK },
+      rectRadius: 0.1
+    });
+
+    // 2. Main card body with bold 2pt dark border
     slide.addShape(pptx.ShapeType.roundRect, {
       x: x,
       y: y,
       w: w,
       h: h,
       fill: { color: isHighlight ? C_RED_BG : C_CARD_BG },
-      line: { color: isHighlight ? C_RED : C_BORDER, width: isHighlight ? 1.5 : 1 },
-      rectRadius: 0.08
+      line: { color: C_DARK, width: 2 },
+      rectRadius: 0.1
     });
 
-    // Formatted text runs
-    const textRuns = [
-      { text: badge.toUpperCase() + '\n', options: { fontFace: FONT_TITLE, fontSize: 9.5, bold: true, color: C_RED } },
-      { text: title + '\n\n', options: { fontFace: FONT_TITLE, fontSize: 12.5, bold: true, color: C_TEXT_DARK } }
-    ];
+    // 3. Card Content
+    const textRuns = [];
 
-    bullets.forEach((b, idx) => {
+    if (badge) {
       textRuns.push({
-        text: '•  ' + b + (idx < bullets.length - 1 ? '\n\n' : '\n'),
-        options: { fontFace: FONT_BODY, fontSize: 10.5, color: C_TEXT_DARK }
-      });
-    });
-
-    if (note) {
-      textRuns.push({
-        text: '\n➔  ' + note,
-        options: { fontFace: FONT_BODY, fontSize: 10, bold: true, color: C_RED }
+        text: badge.toUpperCase() + '\n',
+        options: { fontFace: FONT_TITLE, fontSize: 9.5, bold: true, color: C_RED }
       });
     }
 
+    if (title) {
+      textRuns.push({
+        text: title + '\n\n',
+        options: { fontFace: FONT_TITLE, fontSize: 12.5, bold: true, color: C_DARK }
+      });
+    }
+
+    if (bullets && bullets.length > 0) {
+      bullets.forEach((b, idx) => {
+        textRuns.push({
+          text: (b.startsWith('•') ? b : '•  ' + b) + (idx < bullets.length - 1 ? '\n\n' : '\n'),
+          options: { fontFace: FONT_BODY, fontSize: 10, color: C_DARK }
+        });
+      });
+    }
+
+    // Calculate footer separation
+    const contentH = footerText ? h - 0.72 : h - 0.36;
+
     slide.addText(textRuns, {
-      x: x + 0.2,
+      x: x + 0.22,
       y: y + 0.18,
-      w: w - 0.4,
-      h: h - 0.36,
+      w: w - 0.44,
+      h: contentH,
       valign: 'top',
       margin: 0
     });
+
+    // 4. Card Bottom Footer Banner (if provided)
+    if (footerText) {
+      const footerY = y + h - 0.52;
+      slide.addShape(pptx.ShapeType.rect, {
+        x: x + 0.2,
+        y: footerY,
+        w: w - 0.4,
+        h: 0.015,
+        fill: { color: isHighlight ? C_RED : 'CBD5E1' },
+        line: { color: isHighlight ? C_RED : 'CBD5E1' }
+      });
+      slide.addText(footerText, {
+        x: x + 0.22,
+        y: footerY + 0.06,
+        w: w - 0.44,
+        h: 0.38,
+        fontFace: FONT_TITLE,
+        fontSize: 9.5,
+        bold: true,
+        color: isHighlight ? C_RED : C_DARK,
+        valign: 'middle',
+        margin: 0
+      });
+    }
   }
 
   async function generateAndDownloadPptx() {
@@ -152,13 +258,13 @@
 
     try {
       if (typeof PptxGenJS === 'undefined') {
-        alert('Library PptxGenJS sedang dimuat atau CDN tidak tersedia. Mohon periksa koneksi internet Anda.');
+        alert('PptxGenJS library is still loading or CDN unavailable. Please check your internet connection.');
         return;
       }
 
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span class="hidden sm:inline">Membuat PPTX...</span>';
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span class="hidden sm:inline">Generating PPTX...</span>';
       }
 
       const pptx = new PptxGenJS();
@@ -166,7 +272,7 @@
       pptx.layout = 'HORIZON_WIDE_16_9';
 
       const images = window.PPTX_IMAGES || {};
-      const data = getI18nData();
+      const data = getEnglishData();
 
       // ==========================================
       // SLIDE 1: LANDING PAGE OPENING HERO
@@ -174,45 +280,43 @@
       const s1 = pptx.addSlide();
       s1.background = { fill: C_WHITE };
 
-      // Logo Horizon
+      // Top Header Bar
       if (images.logo) {
-        s1.addImage({ data: images.logo, x: 0.8, y: 0.36, w: 0.42, h: 0.42 });
+        s1.addImage({ data: images.logo, x: 0.8, y: 0.34, w: 0.44, h: 0.44 });
       }
 
-      // Header Department Label
-      s1.addText('DEPARTEMEN KEUANGAN • UNIVERSITAS HORIZON INDONESIA', {
-        x: 1.32,
-        y: 0.44,
+      s1.addText((data.slide1?.headerDept || 'Finance Department • Horizon University Indonesia').toUpperCase(), {
+        x: 1.34,
+        y: 0.42,
         w: 8.0,
         h: 0.35,
         fontFace: FONT_BODY,
         fontSize: 9.5,
         bold: true,
-        color: '64748B',
+        color: C_MUTED,
         margin: 0
       });
 
-      // Technospark Header Logo
       if (images.technospark) {
         s1.addImage({ data: images.technospark, x: 10.65, y: 0.24, w: 1.88, h: 0.52 });
       }
 
-      // Header divider
+      // 2pt Neo-Brutalist Header Divider
       s1.addShape(pptx.ShapeType.rect, {
         x: 0.8,
         y: 0.88,
         w: 11.733,
-        h: 0.02,
-        fill: { color: C_BORDER },
-        line: { color: C_BORDER }
+        h: 0.025,
+        fill: { color: C_DARK },
+        line: { color: C_DARK }
       });
 
-      // Hero banner text
+      // Hero Title Banner
       s1.addText([
-        { text: 'SOLUSI RANTAI PASOK LOGISTIK KAMPUS TERINTEGRASI\n', options: { fontFace: FONT_TITLE, fontSize: 11, bold: true, color: C_RED } },
-        { text: 'HORIZONU ', options: { fontFace: FONT_TITLE, fontSize: 36, bold: true, color: C_TEXT_DARK } },
+        { text: (data.slide1?.eyebrow || 'INTEGRATED CAMPUS LOGISTICS SUPPLY CHAIN SOLUTION').toUpperCase() + '\n', options: { fontFace: FONT_TITLE, fontSize: 11, bold: true, color: C_RED } },
+        { text: 'HORIZONU ', options: { fontFace: FONT_TITLE, fontSize: 36, bold: true, color: C_DARK } },
         { text: 'UNIFORM\n\n', options: { fontFace: FONT_TITLE, fontSize: 36, bold: true, color: C_RED, underline: true } },
-        { text: 'Transformasi digital operasional seragam mahasiswa: Menghubungkan Hulu (Vendor Pabrik), Gudang Kampus, dan Bagian Keuangan hingga Hilir (Mahasiswa) berbasis data presisi dan aturan inventaris FIFO.', options: { fontFace: FONT_BODY, fontSize: 12, color: '4B5563' } }
+        { text: data.slide1?.desc || 'Digital transformation of student uniform operations: Connecting Upstream (Apparel Vendor), Campus Warehouse, and Finance to Downstream (Students) powered by precision data and FIFO inventory rules.', options: { fontFace: FONT_BODY, fontSize: 12, color: '334155' } }
       ], {
         x: 0.8,
         y: 1.15,
@@ -222,17 +326,29 @@
         margin: 0
       });
 
-      // 2 Bento Cards
-      addCard(s1, pptx, 0.8, 3.85, 5.75, 2.95, 'Objek & Komoditas Logistik', 'Pengadaan Perlengkapan Kampus', [
-        'Pengadaan dan penyaluran tahunan ribuan paket perlengkapan mahasiswa baru: Jas Almamater, Kemeja Putih, Celana/Rok Bahan, Sepatu Lab & Dinas, serta Medical Kit.',
-        'Penyaluran langsung secara terpusat tanpa perantara ritel komersial (Direct Campus SCM).'
-      ], 'Model: Closed-Loop Campus SCM', false);
+      // 2 Bento Cards with Neo-Brutalist Shadow & 2pt Border
+      addNeoCard(s1, pptx, 0.8, 3.85, 5.75, 2.95,
+        data.slide1?.box1?.title || 'Logistics Commodity & Scope',
+        'Campus Equipment Procurement',
+        [
+          stripHtml(data.slide1?.box1?.desc || 'Annual procurement and distribution of thousands of freshman packages: Alma Mater Blazers, White Shirts, Formal Trousers/Skirts, Lab & Clinical Shoes, and Medical Kits.'),
+          'Direct campus distribution without commercial retail intermediaries (Direct Campus SCM).'
+        ],
+        'Model: Closed-Loop Campus SCM',
+        false
+      );
 
-      addCard(s1, pptx, 6.78, 3.85, 5.75, 2.95, 'Tantangan Operasional Utama', 'Hambatan Spreadsheet & Posko', [
-        'Spreadsheet Excel Induk 4.5 MB rawan crash dan lag saat ribuan mahasiswa mendaftar serentak.',
-        'Waktu antrean posko fisik lambat (15–20 menit per mahasiswa) akibat verifikasi berkas manual.',
-        'Tebakan rasio order pengadaan pabrik memicu dead-stock ekstrem dan modal kampus mengendap.'
-      ], 'Dampak: Modal Mengendap & Risiko Klaim Ganda', true);
+      addNeoCard(s1, pptx, 6.78, 3.85, 5.75, 2.95,
+        data.slide1?.box2?.title || 'Core Operational Challenges',
+        'Spreadsheet & Queue Obstacles',
+        [
+          stripHtml(data.slide1?.box2?.desc || '4.5 MB master Excel spreadsheet prone to crashing during peak enrollment.'),
+          'Slow physical queue turnaround times (15–20 minutes per student) due to manual paper verification.',
+          'Heuristic vendor procurement ratios causing massive dead-stock and trapped campus working capital.'
+        ],
+        'Impact: Stagnant Capital & Double-Claim Vulnerability',
+        true
+      );
 
       s1.addNotes(getSpeakerNote(1));
 
@@ -240,15 +356,20 @@
       // SLIDE 2: OUR TEAM (NIRWANA DEVELOPMENT TEAM)
       // ==========================================
       const s2 = pptx.addSlide();
-      applyHeader(s2, pptx, 'Profil Tim Pengembang', 'Our Team • Nirwana Development Team', 'Kolaborasi lintas disiplin dalam perancangan arsitektur, rekayasa kode, dan tata kelola platform HorizonU Uniform');
+      applyHeader(s2, pptx,
+        data.slide2?.badge || 'Development Team Profile',
+        data.slide2?.title || 'Our Team • Nirwana Development Team',
+        data.slide2?.subtitle || 'Cross-disciplinary collaboration across system architecture, software engineering, and platform governance',
+        data.slide2?.badgeCount || '6 Core Engineers'
+      );
 
       const team = [
-        { id: 'ferry', name: 'Ferry Noer Hendriawan', role: 'Frontend Developer', col: 0, row: 0, isPm: false },
-        { id: 'fhazar', name: 'Fhazar Raffiful Aqyla', role: 'Project Manager', col: 1, row: 0, isPm: true },
-        { id: 'hildan', name: 'Hildan Anugrah Tamadi Putra', role: 'Backend Developer', col: 2, row: 0, isPm: false },
-        { id: 'fadel', name: 'Fadel Rahmadhan', role: 'Quality Assurance', col: 0, row: 1, isPm: false },
-        { id: 'daffa', name: 'Daffa Nazriel Zaidan', role: 'UI/UX Designer', col: 1, row: 1, isPm: false },
-        { id: 'acep', name: 'Acep Ugan Saputra', role: 'System Analyst', col: 2, row: 1, isPm: false }
+        { id: 'ferry', name: 'Ferry Noer Hendriawan', role: data.slide2?.members?.ferry?.role || 'Frontend Developer', col: 0, row: 0, isPm: false },
+        { id: 'fhazar', name: 'Fhazar Raffiful Aqyla', role: data.slide2?.members?.fhazar?.role || 'Project Manager', col: 1, row: 0, isPm: true },
+        { id: 'hildan', name: 'Hildan Anugrah Tamadi Putra', role: data.slide2?.members?.hildan?.role || 'Backend Developer', col: 2, row: 0, isPm: false },
+        { id: 'fadel', name: 'Fadel Rahmadhan', role: data.slide2?.members?.fadel?.role || 'Quality Assurance', col: 0, row: 1, isPm: false },
+        { id: 'daffa', name: 'Daffa Nazriel Zaidan', role: data.slide2?.members?.daffa?.role || 'UI/UX Designer', col: 1, row: 1, isPm: false },
+        { id: 'acep', name: 'Acep Ugan Saputra', role: data.slide2?.members?.acep?.role || 'System Analyst', col: 2, row: 1, isPm: false }
       ];
 
       const colX = [0.8, 4.78, 8.76];
@@ -260,42 +381,91 @@
         const x = colX[m.col];
         const y = rowY[m.row];
 
-        // Card bg
+        // 1. Neo-Brutalism card shadow
         s2.addShape(pptx.ShapeType.roundRect, {
-          x, y, w: cardW, h: cardH,
-          fill: { color: m.isPm ? C_RED_BG : C_CARD_BG },
-          line: { color: m.isPm ? C_RED : C_BORDER, width: 1.5 },
-          rectRadius: 0.08
+          x: x + SHADOW_OFFSET,
+          y: y + SHADOW_OFFSET,
+          w: cardW,
+          h: cardH,
+          fill: { color: C_DARK },
+          line: { color: C_DARK },
+          rectRadius: 0.1
         });
 
-        // Photo
+        // 2. Card body with 2pt border
+        s2.addShape(pptx.ShapeType.roundRect, {
+          x: x,
+          y: y,
+          w: cardW,
+          h: cardH,
+          fill: { color: m.isPm ? C_RED_BG : C_CARD_BG },
+          line: { color: C_DARK, width: 2 },
+          rectRadius: 0.1
+        });
+
+        // 3. Avatar photo with Neo circular shadow & border
+        const picSize = 1.05;
+        const picX = x + (cardW - picSize) / 2;
+        const picY = y + 0.15;
+
+        s2.addShape(pptx.ShapeType.oval, {
+          x: picX + SHADOW_OFFSET_SM,
+          y: picY + SHADOW_OFFSET_SM,
+          w: picSize,
+          h: picSize,
+          fill: { color: C_DARK },
+          line: { color: C_DARK }
+        });
+
         if (images[m.id]) {
           s2.addImage({
             data: images[m.id],
-            x: x + (cardW - 1.05) / 2,
-            y: y + 0.15,
-            w: 1.05,
-            h: 1.05,
+            x: picX,
+            y: picY,
+            w: picSize,
+            h: picSize,
             round: true
           });
         }
 
-        // Name pill
+        s2.addShape(pptx.ShapeType.oval, {
+          x: picX,
+          y: picY,
+          w: picSize,
+          h: picSize,
+          fill: { type: 'none' },
+          line: { color: C_DARK, width: 2 }
+        });
+
+        // 4. Name Pill with Neo shadow
         const pillW = 3.2;
         const pillH = 0.32;
+        const pillX = x + (cardW - pillW) / 2;
+        const pillY = y + 1.28;
+
         s2.addShape(pptx.ShapeType.roundRect, {
-          x: x + (cardW - pillW) / 2,
-          y: y + 1.28,
+          x: pillX + SHADOW_OFFSET_SM,
+          y: pillY + SHADOW_OFFSET_SM,
+          w: pillW,
+          h: pillH,
+          fill: { color: C_DARK },
+          line: { color: C_DARK },
+          rectRadius: 0.15
+        });
+
+        s2.addShape(pptx.ShapeType.roundRect, {
+          x: pillX,
+          y: pillY,
           w: pillW,
           h: pillH,
           fill: { color: C_RED },
-          line: { color: C_BORDER, width: 1 },
+          line: { color: C_DARK, width: 1.5 },
           rectRadius: 0.15
         });
 
         s2.addText(m.name.toUpperCase(), {
-          x: x + (cardW - pillW) / 2,
-          y: y + 1.28,
+          x: pillX,
+          y: pillY,
           w: pillW,
           h: pillH,
           fontFace: FONT_TITLE,
@@ -307,7 +477,7 @@
           margin: 0
         });
 
-        // Role
+        // 5. Role
         s2.addText(m.role, {
           x: x + 0.1,
           y: y + 1.68,
@@ -316,7 +486,7 @@
           fontFace: FONT_TITLE,
           fontSize: 11,
           bold: true,
-          color: m.isPm ? C_RED : C_TEXT_DARK,
+          color: m.isPm ? C_RED : C_DARK,
           align: 'center',
           valign: 'top',
           margin: 0
@@ -329,76 +499,129 @@
       // SLIDE 3: SUPPLY CHAIN STRUCTURE
       // ==========================================
       const s3 = pptx.addSlide();
-      applyHeader(s3, pptx, 'Struktur Rantai Pasok', 'Pemetaan Stakeholder & Aliran Fisik Barang', "Aliran terpadu dari pabrik vendor hingga serah terima mahasiswa dengan prinsip 'Data Mengunci Fisik'");
+      applyHeader(s3, pptx,
+        data.slide3?.badge || 'Supply Chain Structure',
+        data.slide3?.title || 'Stakeholder Mapping & Physical Cargo Flow',
+        data.slide3?.subtitle || "Integrated physical flow from garment vendor to student handoff under the 'Data Locks Physical Asset' doctrine"
+      );
 
-      addCard(s3, pptx, 0.8, 1.55, 2.78, 5.25, '01 • Supplier (Hulu)', 'Pabrik Garmen & Sepatu', [
-        'Memproduksi paket seragam dan sepatu sesuai pesanan pengadaan kampus (PO).',
-        'Menerapkan standarisasi kode SKU per kategori dan ukuran.',
-        'Titik Barang: Pengiriman kontainer stok ke gudang kampus (Inbound Logistics).'
-      ], 'Aliran: PO Agregat ➔ Fisik Masuk', false);
+      const c1 = data.slide3?.col1 || {};
+      const c2 = data.slide3?.col2 || {};
+      const c3 = data.slide3?.col3 || {};
+      const c4 = data.slide3?.col4 || {};
 
-      addCard(s3, pptx, 3.78, 1.55, 2.78, 5.25, '02 • Gudang (Inbound)', 'Gudang Logistik Kampus', [
-        'Penerimaan fisik barang (StockReceive) dan pemeriksaan mutu (QC).',
-        'Pencatatan batch urutan FIFO (First-In, First-Out) dan penetapan harga beli unit.',
-        'Titik Barang: Transfer stok batch tertua menuju posko distribusi loket.'
-      ], 'Aliran: Inbound ➔ POS Loket', false);
+      addNeoCard(s3, pptx, 0.8, 1.55, 2.78, 5.25,
+        c1.step || '01 • Supplier (Upstream)',
+        c1.title || 'Garment & Shoe Factories',
+        [
+          stripHtml(c1.p1 || 'Produces uniform packages based on aggregate purchase orders (PO).'),
+          stripHtml(c1.p2 || 'Enforces strict 5-segment SKU coding standards per category and size.'),
+          stripHtml(c1.p3 || 'Cargo Point: Inbound container shipments delivered to campus warehouse.')
+        ],
+        c1.flow || 'Flow: Aggregate PO ➔ Inbound Freight',
+        false
+      );
 
-      addCard(s3, pptx, 6.76, 1.55, 2.78, 5.25, '03 • Verifikator & Loket', 'Staf Keuangan & Posko', [
-        'Keuangan: Otorisasi status pelunasan biaya kuliah mahasiswa (Eligibility).',
-        'Staf Posko: Melayani meja pembagian fisik seragam di posko kampus.',
-        'Titik Kritis: Validasi identitas QR Code dan pencocokan ukuran saat proses fitting.'
-      ], 'Aliran: Data Lunas ➔ Serah Fisik', true);
+      addNeoCard(s3, pptx, 3.78, 1.55, 2.78, 5.25,
+        c2.step || '02 • Warehouse (Inbound)',
+        c2.title || 'Campus Logistics Warehouse',
+        [
+          stripHtml(c2.p1 || 'Physical cargo receiving (StockReceive) and quality control (QC).'),
+          stripHtml(c2.p2 || 'Strict FIFO (First-In, First-Out) batch recording and landed unit cost assignment.'),
+          stripHtml(c2.p3 || 'Cargo Point: Outbound transfer of oldest batches to distribution booths.')
+        ],
+        c2.flow || 'Flow: Inbound ➔ POS Distribution Booths',
+        false
+      );
 
-      addCard(s3, pptx, 9.74, 1.55, 2.78, 5.25, '04 • Konsumen (Hilir)', 'Mahasiswa (Customer)', [
-        'Konsumen akhir yang memiliki hak jatah barang (Entitlement) sesuai prodi.',
-        'Mengisi profil ukuran mandiri di web dan menerima tiket jadwal pembagian.',
-        'Titik Info: Menunjukkan tiket QR Code beresolusi tinggi (NIM murni) di loket.'
-      ], 'Aliran: Profil ➔ Seragam Pas', false);
+      addNeoCard(s3, pptx, 6.76, 1.55, 2.78, 5.25,
+        c3.step || '03 • Verifiers & Booths',
+        c3.title || 'Finance & On-Site Booth Staff',
+        [
+          stripHtml(c3.p1 || 'Finance: Authorizes student tuition payment status (Eligibility verification).'),
+          stripHtml(c3.p2 || 'Booth Staff: Serves physical garment distribution at campus pickup booths.'),
+          stripHtml(c3.p3 || 'Critical Point: QR Code identity scanning and size fitting validation.')
+        ],
+        c3.flow || 'Flow: Paid Status ➔ Physical Handover',
+        true
+      );
+
+      addNeoCard(s3, pptx, 9.74, 1.55, 2.78, 5.25,
+        c4.step || '04 • Consumer (Downstream)',
+        c4.title || 'Freshman Students (Customers)',
+        [
+          stripHtml(c4.p1 || 'End consumers with official package entitlements per study program.'),
+          stripHtml(c4.p2 || 'Submits body size profiles via student portal and receives assigned schedule tickets.'),
+          stripHtml(c4.p3 || 'Info Point: Presents high-resolution QR Code ticket at pickup booth.')
+        ],
+        c4.flow || 'Flow: Size Profile ➔ Tailored Uniform Package',
+        false
+      );
 
       s3.addNotes(getSpeakerNote(3));
 
       // ==========================================
-      // SLIDE 4: PROBLEM ANALYSIS
+      // SLIDE 4: PROBLEM ANALYSIS (NEO TABLE)
       // ==========================================
       const s4 = pptx.addSlide();
-      applyHeader(s4, pptx, 'Analisis Masalah Sistem Lama', 'Evaluasi Kendala Operasional & Dampak Sistemik', 'Analisis akar masalah pengelolaan manual terhadap pembengkakan biaya, waktu kerja, dan penurunan mutu layanan');
+      applyHeader(s4, pptx,
+        data.slide4?.badge || 'Legacy System Problem Analysis',
+        data.slide4?.title || 'Operational Bottlenecks & Systemic Impact Evaluation',
+        data.slide4?.subtitle || 'Comprehensive root cause analysis of manual spreadsheets causing cost overruns, delays, and service degradation'
+      );
 
       const s4Headers = [
-        { text: 'Masalah Utama (Gejala Lapangan)', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10.5, fontFace: FONT_TITLE } },
-        { text: 'Akar Penyebab Masalah (Root Cause)', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10.5, fontFace: FONT_TITLE } },
-        { text: 'Dampak terhadap Biaya, Waktu, Stok & Layanan', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10.5, fontFace: FONT_TITLE } }
+        { text: data.slide4?.thProblem || 'Primary Problem (Field Symptom)', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10.5, fontFace: FONT_TITLE } },
+        { text: data.slide4?.thCause || 'Root Cause', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10.5, fontFace: FONT_TITLE } },
+        { text: data.slide4?.thImpact || 'Impact on Cost, Time, Inventory & Service', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10.5, fontFace: FONT_TITLE } }
       ];
+
+      const s4r1 = data.slide4?.row1 || {};
+      const s4r2 = data.slide4?.row2 || {};
+      const s4r3 = data.slide4?.row3 || {};
+      const s4r4 = data.slide4?.row4 || {};
 
       const s4Rows = [
         s4Headers,
         [
-          { text: '1. Ketidakcocokan Ukuran & Penumpukan Dead-Stock', options: { color: C_RED, bold: true, fontSize: 10, fill: { color: C_CARD_BG } } },
-          { text: 'Pemesanan pengadaan ke vendor pabrik hanya menggunakan tebakan rasio historis. Tidak ada sistem survey profil ukuran mandiri sebelum tender dibuka.', options: { color: C_TEXT_DARK, fontSize: 10, fill: { color: C_CARD_BG } } },
-          { text: 'Dampak Stok & Biaya: Ukuran favorit (M/L) habis pada hari pertama pembagian, ukuran ekstrem (XS, 3XL) menumpuk bertahun-tahun. Modal kampus mengendap menjadi dead-stock.', options: { color: C_TEXT_DARK, fontSize: 10, fill: { color: C_CARD_BG } } }
+          { text: s4r1.problem || '1. Size Mismatches & Dead-Stock Accumulation', options: { color: C_RED, bold: true, fontSize: 10, fill: { color: C_CARD_BG } } },
+          { text: s4r1.cause || 'Factory procurement orders based purely on historical heuristic ratios.', options: { color: C_DARK, fontSize: 10, fill: { color: C_CARD_BG } } },
+          { text: stripHtml(s4r1.impact || 'Inventory & Cost Impact: Popular sizes ran out while extreme sizes accumulated as dead-stock.'), options: { color: C_DARK, fontSize: 10, fill: { color: C_CARD_BG } } }
         ],
         [
-          { text: '2. File Excel Sering Crash & Pengumuman Lambat', options: { color: C_RED, bold: true, fontSize: 10, fill: { color: C_RED_BG } } },
-          { text: 'Departemen Keuangan memakai satu file spreadsheet raksasa (~4.5 MB, 19 sheet) untuk ribuan data mahasiswa. Pengiriman jadwal disebarkan manual via surel.', options: { color: C_TEXT_DARK, fontSize: 10, fill: { color: C_RED_BG } } },
-          { text: 'Dampak Waktu & Layanan: Aplikasi sering not responding atau data korup. Rekapitulasi memakan waktu berminggu-minggu dan info jadwal terlambat diterima mahasiswa.', options: { color: C_TEXT_DARK, fontSize: 10, fill: { color: C_RED_BG } } }
+          { text: s4r2.problem || '2. Excel Crashes & Delayed Schedule Broadcasts', options: { color: C_RED, bold: true, fontSize: 10, fill: { color: C_RED_BG } } },
+          { text: s4r2.cause || 'Finance managed a massive spreadsheet file (~4.5 MB, 19 sheets) for thousands of students.', options: { color: C_DARK, fontSize: 10, fill: { color: C_RED_BG } } },
+          { text: stripHtml(s4r2.impact || 'Time & Service Impact: Constant software freezes and delayed schedules.'), options: { color: C_DARK, fontSize: 10, fill: { color: C_RED_BG } } }
         ],
         [
-          { text: '3. Bottleneck Loket Posko & Risiko Double-Claim', options: { color: C_RED, bold: true, fontSize: 10, fill: { color: C_CARD_BG } } },
-          { text: 'Pengecekan lunas, pencocokan hak prodi, dan paraf bukti serah terima dilakukan manual dengan mencentang map formulir kertas fisik.', options: { color: C_TEXT_DARK, fontSize: 10, fill: { color: C_CARD_BG } } },
-          { text: 'Dampak Waktu & Akurasi: Waktu pelayanan lambat (15–20 menit per orang), antrean ratusan meter, serta rawan klaim ganda (double-claim) di loket atau hari berbeda.', options: { color: C_TEXT_DARK, fontSize: 10, fill: { color: C_CARD_BG } } }
+          { text: s4r3.problem || '3. Booth Queue Bottlenecks & Double-Claim Exposure', options: { color: C_RED, bold: true, fontSize: 10, fill: { color: C_CARD_BG } } },
+          { text: s4r3.cause || 'Verification and handover confirmations were handled manually by paper checklist tick marks.', options: { color: C_DARK, fontSize: 10, fill: { color: C_CARD_BG } } },
+          { text: stripHtml(s4r3.impact || 'Time & Accuracy Impact: Service times lagged at 15–20 minutes with high double-claim exposure.'), options: { color: C_DARK, fontSize: 10, fill: { color: C_CARD_BG } } }
         ],
         [
-          { text: '4. Susut Stok Liar & Valuasi HPP Buram', options: { color: C_RED, bold: true, fontSize: 10, fill: { color: C_RED_BG } } },
-          { text: 'Penerimaan seragam dari vendor dengan harga berbeda tidak dicatat per batch FIFO dan tanpa kartu mutasi stok otomatis yang terikat ke transaksi loket.', options: { color: C_TEXT_DARK, fontSize: 10, fill: { color: C_RED_BG } } },
-          { text: 'Dampak Biaya & Akuntansi: Selisih barang susut (shrinkage) tidak terlacak penanggungjawabnya. Valuasi HPP dan analisis Gross Profit Margin (GPM) terdistorsi.', options: { color: C_TEXT_DARK, fontSize: 10, fill: { color: C_RED_BG } } }
+          { text: s4r4.problem || '4. Shrinkage & Opaque COGS / FIFO Valuation', options: { color: C_RED, bold: true, fontSize: 10, fill: { color: C_RED_BG } } },
+          { text: s4r4.cause || 'Uniform receipts from vendors were not tracked via FIFO queues or automated ledger entries.', options: { color: C_DARK, fontSize: 10, fill: { color: C_RED_BG } } },
+          { text: stripHtml(s4r4.impact || 'Cost & Audit Impact: Unaccounted inventory shrinkage and distorted COGS/GPM calculations.'), options: { color: C_DARK, fontSize: 10, fill: { color: C_RED_BG } } }
         ]
       ];
+
+      // Table Neo shadow backing
+      s4.addShape(pptx.ShapeType.roundRect, {
+        x: 0.8 + SHADOW_OFFSET,
+        y: 1.55 + SHADOW_OFFSET,
+        w: 11.733,
+        h: 5.25,
+        fill: { color: C_DARK },
+        line: { color: C_DARK },
+        rectRadius: 0.08
+      });
 
       s4.addTable(s4Rows, {
         x: 0.8,
         y: 1.55,
         w: 11.733,
         colW: [3.2, 4.2, 4.333],
-        border: { color: C_BORDER, pt: 1 }
+        border: { color: C_DARK, pt: 1.5 }
       });
 
       s4.addNotes(getSpeakerNote(4));
@@ -407,77 +630,130 @@
       // SLIDE 5: INFORMATION FLOW ANALYSIS
       // ==========================================
       const s5 = pptx.addSlide();
-      applyHeader(s5, pptx, 'Analisis Aliran Informasi', 'Titik Kemacetan & Isolasi Data (As-Is State)', 'Hambatan komunikasi antarbagian yang memicu keterlambatan, inkonsistensi data, dan pembatalan layanan');
+      applyHeader(s5, pptx,
+        data.slide5?.badge || 'Information Flow Analysis',
+        data.slide5?.title || 'Data Bottlenecks & Information Silos (As-Is State)',
+        data.slide5?.subtitle || 'Inter-departmental communication barriers triggering service delays, data inconsistencies, and transaction friction'
+      );
 
-      addCard(s5, pptx, 0.8, 1.55, 5.75, 2.55, 'Aliran 01 • Mahasiswa ➔ Kampus', 'Kebutuhan: Profil Ukuran & Jadwal', [
-        'Asal & Tujuan: Mahasiswa mengisi form ke kampus dan menerima jadwal pembagian via email.',
-        'Titik Masalah: Google Form terpisah tanpa validasi SKU baku, memicu input ganda dan rekapitulasi data staf terlambat berminggu-minggu.'
-      ], 'Kondisi: Informasi Terlambat & Format Liar', false);
+      const f1 = data.slide5?.card1 || {};
+      const f2 = data.slide5?.card2 || {};
+      const f3 = data.slide5?.card3 || {};
+      const f4 = data.slide5?.card4 || {};
 
-      addCard(s5, pptx, 6.78, 1.55, 5.75, 2.55, 'Aliran 02 • Keuangan ➔ Posko Hari-H', 'Kebutuhan: Status Lunas (Eligibility)', [
-        'Asal & Tujuan: Staf Keuangan mengekspor data lunas ke staf meja posko pembagian seragam.',
-        'Titik Masalah: Data terisolasi di file Excel lokal staf. Saat ada pelunasan baru di bank pada hari-H, staf posko tidak terupdate sehingga maba tertolak.'
-      ], 'Kondisi: Informasi Terputus (Silo Data Lokal)', true);
+      addNeoCard(s5, pptx, 0.8, 1.55, 5.75, 2.55,
+        f1.flow || 'Flow 01 • Student ➔ University',
+        f1.title || 'Requirement: Size Profiles & Schedules',
+        [
+          stripHtml(f1.p1 || 'Students submit data to campus; receive schedule via email.'),
+          stripHtml(f1.p2 || 'Google Forms without SKU validation caused duplicates and manual consolidation delays.')
+        ],
+        f1.status || 'Status: Delayed Information & Unstandardized Format',
+        false
+      );
 
-      addCard(s5, pptx, 0.8, 4.25, 5.75, 2.55, 'Aliran 03 • Meja Posko ➔ Gudang', 'Kebutuhan: Kuota Hak & Kartu Mutasi', [
-        'Asal & Tujuan: Staf posko memverifikasi paket hak prodi dan mencatat mutasi seragam yang keluar.',
-        'Titik Masalah: Penyerahan seragam dicatat di lembaran kertas. Pengurangan saldo stok gudang baru direkap malam hari, memicu risiko susut stok.'
-      ], 'Kondisi: Informasi Terlambat (Paper-Based Tracking)', false);
+      addNeoCard(s5, pptx, 6.78, 1.55, 5.75, 2.55,
+        f2.flow || 'Flow 02 • Finance ➔ Day-Of Distribution',
+        f2.title || 'Requirement: Tuition Paid Status (Eligibility)',
+        [
+          stripHtml(f2.p1 || 'Finance exports paid clearance status to booth staff.'),
+          stripHtml(f2.p2 || 'Static local Excel exports fail to reflect day-of bank clearing updates in real time.')
+        ],
+        f2.status || 'Status: Severed Communication (Local Data Silos)',
+        true
+      );
 
-      addCard(s5, pptx, 6.78, 4.25, 5.75, 2.55, 'Aliran 04 • Pengadaan ➔ Pabrik', 'Kebutuhan: Purchase Order Agregat', [
-        'Asal & Tujuan: Pengadaan kampus mengirim rincian jumlah potong seragam dan sepatu ke pabrik.',
-        'Titik Masalah: Purchase Order ke pabrik hanya estimasi kasar tanpa dasar profil data riil maba, memicu lead-time penukaran barang berbulan-bulan.'
-      ], 'Kondisi: Informasi Tidak Akurat (Blind Ordering)', false);
+      addNeoCard(s5, pptx, 0.8, 4.25, 5.75, 2.55,
+        f3.flow || 'Flow 03 • Booth Desk ➔ Warehouse',
+        f3.title || 'Requirement: Package Entitlement & Stock Ledger',
+        [
+          stripHtml(f3.p1 || 'Booth staff verifies entitlements and logs item release.'),
+          stripHtml(f3.p2 || 'Paper logs reconciled only at night left open gaps for shrinkage and stock discrepancies.')
+        ],
+        f3.status || 'Status: Lagging Records (Paper-Based Handover)',
+        false
+      );
+
+      addNeoCard(s5, pptx, 6.78, 4.25, 5.75, 2.55,
+        f4.flow || 'Flow 04 • Procurement ➔ Factory',
+        f4.title || 'Requirement: Aggregate Purchase Orders (PO)',
+        [
+          stripHtml(f4.p1 || 'Procurement dispatches garment production quantities to vendor.'),
+          stripHtml(f4.p2 || 'Purchase orders based on crude estimates rather than verified student measurements.')
+        ],
+        f4.status || 'Status: Blind Ordering (Lack of Real Demand Signal)',
+        false
+      );
 
       s5.addNotes(getSpeakerNote(5));
 
       // ==========================================
-      // SLIDE 6: RECOMMENDED INFORMATION SYSTEMS
+      // SLIDE 6: RECOMMENDED INFORMATION SYSTEMS (NEO TABLE)
       // ==========================================
       const s6 = pptx.addSlide();
-      applyHeader(s6, pptx, 'Rekomendasi Sistem Terpadu', 'Pemilihan Arsitektur Sistem Informasi (HorizonU Uniform Engine)', 'Integrasi empat pilar sistem: ERP, SCM, POS, dan WMS dalam satu platform web modern');
+      applyHeader(s6, pptx,
+        data.slide6?.badge || 'Integrated System Recommendation',
+        data.slide6?.title || 'Information System Architecture Selection (HorizonU Uniform Engine)',
+        data.slide6?.subtitle || 'Unified convergence of four enterprise pillars: ERP, SCM, POS, and WMS in a modern web platform'
+      );
 
       const s6Headers = [
-        { text: 'Masalah yang Diselesaikan', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10, fontFace: FONT_TITLE } },
-        { text: 'Sistem & Modul Terpilih', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10, fontFace: FONT_TITLE } },
-        { text: 'Fungsi Sistem dalam Kasus', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10, fontFace: FONT_TITLE } },
-        { text: 'Manfaat Nyata Terukur', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10, fontFace: FONT_TITLE } }
+        { text: data.slide6?.thProblem || 'Problem Addressed', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10, fontFace: FONT_TITLE } },
+        { text: data.slide6?.thSystem || 'Recommended System & Module', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10, fontFace: FONT_TITLE } },
+        { text: data.slide6?.thFunc || 'System Function in Case Study', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10, fontFace: FONT_TITLE } },
+        { text: data.slide6?.thBenefit || 'Measurable Value Delivered', options: { fill: { color: C_RED }, color: C_WHITE, bold: true, fontSize: 10, fontFace: FONT_TITLE } }
       ];
+
+      const s6r1 = data.slide6?.row1 || {};
+      const s6r2 = data.slide6?.row2 || {};
+      const s6r3 = data.slide6?.row3 || {};
+      const s6r4 = data.slide6?.row4 || {};
 
       const s6Rows = [
         s6Headers,
         [
-          { text: 'Excel Crash & Data Mahasiswa Terpecah', options: { color: C_RED, bold: true, fontSize: 9.5, fill: { color: C_CARD_BG } } },
-          { text: 'ERP Master & Entitlement Engine (Database MySQL InnoDB)', options: { color: C_TEXT_DARK, bold: true, fontSize: 9.5, fill: { color: C_CARD_BG } } },
-          { text: 'Mengelola master data mahasiswa, struktur base code 4-segmen, impor massal via Maatwebsite, serta matriks kuota hak (Entitlement) otomatis per jenjang dan prodi.', options: { color: C_TEXT_DARK, fontSize: 9.5, fill: { color: C_CARD_BG } } },
-          { text: '100% Bebas Crash Excel, data terisolasi ACID, single source of truth.', options: { color: C_TEXT_DARK, fontSize: 9.5, fill: { color: C_CARD_BG } } }
+          { text: s6r1.problem || 'Excel Crashes & Fragmented Student Records', options: { color: C_RED, bold: true, fontSize: 9.5, fill: { color: C_CARD_BG } } },
+          { text: (s6r1.system || 'ERP Master & Entitlement Engine') + '\n(' + (s6r1.tech || 'MySQL InnoDB') + ')', options: { color: C_DARK, bold: true, fontSize: 9.5, fill: { color: C_CARD_BG } } },
+          { text: s6r1.func || 'Governs student master data, 4-segment SKU hierarchy, and automated academic entitlement matrix.', options: { color: C_DARK, fontSize: 9.5, fill: { color: C_CARD_BG } } },
+          { text: s6r1.benefit || '100% immune to spreadsheet crashes; full ACID transaction integrity with unified single source of truth.', options: { color: C_DARK, fontSize: 9.5, fill: { color: C_CARD_BG } } }
         ],
         [
-          { text: 'Dead-Stock & Pengumuman Jadwal Lambat', options: { color: C_RED, bold: true, fontSize: 9.5, fill: { color: C_RED_BG } } },
-          { text: 'SCM Demand Planning Portal (Size Event & Announcement Hub)', options: { color: C_TEXT_DARK, bold: true, fontSize: 9.5, fill: { color: C_RED_BG } } },
-          { text: 'Membuka event input profil ukuran mandiri mahasiswa (SizeChangeEvent), siaran jadwal terfilter per prodi, serta kalkulasi otomatis Demand vs Shortage untuk tender vendor.', options: { color: C_TEXT_DARK, fontSize: 9.5, fill: { color: C_RED_BG } } },
-          { text: 'Zero Dead-Stock, pengadaan pabrik presisi 100% sesuai ukuran riil.', options: { color: C_TEXT_DARK, fontSize: 9.5, fill: { color: C_RED_BG } } }
+          { text: s6r2.problem || 'Dead-Stock & Delayed Schedule Broadcasts', options: { color: C_RED, bold: true, fontSize: 9.5, fill: { color: C_RED_BG } } },
+          { text: (s6r2.system || 'SCM Demand Planning Portal') + '\n(' + (s6r2.tech || 'Size Event Hub') + ')', options: { color: C_DARK, bold: true, fontSize: 9.5, fill: { color: C_RED_BG } } },
+          { text: s6r2.func || 'Self-service size survey windows, program-filtered slot broadcasts, and automated Demand vs. Shortage calculus.', options: { color: C_DARK, fontSize: 9.5, fill: { color: C_RED_BG } } },
+          { text: s6r2.benefit || 'Zero Dead-Stock: Factory purchase orders match 100% of verified student physical measurements.', options: { color: C_DARK, fontSize: 9.5, fill: { color: C_RED_BG } } }
         ],
         [
-          { text: 'Bottleneck Antrean & Risiko Double-Claim', options: { color: C_RED, bold: true, fontSize: 9.5, fill: { color: C_CARD_BG } } },
-          { text: 'POS QR Verification Engine (BaconQrCode & HTML5 Scanner)', options: { color: C_TEXT_DARK, bold: true, fontSize: 9.5, fill: { color: C_CARD_BG } } },
-          { text: 'Penerbitan QR Code NIM beresolusi tinggi (Level H) dan eksekusi 6-Lapis Validasi Atomik via kamera webcam loket (Lunas, Sesi, Prodi, Gender, Sisa Hak, Stok Rak).', options: { color: C_TEXT_DARK, fontSize: 9.5, fill: { color: C_CARD_BG } } },
-          { text: 'Waktu layan < 30 detik/mhs, nol risiko penyerahan ganda.', options: { color: C_TEXT_DARK, fontSize: 9.5, fill: { color: C_CARD_BG } } }
+          { text: s6r3.problem || 'Queue Congestion & Double-Claim Risk', options: { color: C_RED, bold: true, fontSize: 9.5, fill: { color: C_CARD_BG } } },
+          { text: (s6r3.system || 'POS QR Verification Engine') + '\n(' + (s6r3.tech || 'BaconQrCode & Scanner') + ')', options: { color: C_DARK, bold: true, fontSize: 9.5, fill: { color: C_CARD_BG } } },
+          { text: s6r3.func || 'Issues Level-H QR code passes and executes 6-tier atomic validation on scanner read.', options: { color: C_DARK, fontSize: 9.5, fill: { color: C_CARD_BG } } },
+          { text: s6r3.benefit || 'Service time slashed to under 30 seconds per student with zero duplicate claim vulnerability.', options: { color: C_DARK, fontSize: 9.5, fill: { color: C_CARD_BG } } }
         ],
         [
-          { text: 'Susut Stok Gudang & Valuasi HPP Buram', options: { color: C_RED, bold: true, fontSize: 9.5, fill: { color: C_RED_BG } } },
-          { text: 'WMS & FIFO Costing Engine (StockBatch & Movement Ledger)', options: { color: C_TEXT_DARK, bold: true, fontSize: 9.5, fill: { color: C_RED_BG } } },
-          { text: 'Melacak batch penerimaan vendor tertua (FIFO), pemotongan stok berkartu audit, rekonsiliasi Stock Opname fisik via variance kalkulator, serta analitik margin laba kotor.', options: { color: C_TEXT_DARK, fontSize: 9.5, fill: { color: C_RED_BG } } },
-          { text: 'Valuasi HPP FIFO real-time, audit transparan, cegah selisih fisik.', options: { color: C_TEXT_DARK, fontSize: 9.5, fill: { color: C_RED_BG } } }
+          { text: s6r4.problem || 'Warehouse Shrinkage & Opaque COGS Valuation', options: { color: C_RED, bold: true, fontSize: 9.5, fill: { color: C_RED_BG } } },
+          { text: (s6r4.system || 'WMS & FIFO Costing Engine') + '\n(' + (s6r4.tech || 'StockBatch & Movement Ledger') + ')', options: { color: C_DARK, bold: true, fontSize: 9.5, fill: { color: C_RED_BG } } },
+          { text: s6r4.func || 'Tracks oldest vendor intake batches (FIFO), ledger-backed stock deductions, and Stock Opname audits.', options: { color: C_DARK, fontSize: 9.5, fill: { color: C_RED_BG } } },
+          { text: s6r4.benefit || 'Real-time FIFO inventory valuation, transparent audit trails, and elimination of physical discrepancies.', options: { color: C_DARK, fontSize: 9.5, fill: { color: C_RED_BG } } }
         ]
       ];
+
+      // Table Neo shadow backing
+      s6.addShape(pptx.ShapeType.roundRect, {
+        x: 0.8 + SHADOW_OFFSET,
+        y: 1.55 + SHADOW_OFFSET,
+        w: 11.733,
+        h: 5.25,
+        fill: { color: C_DARK },
+        line: { color: C_DARK },
+        rectRadius: 0.08
+      });
 
       s6.addTable(s6Rows, {
         x: 0.8,
         y: 1.55,
         w: 11.733,
         colW: [2.5, 2.9, 4.1, 2.233],
-        border: { color: C_BORDER, pt: 1 }
+        border: { color: C_DARK, pt: 1.5 }
       });
 
       s6.addNotes(getSpeakerNote(6));
@@ -486,31 +762,64 @@
       // SLIDE 7: PROPOSED SOLUTION DESIGN
       // ==========================================
       const s7 = pptx.addSlide();
-      applyHeader(s7, pptx, 'Desain Arsitektur Solusi', 'Aliran 4-Fase Closed-Loop Supply Chain Engine', 'Konektivitas sistem end-to-end, pemrosesan transaksi atomik, dan closed-loop data feedback');
+      applyHeader(s7, pptx,
+        data.slide7?.badge || 'Proposed Solution Design',
+        data.slide7?.title || '4-Phase Closed-Loop Supply Chain Architecture',
+        data.slide7?.subtitle || 'End-to-end system connectivity, atomic transaction processing, and closed-loop data feedback'
+      );
 
-      addCard(s7, pptx, 0.8, 1.55, 2.78, 5.25, 'Fase 1 • Hulu (Inbound)', 'Inbound & Batch FIFO', [
-        'Pencatatan barang dari vendor garmen pada modul StockReceive.',
-        'Sistem menerbitkan ID batch terurut (FIFO Queue Sequence).',
-        'Pencatatan otomatis jurnal mutasi masuk (StockMovement IN) dan penetapan unit HPP batch.'
-      ], 'Output: Batch FIFO Terdaftar', false);
+      const p1 = data.slide7?.phase1 || {};
+      const p2 = data.slide7?.phase2 || {};
+      const p3 = data.slide7?.phase3 || {};
+      const p4 = data.slide7?.phase4 || {};
 
-      addCard(s7, pptx, 3.78, 1.55, 2.78, 5.25, 'Fase 2 • Demand (Planning)', 'Eligibility & Profiling', [
-        'Keuangan mengaktifkan data mahasiswa lunas di EligibilityRecord.',
-        'Mahasiswa input profil ukuran badan mandiri di event portal.',
-        'Sistem menghitung Demand vs Shortage untuk acuan belanja pengadaan vendor.'
-      ], 'Output: QR Code & Jadwal Aktif', false);
+      addNeoCard(s7, pptx, 0.8, 1.55, 2.78, 5.25,
+        p1.step || 'Phase 1 • Upstream (Inbound)',
+        p1.title || 'Inbound & FIFO Batch Registry',
+        [
+          stripHtml(p1.p1 || 'Logs bulk cargo shipments from apparel suppliers via StockReceive module.'),
+          stripHtml(p1.p2 || 'Assigns sequential FIFO batch tracking IDs.'),
+          stripHtml(p1.p3 || 'Posts inventory journal inflows (StockMovement IN) and fixes batch cost basis.')
+        ],
+        p1.output || 'Output: Tracked FIFO Batch Inflow',
+        false
+      );
 
-      addCard(s7, pptx, 6.76, 1.55, 2.78, 5.25, 'Fase 3 • Hilir (Outbound)', 'POS QR & 6-Lapis Validasi', [
-        'Staf memindai QR NIM mahasiswa di loket posko kampus.',
-        'Eksekusi 6-Lapis Validasi Atomik via pessimistic lock (lockForUpdate).',
-        'Pemotongan batch tertua otomatis (deductStockFifo) dan cetak tiket serah terima fisik.'
-      ], 'Output: Seragam Diterima Pas', true);
+      addNeoCard(s7, pptx, 3.78, 1.55, 2.78, 5.25,
+        p2.step || 'Phase 2 • Demand (Planning)',
+        p2.title || 'Eligibility Clearance & Size Profiling',
+        [
+          stripHtml(p2.p1 || 'Finance authorizes enrolled students in EligibilityRecord table.'),
+          stripHtml(p2.p2 || 'Freshmen self-submit body size measurements through student portal.'),
+          stripHtml(p2.p3 || 'Aggregates Demand vs. Shortage analytics to drive supplier procurement contracts.')
+        ],
+        p2.output || 'Output: Active QR Pass & Assigned Time Slot',
+        false
+      );
 
-      addCard(s7, pptx, 9.74, 1.55, 2.78, 5.25, 'Fase 4 • Kontrol (Audit)', 'Opname & Closed-Loop', [
-        'Stock Opname fisik berkala menghitung selisih variance otomatis.',
-        'Penerbitan jurnal penyesuaian susut/surplus stok gudang.',
-        'Generate analitik Gross Profit Margin (GPM) dan laporan sisa stok untuk pimpinan.'
-      ], 'Output: Feedback Siklus Baru', false);
+      addNeoCard(s7, pptx, 6.76, 1.55, 2.78, 5.25,
+        p3.step || 'Phase 3 • Downstream (Outbound)',
+        p3.title || 'POS QR & 6-Tier Atomic Validation',
+        [
+          stripHtml(p3.p1 || 'Booth staff scans student QR code using webcam-based scanner client.'),
+          stripHtml(p3.p2 || 'Executes 6-tier atomic validation under pessimistic database row locking (lockForUpdate).'),
+          stripHtml(p3.p3 || 'Automatically depletes oldest FIFO batches (deductStockFifo) and prints handover receipt.')
+        ],
+        p3.output || 'Output: Verified Zero-Defect Handover',
+        true
+      );
+
+      addNeoCard(s7, pptx, 9.74, 1.55, 2.78, 5.25,
+        p4.step || 'Phase 4 • Control (Audit)',
+        p4.title || 'Stock Opname & Closed-Loop Feedback',
+        [
+          stripHtml(p4.p1 || 'Periodic physical stock audit with automated discrepancy variance calculation.'),
+          stripHtml(p4.p2 || 'Generates shrinkage/surplus adjustment journal vouchers instantly.'),
+          stripHtml(p4.p3 || 'Produces executive Gross Profit Margin (GPM) dashboards and dead-stock alerts for management.')
+        ],
+        p4.output || 'Output: Continuous Closed-Loop Feedback',
+        false
+      );
 
       s7.addNotes(getSpeakerNote(7));
 
@@ -518,56 +827,235 @@
       // SLIDE 8: IMPLEMENTATION AND RISKS
       // ==========================================
       const s8 = pptx.addSlide();
-      applyHeader(s8, pptx, 'Rencana Penerapan & Mitigasi', 'Prioritas Implementasi & Manajemen Risiko Lapangan', 'Tahapan kesiapan operasional serta prosedur kontingensi darurat saat hari-H distribusi');
+      applyHeader(s8, pptx,
+        data.slide8?.badge || 'Deployment Plan & Risk Governance',
+        data.slide8?.title || 'Implementation Priorities & Field Risk Mitigation',
+        data.slide8?.subtitle || 'Operational readiness roadmap alongside battle-tested contingency protocols for distribution day'
+      );
 
-      addCard(s8, pptx, 0.8, 1.55, 3.75, 5.25, '3 Prioritas Implementasi', 'Tahapan Kesiapan Sistem', [
-        'Prioritas 1 (Master Data): Pembersihan data lama, pembuatan skema SKU 5-segmen, impor data mahasiswa, dan konfigurasi hak seragam prodi.',
-        'Prioritas 2 (Integrasi Portal): Integrasi status lunas Keuangan (Eligibility), pembukaan jendela waktu pengisian profil ukuran maba, dan rilis jadwal.',
-        'Prioritas 3 (Kesiapan SDM): Pelatihan teknis staf posko memakai scanner webcam, prosedur fitting ukuran, dan drill skenario darurat.'
-      ], 'Roadmap: 6 Minggu Implementasi Penuh', false);
+      const pr = data.slide8?.priorities || {};
+      const rk = data.slide8?.risks || {};
 
-      addCard(s8, pptx, 4.78, 1.55, 7.75, 5.25, '3 Risiko Lapangan & Cara Mitigasi', 'SOP Kontingensi Hari-H Posko', [
-        'RISIKO 1 (Baterai HP Mati / QR Rusak): Fallback Search manual via NIM atau Nama langsung memanggil profil hak seketika.',
-        'RISIKO 2 (Ukuran Rak Habis / Fitting Beda): Fitur Partial Pickup serahkan barang yang tersedia tanpa menghanguskan sisa hak.',
-        'RISIKO 3 (Jaringan Internet Kampus Lambat): Pessimistic Row Locking (lockForUpdate) dan idempotensi menjamin nol pemotongan ganda.'
-      ], 'Toleransi Kesalahan: Resiliensi Operasional Tinggi', true);
+      addNeoCard(s8, pptx, 0.8, 1.55, 3.75, 5.25,
+        pr.badge || '3 Implementation Priorities',
+        pr.title || 'System Readiness Roadmap',
+        [
+          stripHtml(pr.p1 || 'Priority 1 (Master Data): Cleanse legacy records, deploy 5-segment SKU schema, import student cohorts.'),
+          stripHtml(pr.p2 || 'Priority 2 (Portal Integration): Bridge live tuition clearance feeds (Eligibility), launch self-service size survey portal.'),
+          stripHtml(pr.p3 || 'Priority 3 (Human Readiness): Conduct operational drills for booth staff on webcam scanners, size exchange SOPs.')
+        ],
+        pr.roadmap || 'Roadmap: 6-Week Turnkey Deployment',
+        false
+      );
+
+      addNeoCard(s8, pptx, 4.78, 1.55, 7.75, 5.25,
+        rk.badge || '3 Field Risks & Contingency SOPs',
+        rk.title || 'Booth Operational Protocols',
+        [
+          stripHtml(rk.item1 || 'RISK 1 (Dead Student Phone Battery): Scanner client features instant fallback manual search by Student ID or Full Name.'),
+          stripHtml(rk.item2 || 'RISK 2 (Rack Size Exhaustion): Partial Pickup feature dispenses available items and logs exchange requests in student_size_histories.'),
+          stripHtml(rk.item3 || 'RISK 3 (Network Latency): Transactions guarded by database Pessimistic Row Locking (lockForUpdate), guaranteeing zero duplicate deductions.')
+        ],
+        rk.tolerance || 'Fault Tolerance: High Operational Resilience',
+        true
+      );
 
       s8.addNotes(getSpeakerNote(8));
 
       // ==========================================
-      // SLIDE 9: CONCLUSION AND BENEFITS
+      // SLIDE 9: CONCLUSION & MEASURED IMPACT (BIG METRICS)
       // ==========================================
       const s9 = pptx.addSlide();
-      applyHeader(s9, pptx, 'Kesimpulan & Hasil Terukur', 'Dampak Strategis & Manfaat Nyata Implementasi', 'Transformasi operasional Departemen Keuangan Universitas Horizon Indonesia pasca-digitalisasi');
+      applyHeader(s9, pptx,
+        data.slide9?.badge || 'Conclusion & Measured Impact',
+        data.slide9?.title || 'Strategic Outcomes & Measurable Business Value',
+        data.slide9?.subtitle || 'Operational transformation of Horizon University Indonesia Finance Department post-digitalization'
+      );
 
-      addCard(s9, pptx, 0.8, 1.55, 3.75, 5.25, 'Manfaat 01 • Efisiensi Waktu', '< 30 Detik per Mahasiswa', [
-        'Memangkas waktu layanan loket dari yang sebelumnya 15–20 menit per mahasiswa menjadi di bawah 30 detik.',
-        'Pemindaian QR Code instan berbasis NIM dan eksekusi 6-lapis validasi otomatis.',
-        'Mengeliminasi antrean panjang yang berdesakan di posko kampus setiap awal tahun ajaran baru.'
-      ], 'Dampak: Pelayanan Mahasiswa Cepat & Nyaman', true);
+      const m1 = data.slide9?.m1 || {};
+      const m2 = data.slide9?.m2 || {};
+      const m3 = data.slide9?.m3 || {};
 
-      addCard(s9, pptx, 4.78, 1.55, 3.75, 5.25, 'Manfaat 02 • Akurasi Inventaris', 'Zero (0) Dead-Stock', [
-        'Profiling ukuran mandiri oleh mahasiswa sebelum tender vendor garmen dibuka.',
-        'Kalkulasi Demand vs Shortage otomatis memastikan pesanan pabrik selaras 100% dengan kebutuhan tubuh riil mahasiswa.',
-        'Tidak ada lagi seragam berukuran ekstrem yang mengendap bertahun-tahun di gudang.'
-      ], 'Dampak: Optimalisasi Modal Kerja Kampus', false);
+      function addMetricCard(x, y, w, h, badge, metricVal, title, bullets, footerText, isHighlight) {
+        // Neo shadow backing
+        s9.addShape(pptx.ShapeType.roundRect, {
+          x: x + SHADOW_OFFSET,
+          y: y + SHADOW_OFFSET,
+          w: w,
+          h: h,
+          fill: { color: C_DARK },
+          line: { color: C_DARK },
+          rectRadius: 0.1
+        });
 
-      addCard(s9, pptx, 8.76, 1.55, 3.75, 5.25, 'Manfaat 03 • Akuntabilitas Biaya', '100% Valuasi FIFO Real-Time', [
-        'Mengeliminasi ketergantungan pada spreadsheet Excel raksasa yang rawan rusak atau korup.',
-        'Seluruh pergerakan stok dicatat otomatis ke kartu mutasi persediaan berbasis urutan batch FIFO.',
-        'Laporan Harga Pokok Penjualan (HPP) dan Gross Profit Margin (GPM) tersedia secara transparan bagi pimpinan.'
-      ], 'Dampak: Audit Trail Keuangan Bebas Selisih', false);
+        // Main card body with 2pt border
+        s9.addShape(pptx.ShapeType.roundRect, {
+          x: x,
+          y: y,
+          w: w,
+          h: h,
+          fill: { color: isHighlight ? C_RED_BG : C_CARD_BG },
+          line: { color: C_DARK, width: 2 },
+          rectRadius: 0.1
+        });
+
+        // Badge pill
+        const bW = w - 0.44;
+        s9.addShape(pptx.ShapeType.roundRect, {
+          x: x + 0.22,
+          y: y + 0.18,
+          w: bW,
+          h: 0.32,
+          fill: { color: C_WHITE },
+          line: { color: C_DARK, width: 1.5 },
+          rectRadius: 0.08
+        });
+        s9.addText(badge.toUpperCase(), {
+          x: x + 0.22,
+          y: y + 0.18,
+          w: bW,
+          h: 0.32,
+          fontFace: FONT_TITLE,
+          fontSize: 8.5,
+          bold: true,
+          color: C_RED,
+          align: 'center',
+          valign: 'middle',
+          margin: 0
+        });
+
+        // Huge Bold KPI Metric (Neo-Brutalist 36pt font)
+        s9.addText(metricVal, {
+          x: x + 0.22,
+          y: y + 0.58,
+          w: bW,
+          h: 0.72,
+          fontFace: FONT_TITLE,
+          fontSize: 34,
+          bold: true,
+          color: C_RED,
+          align: 'center',
+          valign: 'middle',
+          margin: 0
+        });
+
+        // Metric Title
+        s9.addText(title, {
+          x: x + 0.22,
+          y: y + 1.34,
+          w: bW,
+          h: 0.38,
+          fontFace: FONT_TITLE,
+          fontSize: 12,
+          bold: true,
+          color: C_DARK,
+          align: 'center',
+          valign: 'top',
+          margin: 0
+        });
+
+        // Divider
+        s9.addShape(pptx.ShapeType.rect, {
+          x: x + 0.3,
+          y: y + 1.76,
+          w: w - 0.6,
+          h: 0.015,
+          fill: { color: 'CBD5E1' },
+          line: { color: 'CBD5E1' }
+        });
+
+        // Bullet Points
+        const textRuns = [];
+        bullets.forEach((b, idx) => {
+          textRuns.push({
+            text: (b.startsWith('•') ? b : '•  ' + b) + (idx < bullets.length - 1 ? '\n\n' : '\n'),
+            options: { fontFace: FONT_BODY, fontSize: 9.5, color: C_DARK }
+          });
+        });
+
+        s9.addText(textRuns, {
+          x: x + 0.22,
+          y: y + 1.88,
+          w: bW,
+          h: h - 2.5,
+          valign: 'top',
+          margin: 0
+        });
+
+        // Footer Banner
+        const footerY = y + h - 0.52;
+        s9.addShape(pptx.ShapeType.rect, {
+          x: x + 0.2,
+          y: footerY,
+          w: w - 0.4,
+          h: 0.015,
+          fill: { color: isHighlight ? C_RED : 'CBD5E1' },
+          line: { color: isHighlight ? C_RED : 'CBD5E1' }
+        });
+        s9.addText(footerText, {
+          x: x + 0.22,
+          y: footerY + 0.06,
+          w: bW,
+          h: 0.38,
+          fontFace: FONT_TITLE,
+          fontSize: 9.5,
+          bold: true,
+          color: isHighlight ? C_RED : C_DARK,
+          valign: 'middle',
+          margin: 0
+        });
+      }
+
+      addMetricCard(0.8, 1.55, 3.75, 5.25,
+        m1.badge || 'VALUE 01 • SERVICE EFFICIENCY',
+        m1.value || '< 30s',
+        m1.title || 'Per Student Pickup Time',
+        [
+          stripHtml(m1.p1 || 'Slashed booth turnaround time from 15–20 minutes down to under 30 seconds per student.'),
+          stripHtml(m1.p2 || 'Instant QR scanning combined with automated 6-tier validation checks.'),
+          stripHtml(m1.p3 || 'Completely eradicated chaotic, overcrowded campus queues during orientation week.')
+        ],
+        m1.impact || 'Impact: Swift & Professional Student Experience',
+        true
+      );
+
+      addMetricCard(4.78, 1.55, 3.75, 5.25,
+        m2.badge || 'VALUE 02 • INVENTORY ACCURACY',
+        m2.value || 'Zero',
+        m2.title || 'Dead-Stock Accumulation',
+        [
+          stripHtml(m2.p1 || 'Pre-enrollment size profiling prior to supplier manufacturing tenders.'),
+          stripHtml(m2.p2 || 'Automated Demand vs. Shortage calculations align factory orders 100% with real student body sizes.'),
+          stripHtml(m2.p3 || 'Eliminated stagnant piles of obsolete extreme sizes tying up warehouse space.')
+        ],
+        m2.impact || 'Impact: Maximum Working Capital Efficiency',
+        false
+      );
+
+      addMetricCard(8.76, 1.55, 3.75, 5.25,
+        m3.badge || 'VALUE 03 • FINANCIAL AUDITABILITY',
+        m3.value || '100%',
+        m3.title || 'Real-Time FIFO Valuation',
+        [
+          stripHtml(m3.p1 || 'Eliminated fragile, crash-prone Excel master spreadsheets permanently.'),
+          stripHtml(m3.p2 || 'Every single inventory movement automatically posted to FIFO batch ledgers.'),
+          stripHtml(m3.p3 || 'Real-time Cost of Goods Sold (COGS) and Gross Profit Margin (GPM) dashboards for university leadership.')
+        ],
+        m3.impact || 'Impact: Discrepancy-Free Financial Audit Trail',
+        false
+      );
 
       s9.addNotes(getSpeakerNote(9));
 
       // ==========================================
-      // WRITE FILE & TRIGGER DOWNLOAD
+      // WRITE FILE & TRIGGER DOWNLOAD (ENGLISH FILE)
       // ==========================================
-      await pptx.writeFile({ fileName: 'HorizonU_Uniform_SCM_Presentasi_Technospark.pptx' });
+      const fileName = 'HorizonU_Uniform_SCM_Presentation_Technospark.pptx';
+      await pptx.writeFile({ fileName: fileName });
 
     } catch (err) {
-      console.error('Gagal membuat PPTX:', err);
-      alert('Terjadi kesalahan saat membuat file PPTX: ' + err.message);
+      console.error('Failed to generate PPTX:', err);
+      alert('Error generating PPTX file: ' + err.message);
     } finally {
       if (btn) {
         btn.disabled = false;

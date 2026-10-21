@@ -29,18 +29,22 @@ FONT_TITLE = 'Arial'
 FONT_BODY  = 'Calibri'
 
 def apply_header(slide, category_tag, main_title, subtitle):
-    # Pure white background
     slide.background.fill.solid()
     slide.background.fill.fore_color.rgb = C_WHITE
 
-    # Left accent line
-    accent = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(0.42), Inches(0.06), Inches(0.78))
+    # Left accent line with Neo-Brutalist shadow
+    acc_sh = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8 + 0.035), Inches(0.42 + 0.035), Inches(0.08), Inches(0.78))
+    acc_sh.fill.solid()
+    acc_sh.fill.fore_color.rgb = C_TEXT_DARK
+    acc_sh.line.fill.background()
+
+    accent = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(0.42), Inches(0.08), Inches(0.78))
     accent.fill.solid()
     accent.fill.fore_color.rgb = C_RED
-    accent.line.fill.background()
+    accent.line.color.rgb = C_TEXT_DARK
+    accent.line.width = Pt(1.5)
 
-    # Category Tag
-    cat_box = slide.shapes.add_textbox(Inches(0.95), Inches(0.38), Inches(11.5), Inches(0.24))
+    cat_box = slide.shapes.add_textbox(Inches(1.02), Inches(0.38), Inches(11.5), Inches(0.24))
     tf_c = cat_box.text_frame
     tf_c.word_wrap = True
     p_c = tf_c.paragraphs[0]
@@ -50,19 +54,17 @@ def apply_header(slide, category_tag, main_title, subtitle):
     p_c.font.bold = True
     p_c.font.color.rgb = C_RED
 
-    # Main Title
-    t_box = slide.shapes.add_textbox(Inches(0.95), Inches(0.60), Inches(11.5), Inches(0.42))
+    t_box = slide.shapes.add_textbox(Inches(1.02), Inches(0.60), Inches(11.5), Inches(0.42))
     tf_t = t_box.text_frame
     tf_t.word_wrap = True
     p_t = tf_t.paragraphs[0]
     p_t.text = main_title
     p_t.font.name = FONT_TITLE
-    p_t.font.size = Pt(19)
+    p_t.font.size = Pt(18)
     p_t.font.bold = True
     p_t.font.color.rgb = C_TEXT_DARK
 
-    # Subtitle
-    sub_box = slide.shapes.add_textbox(Inches(0.95), Inches(1.02), Inches(11.5), Inches(0.28))
+    sub_box = slide.shapes.add_textbox(Inches(1.02), Inches(1.02), Inches(11.5), Inches(0.28))
     tf_sub = sub_box.text_frame
     tf_sub.word_wrap = True
     p_sub = tf_sub.paragraphs[0]
@@ -71,18 +73,23 @@ def apply_header(slide, category_tag, main_title, subtitle):
     p_sub.font.size = Pt(11)
     p_sub.font.color.rgb = C_TEXT_MUTED
 
-    # Subtle bottom border line
-    div = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.36), Inches(11.733), Inches(0.012))
+    div = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.36), Inches(11.733), Inches(0.025))
     div.fill.solid()
-    div.fill.fore_color.rgb = C_BORDER
-    div.line.fill.background()
+    div.fill.fore_color.rgb = C_TEXT_DARK
+    div.line.color.rgb = C_TEXT_DARK
 
 def add_card(slide, x, y, w, h, badge, title, bullets, note=None, is_highlight=False):
+    # Neo-Brutalist shadow backing
+    sh = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x + 0.055), Inches(y + 0.055), Inches(w), Inches(h))
+    sh.fill.solid()
+    sh.fill.fore_color.rgb = C_TEXT_DARK
+    sh.line.fill.background()
+
     card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x), Inches(y), Inches(w), Inches(h))
     card.fill.solid()
     card.fill.fore_color.rgb = C_RED_BG if is_highlight else C_CARD_BG
-    card.line.color.rgb = C_RED if is_highlight else C_BORDER
-    card.line.width = Pt(1.5 if is_highlight else 1.0)
+    card.line.color.rgb = C_TEXT_DARK
+    card.line.width = Pt(2.0)
 
     tf = card.text_frame
     tf.word_wrap = True
