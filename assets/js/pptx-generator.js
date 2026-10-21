@@ -6,6 +6,7 @@
  * - Hard offset drop shadows (shadow-neo)
  * - Crimson Horizon (#980517) highlights & Red-50 tints
  * - Amber badges, big metric numbers, and clean typography
+ * - Unified grid system: 100% symmetric box sizes across all slides
  * - English locale by default (window.I18N_EN_DATA)
  */
 
@@ -25,6 +26,20 @@
 
   const SHADOW_OFFSET    = 0.055; // 4px hard neo-shadow
   const SHADOW_OFFSET_SM = 0.038; // 3px hard neo-shadow
+
+  // Unified Geometry Constants (16:9 layout: 13.333" x 7.5")
+  // Content bounding box: x = 0.80 to 12.533 (Width: 11.733"), y = 1.55 to 6.80 (Height: 5.25")
+  const GRID = {
+    // 2-column layout (Slides 1, 5, 8)
+    col2: { w: 5.74, gap: 0.25, x: [0.80, 6.79] },
+    // 3-column layout (Slides 2, 9)
+    col3: { w: 3.74, gap: 0.25, x: [0.80, 4.79, 8.78] },
+    // 4-column layout (Slides 3, 7)
+    col4: { w: 2.78, gap: 0.20, x: [0.80, 3.78, 6.76, 9.74] },
+    // Row layouts
+    rowFull: { y: 1.55, h: 5.25 },
+    rowHalf: { y: [1.55, 4.30], h: 2.50 }
+  };
 
   // Always use English data for download as requested by user
   function getEnglishData() {
@@ -244,7 +259,7 @@
 
   /**
    * Neo-Brutalist Column Card (Slides 3, 5, 7, 8)
-   * With solid offset shadow, bold 2pt border, white pill badge, and bottom status divider.
+   * With solid offset shadow, bold 2pt border, compact white pill badge, and bottom status divider.
    */
   function addNeoCard(slide, pptx, x, y, w, h, badge, title, bullets, footerText, isHighlight) {
     // 1. Neo-Brutalist hard shadow backing shape
@@ -269,9 +284,10 @@
       rectRadius: 0.1
     });
 
-    // 3. Top White Pill Badge (matching web <span class="bg-white border border-slate-900 text-horizon-700">)
+    // 3. Compact Top White Pill Badge (matching web <span class="bg-white border border-slate-900 text-horizon-700 w-fit">)
+    // Sized compactly to fit text length rather than stretching awkwardly across wide cards
     if (badge) {
-      const bW = w - 0.44;
+      const bW = Math.min(w - 0.44, Math.max(2.0, badge.length * 0.082 + 0.35));
       const bH = 0.28;
       slide.addShape(getShape(pptx, 'roundRect'), {
         x: x + 0.22,
@@ -434,27 +450,28 @@
         margin: 0
       });
 
-      // Bento Grid (2 Boxes matching web layout)
-      // Box 1: Commodity & Scope (bg-neo-bg)
-      const b1X = 0.8;
-      const b1Y = 3.80;
-      const b1W = 5.75;
-      const b1H = 3.00;
+      // Bento Grid (2 Boxes matching web layout with exact symmetric sizes)
+      const b1X = GRID.col2.x[0];
+      const b2X = GRID.col2.x[1];
+      const bW = GRID.col2.w;
+      const bH = 3.00;
+      const bY = 3.80;
 
+      // Box 1: Commodity & Scope (bg-neo-bg)
       s1.addShape(getShape(pptx, 'roundRect'), {
         x: b1X + SHADOW_OFFSET,
-        y: b1Y + SHADOW_OFFSET,
-        w: b1W,
-        h: b1H,
+        y: bY + SHADOW_OFFSET,
+        w: bW,
+        h: bH,
         fill: { color: C_DARK },
         line: { color: C_DARK },
         rectRadius: 0.1
       });
       s1.addShape(getShape(pptx, 'roundRect'), {
         x: b1X,
-        y: b1Y,
-        w: b1W,
-        h: b1H,
+        y: bY,
+        w: bW,
+        h: bH,
         fill: { color: C_CARD_BG },
         line: { color: C_DARK, width: 2 },
         rectRadius: 0.1
@@ -463,7 +480,7 @@
       // Icon Square Badge
       s1.addShape(getShape(pptx, 'roundRect'), {
         x: b1X + 0.3 + SHADOW_OFFSET_SM,
-        y: b1Y + 0.25 + SHADOW_OFFSET_SM,
+        y: bY + 0.25 + SHADOW_OFFSET_SM,
         w: 0.44,
         h: 0.44,
         fill: { color: C_DARK },
@@ -472,7 +489,7 @@
       });
       s1.addShape(getShape(pptx, 'roundRect'), {
         x: b1X + 0.3,
-        y: b1Y + 0.25,
+        y: bY + 0.25,
         w: 0.44,
         h: 0.44,
         fill: { color: C_RED },
@@ -481,7 +498,7 @@
       });
       s1.addText('📦', {
         x: b1X + 0.3,
-        y: b1Y + 0.25,
+        y: bY + 0.25,
         w: 0.44,
         h: 0.44,
         fontSize: 14,
@@ -493,8 +510,8 @@
       // Box 1 Title
       s1.addText(data.slide1?.box1?.title || 'Logistics Commodity & Scope', {
         x: b1X + 0.3,
-        y: b1Y + 0.82,
-        w: b1W - 0.6,
+        y: bY + 0.82,
+        w: bW - 0.6,
         h: 0.38,
         fontFace: FONT_TITLE,
         fontSize: 13,
@@ -512,33 +529,28 @@
       });
       s1.addText(box1Runs, {
         x: b1X + 0.3,
-        y: b1Y + 1.25,
-        w: b1W - 0.6,
+        y: bY + 1.25,
+        w: bW - 0.6,
         h: 1.5,
         valign: 'top',
         margin: 0
       });
 
       // Box 2: Core Operational Challenges (bg-red-50)
-      const b2X = 6.78;
-      const b2Y = 3.80;
-      const b2W = 5.75;
-      const b2H = 3.00;
-
       s1.addShape(getShape(pptx, 'roundRect'), {
         x: b2X + SHADOW_OFFSET,
-        y: b2Y + SHADOW_OFFSET,
-        w: b2W,
-        h: b2H,
+        y: bY + SHADOW_OFFSET,
+        w: bW,
+        h: bH,
         fill: { color: C_DARK },
         line: { color: C_DARK },
         rectRadius: 0.1
       });
       s1.addShape(getShape(pptx, 'roundRect'), {
         x: b2X,
-        y: b2Y,
-        w: b2W,
-        h: b2H,
+        y: bY,
+        w: bW,
+        h: bH,
         fill: { color: C_RED_BG },
         line: { color: C_DARK, width: 2 },
         rectRadius: 0.1
@@ -547,7 +559,7 @@
       // Icon Square Badge (Red)
       s1.addShape(getShape(pptx, 'roundRect'), {
         x: b2X + 0.3 + SHADOW_OFFSET_SM,
-        y: b2Y + 0.25 + SHADOW_OFFSET_SM,
+        y: bY + 0.25 + SHADOW_OFFSET_SM,
         w: 0.44,
         h: 0.44,
         fill: { color: C_DARK },
@@ -556,7 +568,7 @@
       });
       s1.addShape(getShape(pptx, 'roundRect'), {
         x: b2X + 0.3,
-        y: b2Y + 0.25,
+        y: bY + 0.25,
         w: 0.44,
         h: 0.44,
         fill: { color: 'DC2626' },
@@ -565,7 +577,7 @@
       });
       s1.addText('⚠️', {
         x: b2X + 0.3,
-        y: b2Y + 0.25,
+        y: bY + 0.25,
         w: 0.44,
         h: 0.44,
         fontSize: 14,
@@ -577,8 +589,8 @@
       // Box 2 Title
       s1.addText(data.slide1?.box2?.title || 'Core Operational Challenges', {
         x: b2X + 0.3,
-        y: b2Y + 0.82,
-        w: b2W - 0.6,
+        y: bY + 0.82,
+        w: bW - 0.6,
         h: 0.38,
         fontFace: FONT_TITLE,
         fontSize: 13,
@@ -596,8 +608,8 @@
       });
       s1.addText(box2Runs, {
         x: b2X + 0.3,
-        y: b2Y + 1.25,
-        w: b2W - 0.6,
+        y: bY + 1.25,
+        w: bW - 0.6,
         h: 1.5,
         valign: 'top',
         margin: 0
@@ -625,21 +637,21 @@
         { id: 'acep', name: 'Acep Ugan Saputra', role: data.slide2?.members?.acep?.role || 'System Analyst', col: 2, row: 1, isPm: false }
       ];
 
-      const colX = [0.8, 4.78, 8.76];
-      const rowY = [1.55, 4.25];
-      const cardW = 3.75;
-      const cardH = 2.5;
+      const colX2 = GRID.col3.x;
+      const rowY2 = GRID.rowHalf.y;
+      const cardW2 = GRID.col3.w;
+      const cardH2 = GRID.rowHalf.h;
 
       team.forEach(m => {
-        const x = colX[m.col];
-        const y = rowY[m.row];
+        const x = colX2[m.col];
+        const y = rowY2[m.row];
 
         // 1. Neo-Brutalism card shadow
         s2.addShape(getShape(pptx, 'roundRect'), {
           x: x + SHADOW_OFFSET,
           y: y + SHADOW_OFFSET,
-          w: cardW,
-          h: cardH,
+          w: cardW2,
+          h: cardH2,
           fill: { color: C_DARK },
           line: { color: C_DARK },
           rectRadius: 0.1
@@ -649,8 +661,8 @@
         s2.addShape(getShape(pptx, 'roundRect'), {
           x: x,
           y: y,
-          w: cardW,
-          h: cardH,
+          w: cardW2,
+          h: cardH2,
           fill: { color: m.isPm ? C_RED_BG : C_CARD_BG },
           line: { color: C_DARK, width: 2 },
           rectRadius: 0.1
@@ -658,7 +670,7 @@
 
         // 3. Avatar photo with clean circular border backing
         const picSize = 1.05;
-        const picX = x + (cardW - picSize) / 2;
+        const picX = x + (cardW2 - picSize) / 2;
         const picY = y + 0.15;
 
         // Dark shadow ellipse behind avatar
@@ -696,7 +708,7 @@
         // 4. Name Pill with Neo shadow
         const pillW = 3.2;
         const pillH = 0.32;
-        const pillX = x + (cardW - pillW) / 2;
+        const pillX = x + (cardW2 - pillW) / 2;
         const pillY = y + 1.28;
 
         s2.addShape(getShape(pptx, 'roundRect'), {
@@ -737,7 +749,7 @@
         s2.addText(m.role, {
           x: x + 0.1,
           y: y + 1.68,
-          w: cardW - 0.2,
+          w: cardW2 - 0.2,
           h: 0.45,
           fontFace: FONT_TITLE,
           fontSize: 10.5,
@@ -766,7 +778,12 @@
       const c3 = data.slide3?.col3 || {};
       const c4 = data.slide3?.col4 || {};
 
-      addNeoCard(s3, pptx, 0.8, 1.55, 2.78, 5.25,
+      const colX3 = GRID.col4.x;
+      const cardW3 = GRID.col4.w;
+      const cardH3 = GRID.rowFull.h;
+      const cardY3 = GRID.rowFull.y;
+
+      addNeoCard(s3, pptx, colX3[0], cardY3, cardW3, cardH3,
         c1.step || '01 • Supplier (Upstream)',
         c1.title || 'Garment & Shoe Factories',
         [c1.p1, c1.p2, c1.p3],
@@ -774,7 +791,7 @@
         false
       );
 
-      addNeoCard(s3, pptx, 3.78, 1.55, 2.78, 5.25,
+      addNeoCard(s3, pptx, colX3[1], cardY3, cardW3, cardH3,
         c2.step || '02 • Warehouse (Inbound)',
         c2.title || 'Campus Logistics Warehouse',
         [c2.p1, c2.p2, c2.p3],
@@ -782,7 +799,7 @@
         false
       );
 
-      addNeoCard(s3, pptx, 6.76, 1.55, 2.78, 5.25,
+      addNeoCard(s3, pptx, colX3[2], cardY3, cardW3, cardH3,
         c3.step || '03 • Verifiers & Booths',
         c3.title || 'Finance & On-Site Booth Staff',
         [c3.p1, c3.p2, c3.p3],
@@ -790,7 +807,7 @@
         true
       );
 
-      addNeoCard(s3, pptx, 9.74, 1.55, 2.78, 5.25,
+      addNeoCard(s3, pptx, colX3[3], cardY3, cardW3, cardH3,
         c4.step || '04 • Consumer (Downstream)',
         c4.title || 'Freshman Students (Customers)',
         [c4.p1, c4.p2, c4.p3],
@@ -845,11 +862,12 @@
         ]
       ];
 
+      // Exact 25%, 38%, 37% column widths matching web w-1/4, w-[38%], w-[37%]
       s4.addTable(s4Rows, {
         x: 0.8,
         y: 1.55,
         w: 11.733,
-        colW: [3.0, 4.3, 4.433],
+        colW: [2.933, 4.458, 4.342],
         border: { color: C_DARK, pt: 1.5 }
       });
 
@@ -870,7 +888,12 @@
       const f3 = data.slide5?.card3 || {};
       const f4 = data.slide5?.card4 || {};
 
-      addNeoCard(s5, pptx, 0.8, 1.55, 5.75, 2.55,
+      const colX5 = GRID.col2.x;
+      const rowY5 = GRID.rowHalf.y;
+      const cardW5 = GRID.col2.w;
+      const cardH5 = GRID.rowHalf.h;
+
+      addNeoCard(s5, pptx, colX5[0], rowY5[0], cardW5, cardH5,
         f1.flow || 'Flow 01 • Student ➔ University',
         f1.title || 'Requirement: Size Profiles & Schedules',
         [f1.p1, f1.p2],
@@ -878,7 +901,7 @@
         false
       );
 
-      addNeoCard(s5, pptx, 6.78, 1.55, 5.75, 2.55,
+      addNeoCard(s5, pptx, colX5[1], rowY5[0], cardW5, cardH5,
         f2.flow || 'Flow 02 • Finance ➔ Day-Of Distribution',
         f2.title || 'Requirement: Tuition Paid Status (Eligibility)',
         [f2.p1, f2.p2],
@@ -886,7 +909,7 @@
         true
       );
 
-      addNeoCard(s5, pptx, 0.8, 4.25, 5.75, 2.55,
+      addNeoCard(s5, pptx, colX5[0], rowY5[1], cardW5, cardH5,
         f3.flow || 'Flow 03 • Booth Desk ➔ Warehouse',
         f3.title || 'Requirement: Package Entitlement & Stock Ledger',
         [f3.p1, f3.p2],
@@ -894,7 +917,7 @@
         false
       );
 
-      addNeoCard(s5, pptx, 6.78, 4.25, 5.75, 2.55,
+      addNeoCard(s5, pptx, colX5[1], rowY5[1], cardW5, cardH5,
         f4.flow || 'Flow 04 • Procurement ➔ Factory',
         f4.title || 'Requirement: Aggregate Purchase Orders (PO)',
         [f4.p1, f4.p2],
@@ -978,11 +1001,12 @@
         ]
       ];
 
+      // Exact 22%, 26%, 34%, 18% column widths matching web w-[22%], w-[26%], w-[34%], w-[18%]
       s6.addTable(s6Rows, {
         x: 0.8,
         y: 1.55,
         w: 11.733,
-        colW: [2.5, 2.9, 4.1, 2.233],
+        colW: [2.581, 3.050, 3.990, 2.112],
         border: { color: C_DARK, pt: 1.5 }
       });
 
@@ -1003,7 +1027,12 @@
       const p3 = data.slide7?.phase3 || {};
       const p4 = data.slide7?.phase4 || {};
 
-      addNeoCard(s7, pptx, 0.8, 1.55, 2.78, 5.25,
+      const colX7 = GRID.col4.x;
+      const cardW7 = GRID.col4.w;
+      const cardH7 = GRID.rowFull.h;
+      const cardY7 = GRID.rowFull.y;
+
+      addNeoCard(s7, pptx, colX7[0], cardY7, cardW7, cardH7,
         p1.step || 'Phase 1 • Upstream (Inbound)',
         p1.title || 'Inbound & FIFO Batch Registry',
         [p1.p1, p1.p2, p1.p3],
@@ -1011,7 +1040,7 @@
         false
       );
 
-      addNeoCard(s7, pptx, 3.78, 1.55, 2.78, 5.25,
+      addNeoCard(s7, pptx, colX7[1], cardY7, cardW7, cardH7,
         p2.step || 'Phase 2 • Demand (Planning)',
         p2.title || 'Eligibility Clearance & Size Profiling',
         [p2.p1, p2.p2, p2.p3],
@@ -1019,7 +1048,7 @@
         false
       );
 
-      addNeoCard(s7, pptx, 6.76, 1.55, 2.78, 5.25,
+      addNeoCard(s7, pptx, colX7[2], cardY7, cardW7, cardH7,
         p3.step || 'Phase 3 • Downstream (Outbound)',
         p3.title || 'POS QR & 6-Tier Atomic Validation',
         [p3.p1, p3.p2, p3.p3],
@@ -1027,7 +1056,7 @@
         true
       );
 
-      addNeoCard(s7, pptx, 9.74, 1.55, 2.78, 5.25,
+      addNeoCard(s7, pptx, colX7[3], cardY7, cardW7, cardH7,
         p4.step || 'Phase 4 • Control (Audit)',
         p4.title || 'Stock Opname & Closed-Loop Feedback',
         [p4.p1, p4.p2, p4.p3],
@@ -1050,8 +1079,13 @@
       const pr = data.slide8?.priorities || {};
       const rk = data.slide8?.risks || {};
 
+      const colX8 = GRID.col2.x;
+      const cardW8 = GRID.col2.w;
+      const cardH8 = GRID.rowFull.h;
+      const cardY8 = GRID.rowFull.y;
+
       // Equal 50/50 two columns matching web grid-cols-2
-      addNeoCard(s8, pptx, 0.8, 1.55, 5.75, 5.25,
+      addNeoCard(s8, pptx, colX8[0], cardY8, cardW8, cardH8,
         pr.badge || '3 Implementation Priorities',
         pr.title || 'System Readiness Roadmap',
         [pr.p1, pr.p2, pr.p3],
@@ -1059,7 +1093,7 @@
         false
       );
 
-      addNeoCard(s8, pptx, 6.78, 1.55, 5.75, 5.25,
+      addNeoCard(s8, pptx, colX8[1], cardY8, cardW8, cardH8,
         rk.badge || '3 Field Risks & Contingency SOPs',
         rk.title || 'Booth Operational Protocols',
         [rk.item1 || rk.r1Title, rk.item2 || rk.r2Title, rk.item3 || rk.r3Title],
@@ -1082,6 +1116,11 @@
       const m1 = data.slide9?.m1 || {};
       const m2 = data.slide9?.m2 || {};
       const m3 = data.slide9?.m3 || {};
+
+      const colX9 = GRID.col3.x;
+      const cardW9 = GRID.col3.w;
+      const cardH9 = GRID.rowFull.h;
+      const cardY9 = GRID.rowFull.y;
 
       function addMetricCard(x, y, w, h, badge, metricVal, title, bullets, footerText, isHighlight) {
         // Neo shadow backing
@@ -1106,22 +1145,24 @@
           rectRadius: 0.1
         });
 
-        // White Badge pill
-        const bW = w - 0.44;
+        // Compact Centered Badge pill
+        const bW = Math.min(w - 0.44, Math.max(2.1, badge.length * 0.080 + 0.35));
+        const bX = x + (w - bW) / 2;
+        const bH = 0.28;
         s9.addShape(getShape(pptx, 'roundRect'), {
-          x: x + 0.22,
+          x: bX,
           y: y + 0.18,
           w: bW,
-          h: 0.30,
+          h: bH,
           fill: { color: C_WHITE },
           line: { color: C_DARK, width: 1.2 },
           rectRadius: 0.06
         });
         s9.addText(badge.toUpperCase(), {
-          x: x + 0.22,
+          x: bX,
           y: y + 0.18,
           w: bW,
-          h: 0.30,
+          h: bH,
           fontFace: FONT_TITLE,
           fontSize: 8,
           bold: true,
@@ -1136,7 +1177,7 @@
         s9.addText(metricVal, {
           x: x + 0.22,
           y: y + 0.54,
-          w: bW,
+          w: w - 0.44,
           h: 0.76,
           fontFace: FONT_TITLE,
           fontSize: 36,
@@ -1151,7 +1192,7 @@
         s9.addText(title, {
           x: x + 0.22,
           y: y + 1.34,
-          w: bW,
+          w: w - 0.44,
           h: 0.38,
           fontFace: FONT_TITLE,
           fontSize: 11.5,
@@ -1166,7 +1207,7 @@
         s9.addShape(getShape(pptx, 'rect'), {
           x: x + 0.22,
           y: y + 1.76,
-          w: bW,
+          w: w - 0.44,
           h: 0.015,
           fill: { color: isHighlight ? 'FCA5A5' : 'CBD5E1' },
           line: { color: isHighlight ? 'FCA5A5' : 'CBD5E1' }
@@ -1182,7 +1223,7 @@
         s9.addText(bulletRuns, {
           x: x + 0.22,
           y: y + 1.88,
-          w: bW,
+          w: w - 0.44,
           h: h - 2.45,
           valign: 'top',
           margin: 0
@@ -1193,7 +1234,7 @@
         s9.addShape(getShape(pptx, 'rect'), {
           x: x + 0.22,
           y: footerY,
-          w: bW,
+          w: w - 0.44,
           h: 0.015,
           fill: { color: isHighlight ? 'FCA5A5' : 'CBD5E1' },
           line: { color: isHighlight ? 'FCA5A5' : 'CBD5E1' }
@@ -1201,7 +1242,7 @@
         s9.addText(footerText, {
           x: x + 0.22,
           y: footerY + 0.04,
-          w: bW,
+          w: w - 0.44,
           h: 0.36,
           fontFace: FONT_TITLE,
           fontSize: 9,
@@ -1212,7 +1253,7 @@
         });
       }
 
-      addMetricCard(0.8, 1.55, 3.75, 5.25,
+      addMetricCard(colX9[0], cardY9, cardW9, cardH9,
         m1.badge || 'VALUE 01 • SERVICE EFFICIENCY',
         m1.value || '< 30s',
         m1.title || 'Per Student Pickup Time',
@@ -1221,7 +1262,7 @@
         true
       );
 
-      addMetricCard(4.79, 1.55, 3.75, 5.25,
+      addMetricCard(colX9[1], cardY9, cardW9, cardH9,
         m2.badge || 'VALUE 02 • INVENTORY ACCURACY',
         m2.value || '0',
         m2.title || 'Dead-Stock Accumulation',
@@ -1230,7 +1271,7 @@
         false
       );
 
-      addMetricCard(8.78, 1.55, 3.75, 5.25,
+      addMetricCard(colX9[2], cardY9, cardW9, cardH9,
         m3.badge || 'VALUE 03 • FINANCIAL AUDITABILITY',
         m3.value || '100%',
         m3.title || 'Real-Time FIFO Valuation',
