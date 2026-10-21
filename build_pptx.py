@@ -147,33 +147,92 @@ def set_notes(slide, notes):
     slide.notes_slide.notes_text_frame.text = notes
 
 # ==========================================
-# SLIDE 1
+# SLIDE 1: LANDING PAGE OPENING HERO
 # ==========================================
 s1 = prs.slides.add_slide(prs.slide_layouts[6])
-apply_header(s1, "Universitas Horizon Indonesia • Departemen Keuangan",
-             "HorizonU Uniform: Transformasi Rantai Pasok Seragam Mahasiswa",
-             "Modernisasi Pengadaan, Tata Kelola Stok FIFO, dan Distribusi Berbasis Web Terintegrasi")
 
-add_card(s1, 0.8, 1.55, 3.75, 5.25, "Profil Institusi & Objek", "Logistik Perlengkapan Kampus", [
-    "Departemen Keuangan mengelola siklus pengadaan, pencatatan keuangan, dan distribusi perlengkapan maba.",
-    "Komoditas: Jas Almamater, Kemeja Putih, Celana/Rok Bahan, Sepatu Lab & Dinas, serta Medical Kit.",
-    "Karakteristik: Penyaluran langsung ke ribuan mahasiswa baru tanpa perantara ritel komersial."
-], "Model: Direct Closed-Loop Campus SCM")
+# Top Header Bar
+top_box = s1.shapes.add_textbox(Inches(0.8), Inches(0.4), Inches(11.733), Inches(0.45))
+tf_top = top_box.text_frame
+tf_top.word_wrap = True
+tf_top.margin_left = tf_top.margin_right = tf_top.margin_top = tf_top.margin_bottom = 0
 
-add_card(s1, 4.78, 1.55, 3.75, 5.25, "Kendala Operasional Utama", "Hambatan Spreadsheet & Posko", [
-    "Spreadsheet Excel Induk (~4.5 MB, 19 sheet) sering mengalami lag atau crash saat data membesar.",
-    "Antrean di posko kampus sangat lambat (15–20 menit per mahasiswa) akibat verifikasi berkas manual.",
-    "Pemesanan seragam ke pabrik hanya estimasi historis tanpa survey ukuran mandiri, memicu dead-stock."
-], "Dampak: Modal Mengendap & Risiko Klaim Ganda", is_highlight=True)
+p_top = tf_top.paragraphs[0]
+r_top1 = p_top.add_run()
+r_top1.text = "DEPARTEMEN KEUANGAN • UNIVERSITAS HORIZON INDONESIA"
+r_top1.font.name = FONT_BODY
+r_top1.font.size = Pt(9.5)
+r_top1.font.bold = True
+r_top1.font.color.rgb = RGBColor(100, 116, 139)
 
-add_card(s1, 8.76, 1.55, 3.75, 5.25, "Tim Pengembang", "Nirwana Development Team", [
-    "Fhazar Raffiful Aqyla — Project Manager",
-    "Ferry Noer Hendriawan — Frontend Engineer",
-    "Hildan Anugrah Tamadi Putra — Backend Engineer",
-    "Fadel Rahmadhan — Quality Assurance",
-    "Daffa Nazriel Zaidan — UI/UX Designer",
-    "Acep Ugan Saputra — System Analyst"
-], "Tim Nirwana • Horizon University")
+r_top2 = p_top.add_run()
+r_top2.text = "                                                                                   TECHNOSPARK 2026 PITCH DECK"
+r_top2.font.name = FONT_BODY
+r_top2.font.size = Pt(9.5)
+r_top2.font.bold = True
+r_top2.font.color.rgb = C_RED
+
+# Header Divider Line
+line = s1.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(0.88), Inches(11.733), Inches(0.02))
+line.fill.solid()
+line.fill.fore_color.rgb = C_BORDER
+line.line.color.rgb = C_BORDER
+
+# Hero Big Banner
+hero_box = s1.shapes.add_textbox(Inches(0.8), Inches(1.15), Inches(11.733), Inches(2.5))
+tf_hero = hero_box.text_frame
+tf_hero.word_wrap = True
+tf_hero.margin_left = tf_hero.margin_right = tf_hero.margin_top = tf_hero.margin_bottom = 0
+
+p_eye = tf_hero.paragraphs[0]
+p_eye.text = "SOLUSI RANTAI PASOK LOGISTIK KAMPUS TERINTEGRASI"
+p_eye.font.name = FONT_TITLE
+p_eye.font.size = Pt(11)
+p_eye.font.bold = True
+p_eye.font.color.rgb = C_RED
+p_eye.space_after = Pt(4)
+
+p_title = tf_hero.add_paragraph()
+r_t1 = p_title.add_run()
+r_t1.text = "HORIZONU "
+r_t1.font.name = FONT_TITLE
+r_t1.font.size = Pt(36)
+r_t1.font.bold = True
+r_t1.font.color.rgb = C_TEXT_DARK
+
+r_t2 = p_title.add_run()
+r_t2.text = "UNIFORM"
+r_t2.font.name = FONT_TITLE
+r_t2.font.size = Pt(36)
+r_t2.font.bold = True
+r_t2.font.color.rgb = C_RED
+r_t2.font.underline = True
+p_title.space_after = Pt(8)
+
+p_desc = tf_hero.add_paragraph()
+p_desc.text = "Transformasi digital operasional seragam mahasiswa: Menghubungkan Hulu (Vendor Pabrik), Gudang Kampus, dan Bagian Keuangan hingga Hilir (Mahasiswa) berbasis data presisi dan aturan inventaris FIFO."
+p_desc.font.name = FONT_BODY
+p_desc.font.size = Pt(12)
+p_desc.font.color.rgb = RGBColor(75, 85, 99)
+p_desc.line_spacing = 1.25
+
+# 3 Bento Cards
+add_card(s1, 0.8, 3.85, 3.75, 2.95, "Objek & Komoditas", "Pengadaan Perlengkapan Kampus", [
+    "Pengadaan dan pembagian tahunan: Jas Almamater, Kemeja Putih, Celana/Rok, Sepatu Lab & Dinas, serta Medical Kit.",
+    "Penyaluran langsung ke ribuan mahasiswa baru tanpa perantara ritel komersial."
+], "Model: Closed-Loop Campus SCM")
+
+add_card(s1, 4.78, 3.85, 3.75, 2.95, "Tantangan Utama", "Hambatan Spreadsheet & Posko", [
+    "Spreadsheet Excel 4.5 MB crash saat ribuan maba mendaftar serentak.",
+    "Antrean fisik posko 15–20 menit/orang akibat verifikasi berkas manual.",
+    "Tebakan order pabrik memicu penumpukan dead-stock ukuran ekstrem."
+], "Dampak: Modal Mengendap", is_highlight=True)
+
+add_card(s1, 8.76, 3.85, 3.75, 2.95, "Nirwana Team", "Tim Pengembang Sistem", [
+    "Fhazar Raffiful Aqyla (Project Manager)",
+    "Ferry Noer Hendriawan (Frontend) • Hildan (Backend)",
+    "Fadel Rahmadhan (QA) • Daffa (UI/UX) • Acep (Analyst)"
+], "Horizon University")
 
 set_notes(s1, """NASKAH BACA PRESENTER SLIDE 1 (Target: 01:10 Menit):
 "Selamat pagi/siang Yang Terhormat Bapak/Ibu Dosen Penguji dan Dewan Juri Technospark. Kami dari Tim Nirwana, yang beranggotakan Fhazar, Ferry, Hildan, Fadel, Daffa, dan Acep. Hari ini kami mempresentasikan analisis dan solusi sistem informasi rantai pasok terpadu bertajuk: HorizonU Uniform, dengan engine sistem bernama UniStock.
@@ -453,9 +512,9 @@ add_card(s7, 0.8, 1.55, 3.75, 5.25, "3 Prioritas Implementasi", "Tahapan Kesiapa
 ], "Roadmap: 6 Minggu Implementasi Penuh")
 
 add_card(s7, 4.78, 1.55, 7.75, 5.25, "3 Risiko Lapangan & Cara Mitigasi", "SOP Kontingensi Hari-H Posko", [
-    "RISIKO 1: Baterai HP Mahasiswa Mati / QR Rusak\n• Kendala: Mahasiswa tidak bisa menampilkan QR Code di layar ponsel.\n• Mitigasi UniStock: Bilah scanner staf posko dilengkapi fitur Fallback Search manual via NIM atau Nama yang langsung memanggil profil hak seketika.",
-    "RISIKO 2: Ukuran Rak Habis / Fitting Beda\n• Kendala: Ukuran fisik seragam di rak posko habis saat dicoba langsung.\n• Mitigasi UniStock: Fitur Partial Pickup memungkinkan staf menyerahkan barang yang tersedia (sisa hak tidak hangus & dijadwal ulang) dan mencatat tukar ukuran di student_size_histories.",
-    "RISIKO 3: Jaringan Internet Kampus Lambat / Dobel Klik\n• Kendala: Sinyal wifi fluktuatif menyebabkan staf mengklik tombol konfirmasi berulang kali.\n• Mitigasi UniStock: Transaksi dilindungi Pessimistic Row Locking (lockForUpdate) dan proteksi idempotensi, menjamin nol pemotongan stok ganda."
+    "RISIKO 1 (Baterai HP Mati / QR Rusak): Fallback Search manual via NIM atau Nama langsung memanggil profil hak seketika.",
+    "RISIKO 2 (Ukuran Rak Habis / Fitting Beda): Fitur Partial Pickup serahkan barang yang tersedia tanpa menghanguskan sisa hak.",
+    "RISIKO 3 (Jaringan Internet Kampus Lambat): Pessimistic Row Locking (lockForUpdate) dan idempotensi menjamin nol pemotongan ganda."
 ], "Toleransi Kesalahan: Resiliensi Operasional Tinggi", is_highlight=True)
 
 set_notes(s7, """NASKAH BACA PRESENTER SLIDE 7 (Target: 01:15 Menit):
