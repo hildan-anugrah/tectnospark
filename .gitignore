@@ -1,5 +1,9 @@
+node_modules/
+dist/
+.bun/
+*.log
+index.html.vanilla-backup
 __pycache__/
 *.py[cod]
-*$py.class
 .vscode/
 .idea/
