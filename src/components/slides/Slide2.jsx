@@ -17,48 +17,48 @@ export default function Slide2() {
   return (
     <div className="h-full flex flex-col justify-between" id="slide-2-content">
       {/* Header */}
-      <div className="border-b-2 border-slate-900 pb-3 mb-4 flex items-start justify-between">
-        <div className="flex items-start gap-3">
-          <div className="w-2.5 h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
+      <div className="border-b-2 border-slate-900 pb-3 mb-3 sm:mb-4 flex items-start justify-between gap-2">
+        <div className="flex items-start gap-2.5 sm:gap-3">
+          <div className="w-2 sm:w-2.5 h-10 sm:h-12 bg-horizon-700 border-2 border-slate-900 rounded shrink-0 shadow-neo-sm"></div>
           <div>
-            <span className="text-horizon-700 text-xs font-black tracking-wider uppercase font-mono">
+            <span className="text-horizon-700 text-[10px] sm:text-xs font-black tracking-wider uppercase font-mono">
               {t('slide2.badge')}
             </span>
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight leading-snug">
+            <h2 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight leading-snug">
               {t('slide2.title')}
             </h2>
-            <p className="text-xs text-slate-600 font-medium mt-0.5">
+            <p className="text-[11px] sm:text-xs text-slate-600 font-medium mt-0.5">
               {t('slide2.subtitle')}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="bg-amber-100 border-2 border-slate-900 text-slate-900 text-xs font-extrabold px-3 py-1 rounded-md shadow-neo-sm font-mono">
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="bg-amber-100 border-2 border-slate-900 text-slate-900 text-[10px] sm:text-xs font-extrabold px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-md shadow-neo-sm font-mono">
             {t('slide2.badgeCount')}
           </span>
         </div>
       </div>
 
-      {/* 2 Rows x 3 Cols Grid of Team Members */}
-      <div className="grid grid-cols-3 gap-6 my-auto">
+      {/* Grid of Team Members: 2 cols on mobile, 3 cols on tablet/desktop */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 my-auto">
         {members.map((m) => (
           <div
             key={m.id}
             className={`${
               m.isPm ? 'bg-red-50' : 'bg-neo-bg'
-            } border-2 border-slate-900 rounded-xl p-5 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all`}
+            } border-2 border-slate-900 rounded-xl p-3 sm:p-5 shadow-neo flex flex-col items-center text-center hover:translate-x-0.5 hover:translate-y-0.5 transition-all`}
           >
             <div
-              className={`w-24 h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-3 ${
+              className={`w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full border-2 border-slate-900 shadow-neo-sm overflow-hidden bg-white mb-2 sm:mb-3 ${
                 m.isPm ? 'ring-2 ring-horizon-700' : ''
               }`}
             >
               <img src={teamImages[m.id]} alt={t(m.nameKey, m.defaultName)} className="w-full h-full object-cover" />
             </div>
-            <span className="bg-horizon-700 text-white border-2 border-slate-900 px-3.5 py-0.5 rounded-full text-xs font-black shadow-neo-sm mb-1.5 uppercase tracking-wider">
+            <span className="bg-horizon-700 text-white border-2 border-slate-900 px-2.5 sm:px-3.5 py-0.5 rounded-full text-[9px] sm:text-[11px] md:text-xs font-black shadow-neo-sm mb-1 sm:mb-1.5 uppercase tracking-wider truncate max-w-full">
               {t(m.nameKey, m.defaultName)}
             </span>
-            <span className={`text-xs font-extrabold ${m.isPm ? 'text-horizon-700' : 'text-slate-800'}`}>
+            <span className={`text-[10px] sm:text-xs font-extrabold ${m.isPm ? 'text-horizon-700' : 'text-slate-800'}`}>
               {t(m.roleKey)}
             </span>
           </div>

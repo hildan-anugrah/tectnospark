@@ -96,6 +96,34 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Touch Swipe Navigation for Mobile
+  const touchStartXRef = useRef(null);
+  const touchStartYRef = useRef(null);
+
+  const handleTouchStart = (e) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
+
+    // Detect horizontal swipe
+    if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+      if (deltaX < 0) {
+        // Swipe Left -> Next Slide
+        setCurrentSlide((prev) => Math.min(prev + 1, TOTAL_SLIDES));
+      } else {
+        // Swipe Right -> Prev Slide
+        setCurrentSlide((prev) => Math.max(prev - 1, 1));
+      }
+    }
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+  };
+
   const toggleFullscreen = async () => {
     try {
       if (!document.fullscreenElement) {
@@ -137,9 +165,14 @@ export default function App() {
   return (
     <div className="bg-[#F3F4F6] text-slate-900 font-sans h-screen w-screen overflow-hidden flex flex-col select-none">
       {/* Main Presentation Viewport */}
-      <main className="flex-1 flex items-center justify-center p-3 md:p-4 overflow-hidden relative">
-        <SlideStage currentSlide={currentSlide} isFullscreen={isFullscreen}>
-          {/* Prompter Drawer inside Stage for Fullscreen visibility */}
+      <main className="flex-1 flex items-center justify-center p-2 sm:p-3 md:p-4 overflow-hidden relative">
+        <SlideStage
+          currentSlide={currentSlide}
+          isFullscreen={isFullscreen}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Prompter Drawer inside Stage for Fullscreen & Mobile visibility */}
           <Prompter
             isOpen={isPrompterOpen}
             onClose={() => setIsPrompterOpen(false)}

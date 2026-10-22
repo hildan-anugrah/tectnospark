@@ -9,28 +9,48 @@ import Slide7 from './slides/Slide7';
 import Slide8 from './slides/Slide8';
 import Slide9 from './slides/Slide9';
 
-export default function SlideStage({ currentSlide, isFullscreen, children }) {
+export default function SlideStage({
+  currentSlide,
+  isFullscreen,
+  onTouchStart,
+  onTouchEnd,
+  children
+}) {
   const [scale, setScale] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
   const viewportRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      // Mobile portrait detection (width under 768px and taller than wide)
+      const mobileMode = w < 768 && h > w;
+      setIsMobile(mobileMode);
+
+      if (mobileMode) {
+        setScale(1);
+        return;
+      }
+
+      // Widescreen 16:9 stage scaling for tablet, desktop, or landscape mobile
       const stageW = 1440;
       const stageH = 810;
 
-      let availW = window.innerWidth;
-      let availH = window.innerHeight;
+      let availW = w;
+      let availH = h;
 
       if (!document.fullscreenElement) {
-        // Dock footer is 56px (h-14) + padding 32px
-        availW = window.innerWidth - 32;
-        availH = window.innerHeight - 88;
+        // Dock footer is 56px + padding 32px
+        availW = w - 32;
+        availH = h - 88;
       }
 
       const sX = availW / stageW;
       const sY = availH / stageH;
       const newScale = Math.min(sX, sY, 1.25); // Cap scale at 1.25x for extreme ultrawides
-      setScale(Math.max(0.2, newScale));
+      setScale(Math.max(0.3, newScale));
     };
 
     handleResize();
@@ -62,19 +82,29 @@ export default function SlideStage({ currentSlide, isFullscreen, children }) {
     <div
       ref={viewportRef}
       id="presentation-viewport"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
       className="w-full h-full flex items-center justify-center overflow-hidden relative"
     >
       <div
         id="slide-stage"
-        style={{
-          transform: `scale(${scale})`,
-          transformOrigin: 'center center'
-        }}
-        className={`w-[1440px] h-[810px] shrink-0 bg-white ${
-          isFullscreen
-            ? 'rounded-none border-none shadow-none'
-            : 'rounded-2xl border-2 border-slate-900 shadow-neo-lg'
-        } flex flex-col justify-between p-8 relative overflow-hidden transition-all duration-150`}
+        style={
+          isMobile
+            ? { width: '100%', height: '100%' }
+            : {
+                width: '1440px',
+                height: '810px',
+                transform: `scale(${scale})`,
+                transformOrigin: 'center center'
+              }
+        }
+        className={`${
+          isMobile
+            ? 'w-full h-full max-w-full rounded-xl border-2 border-slate-900 shadow-neo p-4 overflow-y-auto'
+            : isFullscreen
+            ? 'w-[1440px] h-[810px] shrink-0 bg-white rounded-none border-none shadow-none p-8 overflow-hidden'
+            : 'w-[1440px] h-[810px] shrink-0 bg-white rounded-2xl border-2 border-slate-900 shadow-neo-lg p-8 overflow-hidden'
+        } bg-white flex flex-col justify-between relative transition-all duration-150`}
       >
         {renderActiveSlide()}
         {children}
