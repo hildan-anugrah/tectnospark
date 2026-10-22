@@ -9,6 +9,12 @@ import enTranslation from '../../assets/locales/en.json';
  */
 export async function exportToPptx(setExportingProgress) {
   try {
+    // 1. Ensure all custom fonts and font-metrics are fully loaded before capture
+    if (document.fonts && document.fonts.ready) {
+      if (setExportingProgress) setExportingProgress('Preparing typography & graphics...');
+      await document.fonts.ready;
+    }
+
     const pptx = new PptxGenJS();
     pptx.defineLayout({ name: 'HORIZON_WIDE_16_9', width: 13.333, height: 7.5 });
     pptx.layout = 'HORIZON_WIDE_16_9';
@@ -31,7 +37,7 @@ export async function exportToPptx(setExportingProgress) {
 
       const slideEl = slideElements[i];
 
-      // Temporarily ensure element is visible for capture
+      // Temporarily display flex for capture
       slideEl.style.display = 'flex';
 
       // Capture DOM with exact CSS styling at Retina 2x scale
@@ -42,7 +48,13 @@ export async function exportToPptx(setExportingProgress) {
         backgroundColor: '#ffffff',
         logging: false,
         width: 1440,
-        height: 810
+        height: 810,
+        windowWidth: 1440,
+        windowHeight: 810,
+        x: 0,
+        y: 0,
+        scrollX: 0,
+        scrollY: 0
       });
 
       slideEl.style.display = 'none';
