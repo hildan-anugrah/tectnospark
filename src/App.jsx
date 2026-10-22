@@ -213,13 +213,13 @@ export default function App() {
         id="export-stage-container"
         style={{
           position: 'fixed',
-          top: '-99999px',
-          left: '-99999px',
+          top: '0px',
+          left: '0px',
           width: '1440px',
           height: '810px',
           overflow: 'hidden',
           pointerEvents: 'none',
-          zIndex: -1
+          zIndex: -9999
         }}
       >
         <I18nextProvider i18n={enI18nRef.current}>

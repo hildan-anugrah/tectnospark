@@ -1,12 +1,47 @@
+import { toPng } from 'html-to-image';
 import html2canvas from 'html2canvas';
 import PptxGenJS from 'pptxgenjs';
 import enTranslation from '../../assets/locales/en.json';
 
 /**
- * 100% Pixel-Perfect PPTX Generator using DOM & CSS Capture
- * Captures each slide's exact CSS, fonts, line widths, borders, and Neo-Brutalist shadows.
+ * 100% Pixel-Perfect PPTX Generator using DOM & CSS Capture.
+ * Uses native browser SVG foreignObject rasterization (html-to-image) for 100% pixel-perfect text placement,
+ * with fallback to html2canvas.
  * Always exports in English with Speaker Notes attached.
  */
+async function captureSlideImage(slideEl) {
+  try {
+    // 1. Try html-to-image first (native browser rasterizer, zero font/text shifting)
+    const dataUrl = await toPng(slideEl, {
+      width: 1440,
+      height: 810,
+      pixelRatio: 2,
+      backgroundColor: '#ffffff',
+      cacheBust: true
+    });
+    return dataUrl;
+  } catch (err) {
+    console.warn('html-to-image fallback to html2canvas:', err);
+    // 2. Fallback to html2canvas
+    const canvas = await html2canvas(slideEl, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      width: 1440,
+      height: 810,
+      windowWidth: 1440,
+      windowHeight: 810,
+      x: 0,
+      y: 0,
+      scrollX: 0,
+      scrollY: 0
+    });
+    return canvas.toDataURL('image/png');
+  }
+}
+
 export async function exportToPptx(setExportingProgress) {
   try {
     // 1. Ensure all custom fonts and font-metrics are fully loaded before capture
@@ -40,26 +75,13 @@ export async function exportToPptx(setExportingProgress) {
       // Temporarily display flex for capture
       slideEl.style.display = 'flex';
 
-      // Capture DOM with exact CSS styling at Retina 2x scale
-      const canvas = await html2canvas(slideEl, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-        logging: false,
-        width: 1440,
-        height: 810,
-        windowWidth: 1440,
-        windowHeight: 810,
-        x: 0,
-        y: 0,
-        scrollX: 0,
-        scrollY: 0
-      });
+      // Force layout reflow so dimensions & fonts are computed
+      void slideEl.offsetWidth;
+      await new Promise((resolve) => setTimeout(resolve, 60));
+
+      const imgData = await captureSlideImage(slideEl);
 
       slideEl.style.display = 'none';
-
-      const imgData = canvas.toDataURL('image/png');
 
       // Add to PowerPoint
       const pptxSlide = pptx.addSlide();

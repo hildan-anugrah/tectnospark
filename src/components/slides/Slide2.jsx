@@ -60,11 +60,11 @@ export default function Slide2() {
                 />
               </div>
 
-              <span className="bg-horizon-700 text-white font-extrabold text-[8px] sm:text-[10px] md:text-xs px-1.5 sm:px-2.5 py-0.5 rounded-full border border-slate-900 mb-1 max-w-full truncate inline-block">
+              <div className="bg-horizon-700 text-white font-extrabold text-[8px] sm:text-[10px] md:text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full border border-slate-900 mb-1.5 max-w-full truncate inline-block shadow-sm">
                 {t(m.nameKey)}
-              </span>
+              </div>
 
-              <p className="text-[7.5px] sm:text-[9.5px] md:text-[11px] font-bold text-slate-700 max-w-full truncate">
+              <p className="text-[7.5px] sm:text-[9.5px] md:text-[11px] font-bold text-slate-700 max-w-full truncate block">
                 {t(m.roleKey)}
               </p>
             </div>
