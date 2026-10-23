@@ -336,6 +336,45 @@
       "targetTime": "00:35 Menit",
       "html": "<p class=\"mb-2\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">DAMPAK & KESIMPULAN</span>\"Sebagai penutup, HorizonU Uniform memberikan dampak terukur nyata bagi Universitas Horizon Indonesia:\"</p><p class=\"mb-2\">\"Waktu antrean terpangkas 97% dari 20 menit menjadi <strong>di bawah 30 detik</strong>, kepatuhan FIFO mencapai <strong>100%</strong>, dan <strong>Zero Dead-Stock</strong> menyelamatkan modal operasional.\"</p><p>\"HorizonU Uniform bukan sekadar digitalisasi, melainkan fondasi logistik kampus modern yang cepat, akurat, dan transparan. Terima kasih.\"</p>",
       "text": "NASKAH BACA PRESENTER SLIDE 9 (Target: 00:35 Menit):\n\"Sebagai penutup, HorizonU Uniform memberikan dampak terukur nyata bagi Universitas Horizon Indonesia:\n\nWaktu antrean terpangkas 97% dari 20 menit menjadi di bawah 30 detik, kepatuhan FIFO mencapai 100%, dan Zero Dead-Stock menyelamatkan modal operasional.\n\nHorizonU Uniform bukan sekadar digitalisasi, melainkan fondasi logistik kampus modern yang cepat, akurat, dan transparan. Terima kasih.\" "
+    },
+    "slide10": {
+      "targetTime": "00:30 Menit",
+      "html": "<p class=\"mb-2\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">SESI Q&A</span>\"Demikian pemaparan dari Tim Nirwana mengenai solusi sistem informasi terpadu HorizonU Uniform. Kami sangat terbuka menerima tanggapan, masukan, dan pertanyaan dari Yang Terhormat Bapak/Ibu Dewan Juri.\"</p>",
+      "text": "NASKAH BACA PRESENTER SLIDE 10 (Target: 00:30 Menit):\n\"Demikian pemaparan dari Tim Nirwana mengenai solusi sistem informasi terpadu HorizonU Uniform. Kami sangat terbuka menerima tanggapan, masukan, dan pertanyaan dari Yang Terhormat Bapak/Ibu Dewan Juri. Silakan.\""
+    },
+    "slide11": {
+      "targetTime": "00:20 Menit",
+      "html": "<p class=\"mb-2\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">PENUTUP</span>\"Terima kasih atas perhatian dan kesempatan yang diberikan kepada Tim Nirwana. Semoga inovasi ini dapat menjadi inspirasi digitalisasi logistik kampus Indonesia.\"</p>",
+      "text": "NASKAH BACA PRESENTER SLIDE 11 (Target: 00:20 Menit):\n\"Terima kasih atas perhatian dan kesempatan yang diberikan kepada Tim Nirwana. Semoga inovasi ini dapat menjadi inspirasi digitalisasi logistik kampus Indonesia. Selamat pagi/siang.\""
     }
+  },
+  "slide10": {
+    "badge": "Sesi Diskusi & Tanya Jawab",
+    "title": "Question & Answer (Q&A)",
+    "subtitle": "Forum terbuka pendalaman teknis, arsitektur sistem, dan kelayakan operasional HorizonU Uniform",
+    "heroTitle": "Ada Pertanyaan untuk Tim Kami?",
+    "heroDesc": "Kami siap menjawab pertanyaan Dewan Juri terkait analisis masalah, perancangan sistem, hingga strategi mitigasi lapangan.",
+    "p1Title": "Arsitektur Sistem & Database",
+    "p1Desc": "Integritas transaksi ACID, skema relasional InnoDB, struktur base-code SKU, dan optimasi performa beban puncak ribuan mahasiswa.",
+    "p2Title": "Rantai Pasok & Algoritma FIFO",
+    "p2Desc": "Mekanisme alur barang vendor-ke-gudang, penentuan HPP batch, mitigasi dead-stock, dan doktrin Data Mengunci Fisik.",
+    "p3Title": "Operasional Posko & Resiliensi",
+    "p3Desc": "Validasi 6-lapis barcode/QR < 30 detik, pencegahan double-claim, dan prosedur kontingensi offline-sync saat koneksi drop.",
+    "footerNote": "Silakan ajukan pertanyaan atau masukan kepada Tim Nirwana"
+  },
+  "slide11": {
+    "badge": "Penutup Presentasi",
+    "title": "Terima Kasih",
+    "subtitle": "Mewujudkan transformasi rantai pasok kampus terpadu yang cepat, akurat, dan akuntabel",
+    "mainHeading": "TERIMA KASIH",
+    "tagline": "Bersama Membangun Fondasi Logistik Kampus Modern",
+    "box1Title": "Solusi Inovasi",
+    "box1Desc": "<strong>HorizonU Uniform</strong> mengintegrasikan hulu pabrik hingga hilir mahasiswa demi pengalaman orientasi kampus berkelas dunia.",
+    "box2Title": "Kolaborasi Pengembang",
+    "box2Desc": "<strong>Tim Nirwana</strong> • 6 Talenta Lintas Rekayasa Perangkat Lunak siap mengawal implementasi hingga go-live tuntas.",
+    "box3Title": "Komitmen Dampak",
+    "box3Desc": "Waktu layan <strong>&lt; 30 detik</strong>, kepatuhan FIFO <strong>100%</strong>, dan <strong>Zero Dead-Stock</strong> modal operasional kampus.",
+    "closingDept": "Departemen Keuangan • Universitas Horizon Indonesia",
+    "closingTech": "Technospark 2026 • Faculty of Information & Computer Technology"
   }
 }

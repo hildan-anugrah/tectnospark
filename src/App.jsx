@@ -16,8 +16,10 @@ import Slide6 from './components/slides/Slide6';
 import Slide7 from './components/slides/Slide7';
 import Slide8 from './components/slides/Slide8';
 import Slide9 from './components/slides/Slide9';
+import Slide10 from './components/slides/Slide10';
+import Slide11 from './components/slides/Slide11';
 
-const TOTAL_SLIDES = 9;
+const TOTAL_SLIDES = 11;
 
 export default function App() {
   const { t } = useTranslation();
@@ -249,6 +251,12 @@ export default function App() {
           </div>
           <div className="export-slide-panel w-[1440px] h-[810px] bg-white rounded-2xl border-2 border-slate-900 shadow-neo-lg flex flex-col justify-between p-8" style={{ display: 'none' }}>
             <Slide9 />
+          </div>
+          <div className="export-slide-panel w-[1440px] h-[810px] bg-white rounded-2xl border-2 border-slate-900 shadow-neo-lg flex flex-col justify-between p-8" style={{ display: 'none' }}>
+            <Slide10 />
+          </div>
+          <div className="export-slide-panel w-[1440px] h-[810px] bg-white rounded-2xl border-2 border-slate-900 shadow-neo-lg flex flex-col justify-between p-8" style={{ display: 'none' }}>
+            <Slide11 />
           </div>
         </I18nextProvider>
       </div>

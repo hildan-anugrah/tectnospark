@@ -8,6 +8,8 @@ import Slide6 from './slides/Slide6';
 import Slide7 from './slides/Slide7';
 import Slide8 from './slides/Slide8';
 import Slide9 from './slides/Slide9';
+import Slide10 from './slides/Slide10';
+import Slide11 from './slides/Slide11';
 
 export default function SlideStage({
   currentSlide,
@@ -74,6 +76,8 @@ export default function SlideStage({
       case 7: return <Slide7 />;
       case 8: return <Slide8 />;
       case 9: return <Slide9 />;
+      case 10: return <Slide10 />;
+      case 11: return <Slide11 />;
       default: return <Slide1 />;
     }
   };

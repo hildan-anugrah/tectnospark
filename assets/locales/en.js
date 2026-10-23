@@ -336,6 +336,45 @@ window.I18N_EN_DATA = {
       "targetTime": "00:35 Mins",
       "html": "<p class=\"mb-2\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">IMPACT & CONCLUSION</span>\"In conclusion, HorizonU Uniform delivers tangible, measurable results for Horizon University Indonesia:\"</p><p class=\"mb-2\">\"Queue times slashed by 97% to <strong>under 30 seconds</strong>, <strong>100% FIFO compliance</strong>, and <strong>Zero Dead-Stock</strong> protecting university capital.\"</p><p>\"HorizonU Uniform is not just software — it is the new benchmark for modern campus logistics excellence. Thank you.\"</p>",
       "text": "PRESENTER SCRIPT SLIDE 9 (Target: 00:35 Mins):\n\"In conclusion, HorizonU Uniform delivers tangible, measurable results for Horizon University Indonesia:\n\nQueue times slashed by 97% to under 30 seconds, 100% FIFO compliance, and Zero Dead-Stock protecting university capital.\n\nHorizonU Uniform is not just software — it is the new benchmark for modern campus logistics excellence. Thank you.\" "
+    },
+    "slide10": {
+      "targetTime": "00:30 Mins",
+      "html": "<p class=\"mb-2\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">Q&A SESSION</span>\"That concludes our presentation on the HorizonU Uniform integrated supply chain solution. We welcome questions, feedback, and technical inquiries from the distinguished Board of Judges.\"</p>",
+      "text": "PRESENTER SCRIPT SLIDE 10 (Target: 00:30 Mins):\n\"That concludes our presentation on the HorizonU Uniform integrated supply chain solution. We welcome questions, feedback, and technical inquiries from the distinguished Board of Judges. The floor is open.\""
+    },
+    "slide11": {
+      "targetTime": "00:20 Mins",
+      "html": "<p class=\"mb-2\"><span class=\"bg-horizon-700/40 text-red-200 border border-red-400 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded mr-1.5\">CLOSING</span>\"Thank you for your valuable time and attention. We hope HorizonU Uniform sets a new benchmark for modern university supply chain operations. Have a great day!\"</p>",
+      "text": "PRESENTER SCRIPT SLIDE 11 (Target: 00:20 Mins):\n\"Thank you for your valuable time and attention. We hope HorizonU Uniform sets a new benchmark for modern university supply chain operations. Have a great day!\""
     }
+  },
+  "slide10": {
+    "badge": "Discussion & Interactive Q&A",
+    "title": "Question & Answer (Q&A)",
+    "subtitle": "Open floor for technical inquiry, architectural review, and field operational viability",
+    "heroTitle": "Any Questions for Our Team?",
+    "heroDesc": "We welcome questions and feedback from the Board of Judges regarding system architecture, SCM workflows, and contingency protocols.",
+    "p1Title": "System Architecture & Database",
+    "p1Desc": "ACID transactional integrity, InnoDB schema design, SKU base-code hierarchy, and peak registration load handling.",
+    "p2Title": "Supply Chain & FIFO Logic",
+    "p2Desc": "Vendor-to-warehouse cargo intake, batch landed cost assignment, dead-stock prevention, and Data Locks Physical Asset doctrine.",
+    "p3Title": "Booth Operations & Resilience",
+    "p3Desc": "Sub-30s 6-tier QR validation, duplicate-claim prevention, and offline-sync procedures during connectivity loss.",
+    "footerNote": "We warmly welcome questions and feedback for Team Nirwana"
+  },
+  "slide11": {
+    "badge": "Presentation Closing",
+    "title": "Thank You",
+    "subtitle": "Empowering integrated campus logistics that is rapid, accurate, and accountable",
+    "mainHeading": "THANK YOU",
+    "tagline": "Building the Future of Modern Campus Supply Chain Logistics",
+    "box1Title": "Innovative Solution",
+    "box1Desc": "<strong>HorizonU Uniform</strong> connects upstream vendors to downstream students for a seamless, world-class orientation experience.",
+    "box2Title": "Development Team",
+    "box2Desc": "<strong>Team Nirwana</strong> • 6 Multi-disciplinary Software Engineers dedicated to turnkey implementation through full go-live.",
+    "box3Title": "Committed Impact",
+    "box3Desc": "Service time <strong>&lt; 30 seconds</strong>, <strong>100%</strong> FIFO compliance, and <strong>Zero Dead-Stock</strong> operational savings.",
+    "closingDept": "Finance Department • Horizon University Indonesia",
+    "closingTech": "Technospark 2026 • Faculty of Information & Computer Technology"
   }
 };
