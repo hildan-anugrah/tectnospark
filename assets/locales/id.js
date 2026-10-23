@@ -20,7 +20,7 @@ window.I18N_ID_DATA = {
     "desc": "Transformasi digital operasional seragam mahasiswa: Menghubungkan Hulu (Vendor Pabrik), Gudang Kampus, dan Bagian Keuangan hingga Hilir (Mahasiswa) berbasis data presisi dan aturan inventaris FIFO.",
     "box1": {
       "title": "Objek & Komoditas Logistik",
-      "desc": "Pengadaan dan penyaluran tahunan ribuan paket perlengkapan mahasiswa baru: <strong>Almamater, Kemeja Putih, Celana, Sepatu</strong>, serta <strong>Medical Kit</strong> tanpa perantara ritel komersial."
+      "desc": "Pengadaan dan penyaluran tahunan ribuan paket perlengkapan mahasiswa baru: <strong>Almamater, Celana, Sepatu</strong>, serta <strong>Medical Kit</strong> tanpa perantara ritel komersial."
     },
     "box2": {
       "title": "Tantangan Operasional Utama",

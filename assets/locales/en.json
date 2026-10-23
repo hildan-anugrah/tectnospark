@@ -21,7 +21,7 @@
     "desc": "Digital transformation of student uniform operations: Connecting Upstream (Apparel Vendor), Campus Warehouse, and Finance to Downstream (Students) powered by precision data and FIFO inventory rules.",
     "box1": {
       "title": "Logistics Commodity & Scope",
-      "desc": "Annual procurement and distribution of thousands of freshman packages: <strong>Alma Mater Blazers, White Shirts, Formal Trousers/Skirts, Lab & Clinical Shoes</strong>, and <strong>Medical Kits</strong> without commercial retail intermediaries."
+      "desc": "Annual procurement and distribution of thousands of freshman packages: <strong>Alma Mater Blazers, Formal Trousers/Skirts, Lab & Clinical Shoes</strong>, and <strong>Medical Kits</strong> without commercial retail intermediaries."
     },
     "box2": {
       "title": "Core Operational Challenges",
@@ -68,7 +68,7 @@
       "step": "01 • Supplier (Upstream)",
       "title": "Garment & Shoe Factories",
       "p1": "Produces uniform and footwear packages based on aggregate purchase orders (PO).",
-      "p2": "Enforces strict 5-segment SKU coding standards per category and size.",
+      "p2": "Enforces standardized SKU variant codes per category and size.",
       "p3": "<strong>Cargo Point:</strong> Inbound container shipments delivered to campus warehouse (Inbound Logistics).",
       "flow": "Flow: Aggregate PO ➔ Inbound Freight"
     },
@@ -155,7 +155,7 @@
       "title": "Requirement: Aggregate Purchase Orders (PO)",
       "p1": "<strong>Source & Target:</strong> Procurement dispatches garment production quantities to vendor.",
       "p2": "<strong>Pain Point:</strong> Purchase orders drafted from crude estimates rather than validated student anthropometric demand, triggering multi-month return-exchange lead times.",
-      "status": "Status: Blind Ordering (Lack of Real Demand Signal)"
+      "status": "Status: Inaccurate Data (Blind Ordering)"
     }
   },
   "slide6": {
@@ -221,7 +221,7 @@
       "p1": "• Booth staff scans student QR code using webcam-based scanner client.",
       "p2": "• Executes 6-tier atomic validation under pessimistic database row locking (lockForUpdate).",
       "p3": "• Automatically depletes oldest FIFO batches (deductStockFifo) and prints handover receipt.",
-      "output": "Output: Verified Zero-Defect Handover"
+      "output": "Output: Verified Size-Matched Handover"
     },
     "phase4": {
       "step": "Phase 4 • Control (Audit)",
@@ -240,7 +240,7 @@
       "badge": "3 Implementation Priorities",
       "title": "System Readiness Roadmap",
       "p1": "• <strong>Priority 1 (Master Data):</strong> Cleanse legacy records, deploy 5-segment SKU schema, import student cohorts, and configure program entitlement rules.",
-      "p2": "• <strong>Priority 2 (Portal Integration):</strong> Bridge live tuition clearance feeds (Eligibility), launch self-service size survey portal, and broadcast assigned schedule slots.",
+      "p2": "• <strong>Priority 2 (Portal Integration):</strong> Bridge live tuition clearance feeds (Eligibility), open student body size profiling window, and broadcast distribution schedules.",
       "p3": "• <strong>Priority 3 (Human Readiness):</strong> Conduct operational drills for booth staff on webcam scanners, size exchange SOPs, and offline fallback procedures.",
       "roadmap": "Roadmap: 6-Week Turnkey Deployment"
     },
@@ -266,11 +266,11 @@
     "m1": {
       "badge": "VALUE 01 • SERVICE EFFICIENCY",
       "value": "< 30s",
-      "title": "Per Student Pickup Time",
+      "title": "Service Time per Student",
       "p1": "• Slashed booth turnaround time from 15–20 minutes down to under 30 seconds per student.",
       "p2": "• Instant QR scanning combined with automated 6-tier validation checks.",
       "p3": "• Completely eradicated chaotic, overcrowded campus queues during orientation week.",
-      "impact": "Impact: Swift & Professional Student Experience"
+      "impact": "Impact: Fast & Comfortable Student Service"
     },
     "m2": {
       "badge": "VALUE 02 • INVENTORY ACCURACY",
@@ -279,7 +279,7 @@
       "p1": "• Pre-enrollment size profiling prior to supplier manufacturing tenders.",
       "p2": "• Automated Demand vs. Shortage calculations align factory orders 100% with real student body sizes.",
       "p3": "• Eliminated stagnant piles of obsolete extreme sizes tying up warehouse space.",
-      "impact": "Impact: Maximum Working Capital Efficiency"
+      "impact": "Impact: Campus Working Capital Optimization"
     },
     "m3": {
       "badge": "VALUE 03 • FINANCIAL AUDITABILITY",
